@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Catálogo</title>
   <link rel="stylesheet" href="estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
   <header class="header">
@@ -21,19 +22,33 @@
   </header>
 
   <main style="padding: 40px 20px;">
-    <h1 style="text-align: center; margin-bottom: 40px; color: #f0a41c;">Catálogo de Productos</h1>
+    <h1 style="text-align: center; margin-bottom: 20px; color: #f0a41c;">Catálogo de Productos</h1>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+      <input type="text" id="buscador" placeholder="Buscar productos..." style="padding: 10px; width: 80%; max-width: 400px; border-radius: 8px; border: 1px solid #ccc;" />
+    </div>
+
+    <div id="navegacionCategorias" style="text-align: center; margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;"></div>
+
     <div id="contenedorCatalogo"></div>
   </main>
 
   <script>
+    let productos = [];
+
     async function cargarCatalogo() {
       const res = await fetch("productos.json");
-      const productos = await res.json();
+      productos = await res.json();
+      renderizarCatalogo(productos);
+      crearBotonesCategoria(productos);
+    }
 
+    function renderizarCatalogo(data) {
       const contenedor = document.getElementById("contenedorCatalogo");
+      contenedor.innerHTML = "";
       const categorias = {};
 
-      productos.forEach(p => {
+      data.forEach(p => {
         if (!categorias[p.categoria]) categorias[p.categoria] = [];
         categorias[p.categoria].push(p);
       });
@@ -41,6 +56,7 @@
       Object.entries(categorias).forEach(([categoria, items]) => {
         const bloque = document.createElement("section");
         bloque.classList.add("destacados");
+        bloque.id = categoria.replace(/\s+/g, '-');
 
         const titulo = document.createElement("h2");
         titulo.textContent = categoria;
@@ -56,13 +72,11 @@
 
           div.innerHTML = `
             ${producto.imagen
-              ? `<img src="${producto.imagen}" alt="${producto.nombre}">`
+              ? `<img src="\${producto.imagen}" alt="\${producto.nombre}">`
               : `<div class="sin-imagen">Imagen no disponible</div>`}
-            <h3>${producto.nombre}</h3>
-            <p>$${producto.precio}</p>
-            ${producto.stock > 0
-              ? '<button class="btn-agregar">Agregar al carrito</button>'
-              : ''}
+            <h3>\${producto.nombre}</h3>
+            <p>$\${producto.precio}</p>
+            \${producto.stock > 0 ? '<button class="btn-agregar">Agregar al carrito</button>' : ''}
           `;
 
           if (producto.stock > 0) {
@@ -77,13 +91,41 @@
       });
     }
 
+    function crearBotonesCategoria(data) {
+      const nav = document.getElementById("navegacionCategorias");
+      const categoriasUnicas = [...new Set(data.map(p => p.categoria))];
+
+      categoriasUnicas.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        btn.className = "btn-agregar";
+        btn.onclick = () => {
+          const target = document.getElementById(cat.replace(/\s+/g, '-'));
+          if (target) target.scrollIntoView({ behavior: "smooth" });
+        };
+        nav.appendChild(btn);
+      });
+    }
+
     function agregarAlCarrito(producto) {
       let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
       carrito.push(producto);
       localStorage.setItem("carrito", JSON.stringify(carrito));
     }
 
-    document.addEventListener("DOMContentLoaded", cargarCatalogo);
+    document.addEventListener("DOMContentLoaded", () => {
+      cargarCatalogo();
+
+      document.getElementById("buscador").addEventListener("input", e => {
+        const filtro = e.target.value.toLowerCase();
+        const filtrados = productos.filter(p =>
+          p.nombre.toLowerCase().includes(filtro) ||
+          p.categoria.toLowerCase().includes(filtro) ||
+          (p.material && p.material.toLowerCase().includes(filtro))
+        );
+        renderizarCatalogo(filtrados);
+      });
+    });
   </script>
 </body>
 </html>
