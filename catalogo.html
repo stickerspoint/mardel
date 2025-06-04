@@ -72,11 +72,11 @@
 
           div.innerHTML = `
             ${producto.imagen
-              ? `<img src="\${producto.imagen}" alt="\${producto.nombre}">`
+              ? `<img src="${producto.imagen}" alt="${producto.nombre}">`
               : `<div class="sin-imagen">Imagen no disponible</div>`}
-            <h3>\${producto.nombre}</h3>
-            <p>$\${producto.precio}</p>
-            \${producto.stock > 0 ? '<button class="btn-agregar">Agregar al carrito</button>' : ''}
+            <h3>${producto.nombre}</h3>
+            <p>$${producto.precio}</p>
+            ${producto.stock > 0 ? '<button class="btn-agregar">Agregar al carrito</button>' : ''}
           `;
 
           if (producto.stock > 0) {
