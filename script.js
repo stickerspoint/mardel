@@ -97,10 +97,7 @@ document.getElementById("listaCarrito").addEventListener("click", e => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  actualizarGaleria(document.querySelectorAll('#galeriaSlider img'));
-  renderizarDestacados();
-});
+
 
 async function renderizarCatalogo() {
   try {
@@ -158,14 +155,7 @@ async function renderizarCatalogo() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("contenedorDestacados")) {
-    renderizarDestacados();
-  }
-  if (document.getElementById("contenedorCatalogo")) {
-    renderizarCatalogo();
-  }
-});
+
 
 document.querySelectorAll("#categoriasNav a").forEach(enlace => {
   enlace.addEventListener("click", function(e) {
@@ -179,4 +169,24 @@ document.querySelectorAll("#categoriasNav a").forEach(enlace => {
       });
     }
   });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("contenedorDestacados")) {
+    renderizarDestacados();
+  }
+  if (document.getElementById("contenedorCatalogo")) {
+    renderizarCatalogo().then(() => {
+      document.querySelectorAll("#categoriasNav a").forEach(enlace => {
+        enlace.addEventListener("click", function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute("href").substring(1);
+          const seccion = document.getElementById(targetId);
+          if (seccion) {
+            seccion.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+    });
+  }
 });
