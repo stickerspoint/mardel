@@ -166,3 +166,17 @@ document.addEventListener("DOMContentLoaded", () => {
     renderizarCatalogo();
   }
 });
+
+document.querySelectorAll("#categoriasNav a").forEach(enlace => {
+  enlace.addEventListener("click", function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute("href").substring(1);
+    const seccion = document.getElementById(targetId);
+    if (seccion) {
+      window.scrollTo({
+        top: seccion.offsetTop - 100,
+        behavior: "smooth"
+      });
+    }
+  });
+});
