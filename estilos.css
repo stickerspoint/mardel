@@ -282,6 +282,7 @@ body {
   margin-top: 10px;
 }
 
+
 .producto.fuera-stock {
   position: relative;
   opacity: 0.6;
@@ -300,18 +301,4 @@ body {
   font-weight: bold;
   font-size: 16px;
   pointer-events: none;
-}
-
-/* Habilitar scroll suave */
-html {
-  scroll-behavior: smooth;
-}
-#contenedorCatalogo section {
-  margin-bottom: 60px; /* más espacio entre categorías */
-}
-
-#contenedorCatalogo section h2 {
-  margin-bottom: 30px; /* más espacio debajo del título */
-  font-size: 24px;
-  color: #f0a41c;
 }
