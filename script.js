@@ -28,18 +28,16 @@ function actualizarGaleria(slides) {
   document.getElementById('galeriaSlider').style.transform = `translateX(-${desplazamiento}px)`;
 }
 
-// Cargar productos destacados
+// Cargar productos desde productos.json
 async function renderizarDestacados() {
   try {
     const res = await fetch("productos.json");
     const productos = await res.json();
+
     const contenedor = document.getElementById("contenedorDestacados");
-
-    productos.forEach(producto => {
-      const div = document.createElement("div");
+    productos.forEach(producto => {      const div = document.createElement("div");
       div.classList.add("producto");
-      if (producto.stock <= 0) div.classList.add("fuera-stock");
-
+    if (producto.stock <= 0) div.classList.add("fuera-stock");
       div.innerHTML = `
         ${producto.imagen 
           ? `<img src="${producto.imagen}" alt="${producto.nombre}">` 
@@ -48,12 +46,11 @@ async function renderizarDestacados() {
         <p>$${producto.precio}</p>
         <button class="btn-agregar">Agregar al carrito</button>
       `;
-
       div.querySelector("button").onclick = () => agregarAlCarrito(producto);
       contenedor.appendChild(div);
     });
   } catch (error) {
-    console.error("Error cargando productos destacados:", error);
+    console.error("Error cargando productos:", error);
   }
 }
 
@@ -68,7 +65,6 @@ document.querySelector(".fa-shopping-cart").addEventListener("click", () => {
   const lista = document.getElementById("listaCarrito");
   const total = document.getElementById("totalCarrito");
   const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
   lista.innerHTML = "";
   let suma = 0;
   carrito.forEach((item, index) => {
@@ -77,7 +73,6 @@ document.querySelector(".fa-shopping-cart").addEventListener("click", () => {
     lista.appendChild(li);
     suma += item.precio;
   });
-
   total.textContent = suma;
   document.getElementById("carritoModal").style.display = "flex";
 });
@@ -102,86 +97,7 @@ document.getElementById("listaCarrito").addEventListener("click", e => {
   }
 });
 
-// Cargar catálogo
-async function renderizarCatalogo() {
-  try {
-    const res = await fetch("productos.json");
-    const productos = await res.json();
-    const contenedor = document.getElementById("contenedorCatalogo");
-    const categoriasNav = document.getElementById("categoriasNav");
-    const categorias = [...new Set(productos.map(p => p.categoria))];
-
-    categoriasNav.innerHTML = "";
-    categorias.forEach(categoria => {
-      const btn = document.createElement("a");
-      btn.href = "#" + categoria.replace(/\W+/g, "");
-      btn.textContent = categoria;
-      categoriasNav.appendChild(btn);
-    });
-
-    contenedor.innerHTML = "";
-    categorias.forEach(categoria => {
-      const seccion = document.createElement("section");
-      seccion.id = categoria.replace(/\W+/g, "");
-      seccion.innerHTML = `<h2>${categoria}</h2>`;
-      const grid = document.createElement("div");
-      grid.classList.add("destacados-grid");
-
-      productos.filter(p => p.categoria === categoria).forEach(producto => {
-        const div = document.createElement("div");
-        div.classList.add("producto");
-        if (producto.stock <= 0) div.classList.add("fuera-stock");
-
-        div.innerHTML = `
-          ${producto.imagen 
-            ? `<img src="${producto.imagen}" alt="${producto.nombre}">` 
-            : `<div class="sin-imagen">Imagen no disponible</div>`}
-          <h3>${producto.nombre}</h3>
-          <p>$${producto.precio}</p>
-          <button class="btn-agregar">Agregar al carrito</button>
-        `;
-
-        div.querySelector("button").onclick = () => agregarAlCarrito(producto);
-        grid.appendChild(div);
-      });
-
-      seccion.appendChild(grid);
-      contenedor.appendChild(seccion);
-    });
-
-    document.getElementById("buscador").addEventListener("input", (e) => {
-      const filtro = e.target.value.toLowerCase();
-      document.querySelectorAll("#contenedorCatalogo .producto").forEach(div => {
-        const nombre = div.querySelector("h3").textContent.toLowerCase();
-        div.style.display = nombre.includes(filtro) ? "" : "none";
-      });
-    });
-  } catch (error) {
-    console.error("Error cargando catálogo:", error);
-  }
-}
-
-// Inicialización después de que se carga el DOM
 document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("contenedorDestacados")) {
-    renderizarDestacados();
-  }
-
-  if (document.getElementById("contenedorCatalogo")) {
-    renderizarCatalogo().then(() => {
-      setTimeout(() => {
-        const links = document.querySelectorAll("#categoriasNav a");
-        links.forEach(enlace => {
-          enlace.addEventListener("click", function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute("href").substring(1);
-            const seccion = document.getElementById(targetId);
-            if (seccion) {
-              seccion.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-          });
-        });
-      }, 100);
-    });
-  }
+  actualizarGaleria(document.querySelectorAll('#galeriaSlider img'));
+  renderizarDestacados();
 });
