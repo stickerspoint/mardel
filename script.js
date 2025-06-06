@@ -190,3 +190,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("contenedorDestacados")) {
+    renderizarDestacados();
+  }
+
+  if (document.getElementById("contenedorCatalogo")) {
+    renderizarCatalogo().then(() => {
+      setTimeout(() => {
+        const links = document.querySelectorAll("#categoriasNav a");
+        links.forEach(enlace => {
+          enlace.addEventListener("click", function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute("href").substring(1);
+            const seccion = document.getElementById(targetId);
+            if (seccion) {
+              seccion.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+        });
+      }, 100);
+    });
+  }
+});
