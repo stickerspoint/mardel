@@ -353,27 +353,6 @@ body {
   font-size: 14px;
 }
 
-
-.bloque-filtros {
-  text-align: center;
-  margin: 20px auto 30px auto;
-  max-width: 900px;
-}
-.buscador-catalogo {
-  padding: 10px;
-  width: 90%;
-  max-width: 500px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  margin-bottom: 20px;
-}
-.barra-filtros {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-}
-
 </style>
 </head>
 <body>
@@ -393,18 +372,27 @@ body {
 
 <main class="destacados">
   <h1>Catálogo</h1>
-  
-<div class="bloque-filtros">
-  <input type="text" id="buscador" placeholder="Buscar producto..." class="buscador-catalogo">
-  <div class="barra-filtros">
-    <div id="categoriasNav"></div>
-    <select id="filtroMaterial">
-      <option value="">Material</option>
-    </select>
+  <div style="text-align: center; margin: 20px 0;">
+    <input type="text" id="buscador" placeholder="Buscar producto..." style="padding: 10px; width: 80%; max-width: 500px; border-radius: 8px; border: 1px solid #ccc;">
   </div>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 30px;" class="filtros-categorias">
+    <div id="categoriasNav">
+<a href="#Naturalezaaventura">Naturaleza/aventura</a>
+<a href="#Vareidad">Vareidad</a>
+<a href="#Musica">Musica</a>
+<a href="#Argentina">Argentina</a>
+<a href="#marcas">marcas</a>
+<a href="#tv">tv</a>
+</div>
+<select id="filtroMaterial"><option value="">Material</option>
+<option value="vinilo blanco">vinilo blanco</option>
+<option value="vinilo dorado">vinilo dorado</option>
+<option value="vinilo fotoluminiscente">vinilo fotoluminiscente</option>
+<option value="vinilo holografico">vinilo holografico</option>
+<option value="vinilo holografico triangulitos">vinilo holografico triangulitos</option>
+</select>
 </div>
 <div id="contenedorCatalogo">
-
 <section id="Naturalezaaventura"><h2>Naturaleza/aventura</h2><div class="destacados-grid">
 
         <div class="producto" data-material="vinilo blanco">
