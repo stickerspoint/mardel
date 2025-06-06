@@ -28,16 +28,18 @@ function actualizarGaleria(slides) {
   document.getElementById('galeriaSlider').style.transform = `translateX(-${desplazamiento}px)`;
 }
 
-// Cargar productos desde productos.json
+// Cargar productos destacados
 async function renderizarDestacados() {
   try {
     const res = await fetch("productos.json");
     const productos = await res.json();
-
     const contenedor = document.getElementById("contenedorDestacados");
-    productos.forEach(producto => {      const div = document.createElement("div");
+
+    productos.forEach(producto => {
+      const div = document.createElement("div");
       div.classList.add("producto");
-    if (producto.stock <= 0) div.classList.add("fuera-stock");
+      if (producto.stock <= 0) div.classList.add("fuera-stock");
+
       div.innerHTML = `
         ${producto.imagen 
           ? `<img src="${producto.imagen}" alt="${producto.nombre}">` 
@@ -46,11 +48,12 @@ async function renderizarDestacados() {
         <p>$${producto.precio}</p>
         <button class="btn-agregar">Agregar al carrito</button>
       `;
+
       div.querySelector("button").onclick = () => agregarAlCarrito(producto);
       contenedor.appendChild(div);
     });
   } catch (error) {
-    console.error("Error cargando productos:", error);
+    console.error("Error cargando productos destacados:", error);
   }
 }
 
@@ -65,6 +68,7 @@ document.querySelector(".fa-shopping-cart").addEventListener("click", () => {
   const lista = document.getElementById("listaCarrito");
   const total = document.getElementById("totalCarrito");
   const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
   lista.innerHTML = "";
   let suma = 0;
   carrito.forEach((item, index) => {
@@ -73,6 +77,7 @@ document.querySelector(".fa-shopping-cart").addEventListener("click", () => {
     lista.appendChild(li);
     suma += item.precio;
   });
+
   total.textContent = suma;
   document.getElementById("carritoModal").style.display = "flex";
 });
@@ -97,8 +102,7 @@ document.getElementById("listaCarrito").addEventListener("click", e => {
   }
 });
 
-
-
+// Cargar catálogo
 async function renderizarCatalogo() {
   try {
     const res = await fetch("productos.json");
@@ -119,7 +123,7 @@ async function renderizarCatalogo() {
     categorias.forEach(categoria => {
       const seccion = document.createElement("section");
       seccion.id = categoria.replace(/\W+/g, "");
-      seccion.innerHTML = `<h2 style="margin-bottom:20px;">${categoria}</h2>`;
+      seccion.innerHTML = `<h2>${categoria}</h2>`;
       const grid = document.createElement("div");
       grid.classList.add("destacados-grid");
 
@@ -127,6 +131,7 @@ async function renderizarCatalogo() {
         const div = document.createElement("div");
         div.classList.add("producto");
         if (producto.stock <= 0) div.classList.add("fuera-stock");
+
         div.innerHTML = `
           ${producto.imagen 
             ? `<img src="${producto.imagen}" alt="${producto.nombre}">` 
@@ -135,6 +140,7 @@ async function renderizarCatalogo() {
           <p>$${producto.precio}</p>
           <button class="btn-agregar">Agregar al carrito</button>
         `;
+
         div.querySelector("button").onclick = () => agregarAlCarrito(producto);
         grid.appendChild(div);
       });
@@ -155,41 +161,7 @@ async function renderizarCatalogo() {
   }
 }
 
-
-
-document.querySelectorAll("#categoriasNav a").forEach(enlace => {
-  enlace.addEventListener("click", function(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute("href").substring(1);
-    const seccion = document.getElementById(targetId);
-    if (seccion) {
-      window.scrollTo({
-        top: seccion.offsetTop - 100,
-        behavior: "smooth"
-      });
-    }
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("contenedorDestacados")) {
-    renderizarDestacados();
-  }
-  if (document.getElementById("contenedorCatalogo")) {
-    renderizarCatalogo().then(() => {
-      document.querySelectorAll("#categoriasNav a").forEach(enlace => {
-        enlace.addEventListener("click", function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute("href").substring(1);
-          const seccion = document.getElementById(targetId);
-          if (seccion) {
-            seccion.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        });
-      });
-    });
-  }
-});
+// Inicialización después de que se carga el DOM
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("contenedorDestacados")) {
     renderizarDestacados();

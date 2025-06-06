@@ -302,16 +302,19 @@ body {
   pointer-events: none;
 }
 
-/* Habilitar scroll suave */
-html {
-  scroll-behavior: smooth;
-}
+/* Espacio entre secciones del catálogo */
 #contenedorCatalogo section {
-  margin-bottom: 60px; /* más espacio entre categorías */
+  margin-bottom: 40px;
 }
 
 #contenedorCatalogo section h2 {
-  margin-bottom: 30px; /* más espacio debajo del título */
+  margin-bottom: 20px;
   font-size: 24px;
   color: #f0a41c;
+  text-align: center;
+}
+
+/* Scroll suave general */
+html {
+  scroll-behavior: smooth;
 }
