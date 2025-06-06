@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Catálogo completo</title>
+  <title>Catálogo con filtro de material</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -42,12 +42,13 @@
       border-radius: 8px;
       border: 1px solid #ccc;
     }
-    #categoriasNav {
+    .filtros-categorias {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 15px;
       margin-bottom: 30px;
+      align-items: center;
     }
     #categoriasNav a {
       text-decoration: none;
@@ -60,6 +61,11 @@
     }
     #categoriasNav a:hover {
       background: #ffe2b3;
+    }
+    select {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
     section {
       margin: 60px auto;
@@ -115,7 +121,8 @@
     <input type="text" id="buscador" placeholder="Buscar producto..." />
   </div>
 
-  <div id="categoriasNav">
+  <div class="filtros-categorias">
+    <div id="categoriasNav">
 <a href="#Naturalezaaventura">Naturaleza/aventura</a>
 <a href="#Vareidad">Vareidad</a>
 <a href="#Musica">Musica</a>
@@ -123,203 +130,212 @@
 <a href="#marcas">marcas</a>
 <a href="#tv">tv</a>
 </div>
+<select id="filtroMaterial">
+<option value="">Material</option>
+<option value="vinilo blanco">vinilo blanco</option>
+<option value="vinilo dorado">vinilo dorado</option>
+<option value="vinilo fotoluminiscente">vinilo fotoluminiscente</option>
+<option value="vinilo holografico">vinilo holografico</option>
+<option value="vinilo holografico triangulitos">vinilo holografico triangulitos</option>
+</select>
+</div>
 <section id="Naturalezaaventura">
 <h2>Naturaleza/aventura</h2>
 <div class="destacados-grid">
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Zorro bebe">
           <h3>Zorro bebe</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Conejo bebe">
           <h3>Conejo bebe</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Dinosaurio bebe">
           <h3>Dinosaurio bebe</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="triceratops bebe">
           <h3>triceratops bebe</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="oveja bebe">
           <h3>oveja bebe</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="tortuga bebe">
           <h3>tortuga bebe</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Margarita">
           <h3>Margarita</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="flores BYN">
           <h3>flores BYN</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="margarita alegre">
           <h3>margarita alegre</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="camping ">
           <h3>camping </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="the little things ">
           <h3>the little things </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="salchicha en atardecer ">
           <h3>salchicha en atardecer </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="fogata universo">
           <h3>fogata universo</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="atardecer con paisaje ">
           <h3>atardecer con paisaje </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="olas y sol">
           <h3>olas y sol</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="astronauta y el universo">
           <h3>astronauta y el universo</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="corazon del mar">
           <h3>corazon del mar</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="honguitos y flores">
           <h3>honguitos y flores</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="auroras boreales ">
           <h3>auroras boreales </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="flor de loto ">
           <h3>flor de loto </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="ventana de avion ">
           <h3>ventana de avion </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="la noche y el mar ">
           <h3>la noche y el mar </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="carpa con paisaje dentro ">
           <h3>carpa con paisaje dentro </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="hongutos psicodelicos">
           <h3>hongutos psicodelicos</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="gato con dos cabezas">
           <h3>gato con dos cabezas</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="honguitos ">
           <h3>honguitos </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="mariposa de olas">
           <h3>mariposa de olas</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="mar de noche ">
           <h3>mar de noche </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="gato con tercer ojo ">
           <h3>gato con tercer ojo </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="leopardo con corazones">
           <h3>leopardo con corazones</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="gatitos jin y jan">
           <h3>gatitos jin y jan</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="fogata">
           <h3>fogata</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="adventure">
           <h3>adventure</h3>
           <p>$800</p>
@@ -330,181 +346,181 @@
 <h2>Vareidad</h2>
 <div class="destacados-grid">
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="nasa">
           <h3>nasa</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Gracias por nada ">
           <h3>Gracias por nada </h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="infumable">
           <h3>infumable</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="estrella fugaz">
           <h3>estrella fugaz</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Estamso bien ">
           <h3>Estamso bien </h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Cerecitas">
           <h3>Cerecitas</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt=" porrito kawaii">
           <h3> porrito kawaii</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="fuego brillante ">
           <h3>fuego brillante </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="alien kawaii">
           <h3>alien kawaii</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="ovni kawaii">
           <h3>ovni kawaii</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="existential crisis">
           <h3>existential crisis</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="rick y morty porrito">
           <h3>rick y morty porrito</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="chica psicodelica">
           <h3>chica psicodelica</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="gato psicodelico ">
           <h3>gato psicodelico </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="esqueleto y mariposa">
           <h3>esqueleto y mariposa</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="ariana grande  positions ">
           <h3>ariana grande  positions </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="corazon distorsionado">
           <h3>corazon distorsionado</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="alien en ovni">
           <h3>alien en ovni</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="avion de papel en el espacio">
           <h3>avion de papel en el espacio</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="ovni con caras distorsionadas">
           <h3>ovni con caras distorsionadas</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="esqueleto ">
           <h3>esqueleto </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="stoner">
           <h3>stoner</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="fantasmita">
           <h3>fantasmita</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="cara distorsionada">
           <h3>cara distorsionada</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="caritas deformadas">
           <h3>caritas deformadas</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="aliens y planetas">
           <h3>aliens y planetas</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="alien en ovni">
           <h3>alien en ovni</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="mano con ojo">
           <h3>mano con ojo</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="ojo de olas">
           <h3>ojo de olas</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="ojo psicodelico">
           <h3>ojo psicodelico</h3>
           <p>$800</p>
@@ -515,43 +531,43 @@
 <h2>Musica</h2>
 <div class="destacados-grid">
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Indio solari">
           <h3>Indio solari</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="mala fama">
           <h3>mala fama</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="kizz">
           <h3>kizz</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="ACDC">
           <h3>ACDC</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="artic monkeys ">
           <h3>artic monkeys </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="michel jackson ">
           <h3>michel jackson </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="dosastereo">
           <h3>dosastereo</h3>
           <p>$800</p>
@@ -562,37 +578,37 @@
 <h2>Argentina</h2>
 <div class="destacados-grid">
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo blanco">
           <img src="sin-imagen.jpg" alt="Mate">
           <h3>Mate</h3>
           <p>$600</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="bandera argentina ">
           <h3>bandera argentina </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="maradona ">
           <h3>maradona </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="made in argentina">
           <h3>made in argentina</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="sol argentina ">
           <h3>sol argentina </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="fernet">
           <h3>fernet</h3>
           <p>$800</p>
@@ -603,19 +619,19 @@
 <h2>marcas</h2>
 <div class="destacados-grid">
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico">
           <img src="sin-imagen.jpg" alt="rip curl">
           <h3>rip curl</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="fox apilado">
           <h3>fox apilado</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="hot wheels">
           <h3>hot wheels</h3>
           <p>$800</p>
@@ -626,61 +642,61 @@
 <h2>tv</h2>
 <div class="destacados-grid">
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="lisa loca">
           <h3>lisa loca</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="rick y morty">
           <h3>rick y morty</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="dólar morty">
           <h3>dólar morty</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo holografico triangulitos">
           <img src="sin-imagen.jpg" alt="carta astrologica coraje ">
           <h3>carta astrologica coraje </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="el principito y el zorro">
           <h3>el principito y el zorro</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="escandalosos en la luna ">
           <h3>escandalosos en la luna </h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo fotoluminiscente">
           <img src="sin-imagen.jpg" alt="mr burns alien">
           <h3>mr burns alien</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="sol rapunzel">
           <h3>sol rapunzel</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="homero buda">
           <h3>homero buda</h3>
           <p>$800</p>
         </div>
 
-        <div class="producto">
+        <div class="producto" data-material="vinilo dorado">
           <img src="sin-imagen.jpg" alt="logo harry potter">
           <h3>logo harry potter</h3>
           <p>$800</p>
@@ -694,6 +710,14 @@ document.getElementById("buscador").addEventListener("input", function () {
   document.querySelectorAll(".producto").forEach(prod => {
     const nombre = prod.querySelector("h3").textContent.toLowerCase();
     prod.style.display = nombre.includes(filtro) ? "" : "none";
+  });
+});
+
+document.getElementById("filtroMaterial").addEventListener("change", function () {
+  const valor = this.value.toLowerCase();
+  document.querySelectorAll(".producto").forEach(prod => {
+    const mat = prod.getAttribute("data-material") || "";
+    prod.style.display = (!valor || mat === valor) ? "" : "none";
   });
 });
 </script>
