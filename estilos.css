@@ -52,103 +52,6 @@ body {
   color: #333;
 }
 
-.inicio {
-  padding: 60px 20px;
-  background: #fef5e7;
-  display: flex;
-  justify-content: center;
-}
-
-.inicio-contenido {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  max-width: 1100px;
-  width: 100%;
-}
-
-.texto {
-  flex: 1;
-  min-width: 280px;
-  text-align: center;
-}
-
-.texto h1 {
-  font-size: 32px;
-  color: #333;
-  margin-bottom: 15px;
-}
-
-.texto p {
-  font-size: 18px;
-  color: #666;
-  line-height: 1.6;
-}
-
-.imagen {
-  flex: 1;
-  text-align: center;
-  min-width: 250px;
-}
-
-.imagen img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
-}
-
-.galeria-fondo {
-  background: #fef5e7;
-  padding: 50px 0;
-  text-align: center;
-}
-
-.galeria-container {
-  position: relative;
-  width: 930px;
-  margin: auto;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.galeria-slider {
-  display: flex;
-  transition: transform 0.6s ease;
-  width: max-content;
-  scroll-behavior: smooth;
-}
-
-.galeria-slider img {
-  width: 300px;
-  flex-shrink: 0;
-  object-fit: cover;
-  margin-right: 10px;
-  border-radius: 10px;
-  opacity: 0.5;
-  transition: opacity 0.4s ease;
-}
-
-.galeria-slider img.central {
-  opacity: 1;
-}
-
-.galeria-controles {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-  gap: 20px;
-}
-
-.galeria-controles button {
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: #f0a41c;
-  cursor: pointer;
-}
-
-/* DESTACADOS */
 .destacados {
   padding: 60px 20px;
   background: #fffef9;
@@ -257,7 +160,6 @@ body {
   font-size: 24px;
 }
 
-
 /* Imagen faltante */
 .sin-imagen {
   width: 100%;
@@ -271,18 +173,7 @@ body {
   border-radius: 10px;
 }
 
-
-/* Etiqueta de producto sin stock */
-.sin-stock {
-  background-color: #e74c3c;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-
+/* Producto sin stock */
 .producto.fuera-stock {
   position: relative;
   opacity: 0.6;
@@ -301,4 +192,31 @@ body {
   font-weight: bold;
   font-size: 16px;
   pointer-events: none;
+}
+
+/* Espacio entre secciones del catálogo */
+#contenedorCatalogo section {
+  margin-bottom: 40px;
+  padding-top: 40px;
+}
+
+#contenedorCatalogo section h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #f0a41c;
+  text-align: center;
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Categoría activa */
+#categoriasNav a.activa {
+  background-color: #ffe2b3;
+  border-radius: 10px;
+  padding: 6px 12px;
+  color: #333;
+  font-weight: bold;
 }
