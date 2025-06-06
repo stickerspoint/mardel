@@ -306,3 +306,12 @@ body {
 html {
   scroll-behavior: smooth;
 }
+#contenedorCatalogo section {
+  margin-bottom: 60px; /* más espacio entre categorías */
+}
+
+#contenedorCatalogo section h2 {
+  margin-bottom: 30px; /* más espacio debajo del título */
+  font-size: 24px;
+  color: #f0a41c;
+}
