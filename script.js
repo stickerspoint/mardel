@@ -101,3 +101,68 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarGaleria(document.querySelectorAll('#galeriaSlider img'));
   renderizarDestacados();
 });
+
+async function renderizarCatalogo() {
+  try {
+    const res = await fetch("productos.json");
+    const productos = await res.json();
+    const contenedor = document.getElementById("contenedorCatalogo");
+    const categoriasNav = document.getElementById("categoriasNav");
+    const categorias = [...new Set(productos.map(p => p.categoria))];
+
+    categoriasNav.innerHTML = "";
+    categorias.forEach(categoria => {
+      const btn = document.createElement("a");
+      btn.href = "#" + categoria.replace(/\W+/g, "");
+      btn.textContent = categoria;
+      categoriasNav.appendChild(btn);
+    });
+
+    contenedor.innerHTML = "";
+    categorias.forEach(categoria => {
+      const seccion = document.createElement("section");
+      seccion.id = categoria.replace(/\W+/g, "");
+      seccion.innerHTML = `<h2 style="margin-bottom:20px;">${categoria}</h2>`;
+      const grid = document.createElement("div");
+      grid.classList.add("destacados-grid");
+
+      productos.filter(p => p.categoria === categoria).forEach(producto => {
+        const div = document.createElement("div");
+        div.classList.add("producto");
+        if (producto.stock <= 0) div.classList.add("fuera-stock");
+        div.innerHTML = `
+          ${producto.imagen 
+            ? `<img src="${producto.imagen}" alt="${producto.nombre}">` 
+            : `<div class="sin-imagen">Imagen no disponible</div>`}
+          <h3>${producto.nombre}</h3>
+          <p>$${producto.precio}</p>
+          <button class="btn-agregar">Agregar al carrito</button>
+        `;
+        div.querySelector("button").onclick = () => agregarAlCarrito(producto);
+        grid.appendChild(div);
+      });
+
+      seccion.appendChild(grid);
+      contenedor.appendChild(seccion);
+    });
+
+    document.getElementById("buscador").addEventListener("input", (e) => {
+      const filtro = e.target.value.toLowerCase();
+      document.querySelectorAll("#contenedorCatalogo .producto").forEach(div => {
+        const nombre = div.querySelector("h3").textContent.toLowerCase();
+        div.style.display = nombre.includes(filtro) ? "" : "none";
+      });
+    });
+  } catch (error) {
+    console.error("Error cargando catálogo:", error);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("contenedorDestacados")) {
+    renderizarDestacados();
+  }
+  if (document.getElementById("contenedorCatalogo")) {
+    renderizarCatalogo();
+  }
+});

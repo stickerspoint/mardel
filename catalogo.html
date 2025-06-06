@@ -1,33 +1,42 @@
 
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Catálogo</title>
-<link href="estilos.css" rel="stylesheet"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Catálogo</title>
+  <link rel="stylesheet" href="estilos.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body>
 <header class="header">
-<div class="logo">StickersPoint</div>
-<nav class="nav-links">
-<a href="index.html">Inicio</a>
-<a href="catalogo.html">Productos</a>
-<a href="#">Contacto</a>
-</nav>
-<div class="icons">
-<button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
-</div>
+  <div class="logo">StickersPoint</div>
+  <nav class="nav-links">
+    <a href="index.html">Inicio</a>
+    <a href="catalogo.html">Productos</a>
+    <a href="#">Contacto</a>
+  </nav>
+  <div class="icons">
+    <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+  </div>
 </header>
-<main><h1>Catálogo</h1></main>
+
+<main class="destacados">
+  <h1>Catálogo</h1>
+  <input type="text" id="buscador" placeholder="Buscar producto..." style="margin: 20px auto; padding: 10px; width: 80%; max-width: 500px; display: block; border-radius: 8px; border: 1px solid #ccc;">
+  <div id="categoriasNav" class="nav-links" style="justify-content: center; flex-wrap: wrap; gap: 20px; margin-bottom: 30px;"></div>
+  <div id="contenedorCatalogo"></div>
+</main>
+
 <div class="modal" id="carritoModal">
-<div class="modal-content carrito">
-<span class="close-modal" id="cerrarCarrito">×</span>
-<h2>Carrito</h2>
-<ul id="listaCarrito"></ul>
-<p>Total: $<span id="totalCarrito">0</span></p>
-<button id="vaciarCarrito">Vaciar carrito</button>
+  <div class="modal-content carrito">
+    <span class="close-modal" id="cerrarCarrito">×</span>
+    <h2>Carrito</h2>
+    <ul id="listaCarrito"></ul>
+    <p>Total: $<span id="totalCarrito">0</span></p>
+    <button id="vaciarCarrito">Vaciar carrito</button>
+  </div>
 </div>
-</div><script src="script.js"></script></body>
+<script src="script.js"></script>
+</body>
 </html>
