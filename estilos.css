@@ -302,3 +302,12 @@ body {
   font-size: 16px;
   pointer-events: none;
 }
+/* Asegurar visibilidad de imágenes de productos */
+.producto img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
