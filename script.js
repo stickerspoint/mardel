@@ -101,3 +101,4 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarGaleria(document.querySelectorAll('#galeriaSlider img'));
   renderizarDestacados();
 });
+if (document.getElementById('contenedorDestacados')) renderizarDestacados();
