@@ -1,51 +1,117 @@
 
-/* ==== Scroll Suave === */
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
-/* ==== Filtro Material === */
-#filtroMaterial {
-  padding: 8px 12px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  margin-top: 5px;
-  background: white;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fffef9;
+  color: #333;
 }
 
-/* ==== Atajos de Categoría === */
-#categoriasNav a {
+/* Header */
+.header {
+  background: white;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 16px 16px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f0a41c;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links a {
   text-decoration: none;
   color: #333;
-  padding: 6px 12px;
-  border-radius: 12px;
-  background: #f5f5f5;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  display: inline-block;
-  transition: background 0.3s;
-  margin: 5px;
+  font-weight: bold;
 }
 
-#categoriasNav a:hover {
-  background-color: #ffe2b3;
+.icons .icon-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
 }
 
-/* ==== Títulos de Categoría === */
-#contenedorCatalogo section {
-  margin-bottom: 50px;
-  padding-top: 50px;
-}
-
-#contenedorCatalogo section h2 {
-  margin-bottom: 30px;
-  font-size: 24px;
-  color: #f0a41c;
+/* Carrusel */
+.galeria-fondo {
+  background-color: #f9f2e8;
+  padding: 50px 0;
   text-align: center;
 }
 
-/* ==== Productos ==== */
+.galeria-container {
+  width: 930px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 12px;
+  position: relative;
+}
+
+.galeria-slider {
+  display: flex;
+  transition: transform 0.5s ease;
+  width: max-content;
+}
+
+.galeria-slider img {
+  width: 300px;
+  margin-right: 10px;
+  border-radius: 12px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.galeria-slider img.central {
+  opacity: 1;
+}
+
+.galeria-controles {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 40px;
+}
+
+.galeria-controles button {
+  font-size: 30px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Catálogo y productos */
+.destacados {
+  padding: 40px 20px;
+  background-color: #fffef9;
+  text-align: center;
+}
+
+.destacados h1 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
 .destacados-grid {
   display: flex;
   flex-wrap: wrap;
@@ -83,12 +149,101 @@ html {
   font-weight: bold;
 }
 
-/* ==== Carrusel ==== */
-.galeria-slider img {
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
+.btn-agregar {
+  background-color: #f0a41c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
-.galeria-slider img.central {
-  opacity: 1;
+.btn-agregar:hover {
+  background-color: #d98c17;
+}
+
+/* Modal carrito */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal-content.carrito {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: left;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.modal-content li {
+  margin-bottom: 10px;
+}
+
+.modal-content button {
+  margin-top: 10px;
+}
+
+.close-modal {
+  float: right;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+/* Filtro y categorías */
+#categoriasNav a {
+  text-decoration: none;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  display: inline-block;
+  transition: background 0.3s;
+  margin: 5px;
+}
+
+#categoriasNav a:hover {
+  background-color: #ffe2b3;
+}
+
+#filtroMaterial {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-top: 5px;
+  background: white;
+}
+
+/* Separación entre títulos y productos */
+#contenedorCatalogo section {
+  margin-bottom: 50px;
+  padding-top: 50px;
+}
+
+#contenedorCatalogo section h2 {
+  margin-bottom: 30px;
+  font-size: 24px;
+  color: #f0a41c;
+  text-align: center;
 }
