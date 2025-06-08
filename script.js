@@ -1,102 +1,103 @@
-
-// ================= CARRUSEL ===================
-let posicionActual = 0;
-let intervalo;
+// Carrusel
+let galeriaIndice = 1;
 
 function moverGaleria(direccion) {
-  const slider = document.getElementById('galeriaSlider');
-  const imagenes = slider.querySelectorAll('img');
-  const total = imagenes.length;
+  const galeria = document.getElementById('galeriaSlider');
+  const slides = galeria.querySelectorAll('img');
+  galeriaIndice += direccion;
 
-  posicionActual += direccion;
-  if (posicionActual < 0) posicionActual = total - 1;
-  if (posicionActual >= total) posicionActual = 0;
+  if (galeriaIndice < 0) galeriaIndice = 0;
+  if (galeriaIndice > slides.length - 1) galeriaIndice = slides.length - 1;
 
-  slider.style.transform = 'translateX(-' + (posicionActual * (imagenes[0].clientWidth + 10)) + 'px)';
-  actualizarClases(imagenes);
+  actualizarGaleria(slides);
 }
 
-function actualizarClases(imagenes) {
-  imagenes.forEach((img, idx) => {
-    img.classList.remove('central');
-    if (idx === posicionActual) {
-      img.classList.add('central');
-    }
+function actualizarGaleria(slides) {
+  slides.forEach(slide => {
+    slide.classList.remove('central');
+    slide.style.opacity = '0.5';
   });
+
+  if (slides[galeriaIndice]) {
+    slides[galeriaIndice].classList.add('central');
+    slides[galeriaIndice].style.opacity = '1';
+  }
+
+  const anchoImagen = 310;
+  const desplazamiento = (galeriaIndice - 1) * anchoImagen;
+  document.getElementById('galeriaSlider').style.transform = `translateX(-${desplazamiento}px)`;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const slider = document.getElementById('galeriaSlider');
-  if (slider) {
-    // Duplicar imágenes si hay menos de 5
-    const imgs = Array.from(slider.children);
-    while (slider.children.length < 5) {
-      imgs.forEach(img => slider.appendChild(img.cloneNode(true)));
-    }
-    actualizarClases(slider.querySelectorAll('img'));
-    intervalo = setInterval(() => moverGaleria(1), 4000);
-  }
+// Cargar productos desde productos.json
+async function renderizarDestacados() {
+  try {
+    const res = await fetch("productos.json");
+    const productos = await res.json();
 
-  if (document.getElementById("contenedorDestacados")) {
-    renderizarDestacados();
+    const contenedor = document.getElementById("contenedorDestacados");
+    productos.forEach(producto => {      const div = document.createElement("div");
+      div.classList.add("producto");
+    if (producto.stock <= 0) div.classList.add("fuera-stock");
+      div.innerHTML = `
+        ${producto.imagen 
+          ? `<img src="${producto.imagen}" alt="${producto.nombre}">` 
+          : `<div class="sin-imagen">Imagen no disponible</div>`}
+        <h3>${producto.nombre}</h3>
+        <p>$${producto.precio}</p>
+        <button class="btn-agregar">Agregar al carrito</button>
+      `;
+      div.querySelector("button").onclick = () => agregarAlCarrito(producto);
+      contenedor.appendChild(div);
+    });
+  } catch (error) {
+    console.error("Error cargando productos:", error);
   }
-  if (document.getElementById("contenedorCatalogo")) {
-    inicializarCatalogo();
+}
+
+// Carrito
+function agregarAlCarrito(producto) {
+  let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+  carrito.push(producto);
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+}
+
+document.querySelector(".fa-shopping-cart").addEventListener("click", () => {
+  const lista = document.getElementById("listaCarrito");
+  const total = document.getElementById("totalCarrito");
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+  lista.innerHTML = "";
+  let suma = 0;
+  carrito.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `${item.nombre} - $${item.precio} <button data-index="${index}" class="eliminar-item">X</button>`;
+    lista.appendChild(li);
+    suma += item.precio;
+  });
+  total.textContent = suma;
+  document.getElementById("carritoModal").style.display = "flex";
+});
+
+document.getElementById("cerrarCarrito").addEventListener("click", () => {
+  document.getElementById("carritoModal").style.display = "none";
+});
+
+document.getElementById("vaciarCarrito").addEventListener("click", () => {
+  localStorage.removeItem("carrito");
+  document.getElementById("listaCarrito").innerHTML = "";
+  document.getElementById("totalCarrito").textContent = "0";
+});
+
+document.getElementById("listaCarrito").addEventListener("click", e => {
+  if (e.target.classList.contains("eliminar-item")) {
+    const index = e.target.dataset.index;
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    carrito.splice(index, 1);
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    document.querySelector(".fa-shopping-cart").click();
   }
 });
 
-// ================== CATÁLOGO ==================
-function inicializarCatalogo() {
-  const contenedor = document.getElementById("contenedorCatalogo");
-  const filtroMaterial = document.getElementById("filtroMaterial");
-  const buscador = document.getElementById("buscador");
-
-  fetch("productos.json")
-    .then(res => res.json())
-    .then(productos => {
-      const categorias = [...new Set(productos.map(p => p.categoria))];
-
-      categorias.forEach(cat => {
-        const idCat = cat.replace(/[^a-zA-Z0-9]/g, "");
-        const section = document.createElement("section");
-        section.id = idCat;
-        section.innerHTML = \`<h2>\${cat}</h2><div class="destacados-grid"></div>\`;
-        contenedor.appendChild(section);
-      });
-
-      function renderProductos(filtro = "", texto = "") {
-        categorias.forEach(cat => {
-          const idCat = cat.replace(/[^a-zA-Z0-9]/g, "");
-          const grid = document.querySelector(\`#\${idCat} .destacados-grid\`);
-          grid.innerHTML = "";
-
-          productos
-            .filter(p => p.categoria === cat)
-            .filter(p => !filtro || p.material === filtro)
-            .filter(p => !texto || p.nombre.toLowerCase().includes(texto.toLowerCase()))
-            .forEach(prod => {
-              const div = document.createElement("div");
-              div.className = "producto";
-              if (prod.stock <= 0) div.classList.add("fuera-stock");
-              div.innerHTML = \`
-                <img src="\${prod.imagen}" alt="\${prod.nombre}">
-                <h3>\${prod.nombre}</h3>
-                <p>$\${prod.precio}</p>
-                <button class="btn-agregar">Agregar al carrito</button>
-              \`;
-              grid.appendChild(div);
-            });
-        });
-      }
-
-      renderProductos();
-
-      filtroMaterial.addEventListener("change", () => {
-        renderProductos(filtroMaterial.value, buscador.value);
-      });
-
-      buscador.addEventListener("input", () => {
-        renderProductos(filtroMaterial.value, buscador.value);
-      });
-    });
-}
+document.addEventListener("DOMContentLoaded", () => {
+  actualizarGaleria(document.querySelectorAll('#galeriaSlider img'));
+  renderizarDestacados();
+});
