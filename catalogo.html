@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,33 +9,53 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">StickersPoint</div>
-    <nav class="nav-links">
-      <a href="index.html">Inicio</a>
-      <a href="catalogo.html">Productos</a>
-      <a href="#">Contacto</a>
-    </nav>
-    <div class="icons">
-      <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
-    </div>
-  </header>
 
-  <main class="destacados">
-    <h1>Catálogo</h1>
-    <div id="contenedorDestacados" class="destacados-grid"></div>
-  </main>
-
-  <div class="modal" id="carritoModal">
-    <div class="modal-content carrito">
-      <span class="close-modal" id="cerrarCarrito">×</span>
-      <h2>Carrito</h2>
-      <ul id="listaCarrito"></ul>
-      <p>Total: $<span id="totalCarrito">0</span></p>
-      <button id="vaciarCarrito">Vaciar carrito</button>
-    </div>
+<header class="header">
+  <div class="logo">StickersPoint</div>
+  <nav class="nav-links">
+    <a href="index.html">Inicio</a>
+    <a href="catalogo.html">Productos</a>
+    <a href="#">Contacto</a>
+  </nav>
+  <div class="icons">
+    <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
   </div>
+</header>
 
-  <script src="script.js"></script>
+<main class="destacados">
+  <h1>Catálogo</h1>
+  <div style="text-align: center; margin: 20px 0;">
+    <input type="text" id="buscador" placeholder="Buscar producto..." style="padding: 10px; width: 80%; max-width: 500px; border-radius: 8px; border: 1px solid #ccc;">
+  </div>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 30px;" class="filtros-categorias">
+    <div id="categoriasNav"></div>
+    <select id="filtroMaterial">
+      <option value="">Material</option>
+      <option value="vinilo blanco">vinilo blanco</option>
+      <option value="vinilo dorado">vinilo dorado</option>
+      <option value="vinilo fotoluminiscente">vinilo fotoluminiscente</option>
+      <option value="vinilo holografico">vinilo holografico</option>
+      <option value="vinilo holografico triangulitos">vinilo holografico triangulitos</option>
+    </select>
+  </div>
+  <div id="contenedorCatalogo"></div>
+</main>
+
+<script>
+  fetch("productos.json")
+    .then(res => res.json())
+    .then(productos => {
+      const nav = document.getElementById("categoriasNav");
+      const categorias = [...new Set(productos.map(p => p.categoria))];
+      categorias.forEach(cat => {
+        const id = cat.replace(/[^a-zA-Z0-9]/g, "");
+        const link = document.createElement("a");
+        link.href = "#" + id;
+        link.textContent = cat;
+        nav.appendChild(link);
+      });
+    });
+</script>
+<script src="script.js"></script>
 </body>
 </html>
