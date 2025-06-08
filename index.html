@@ -1,60 +1,55 @@
 
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Tienda Online</title>
-<link href="estilos.css" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio - StickersPoint</title>
+  <link rel="stylesheet" href="estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body>
+
 <header class="header">
-<div class="logo">StickersPoint</div>
-<nav class="nav-links">
-<a href="#">Inicio</a>
-<a href="catalogo.html">Productos</a>
-<a href="#">Contacto</a>
-</nav>
-<div class="icons">
-<button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
-</div>
+  <div class="logo">StickersPoint</div>
+  <nav class="nav-links">
+    <a href="index.html">Inicio</a>
+    <a href="catalogo.html">Productos</a>
+    <a href="#">Contacto</a>
+  </nav>
+  <div class="icons">
+    <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+  </div>
 </header>
-<section class="inicio">
-<div class="inicio-contenido">
-<div class="texto">
-<h1>Bienvenidos a StickersPoint</h1>
-<p>Descubrí los mejores stickers con la mejor calidad</p>
-</div>
-<div class="imagen">
-<img alt="Mascota" src="mascota.png"/>
-</div>
-</div>
-</section>
+
 <section class="galeria-fondo">
-<div class="galeria-container">
-<div class="galeria-slider" id="galeriaSlider">
-<img alt="Imagen 1" src="carrusel1.jpg"/>
-<img alt="Imagen 2" src="carrusel2.jpg"/>
-<img alt="Imagen 3" src="carrusel1.jpg"/>
-<img alt="Imagen 4" src="carrusel2.jpg"/>
-</div>
-<div class="galeria-controles">
-<button onclick="moverGaleria(-1)">❮</button>
-<button onclick="moverGaleria(1)">❯</button>
-</div>
-</div>
+  <div class="galeria-container">
+    <div id="galeriaSlider" class="galeria-slider">
+      <img src="imagenescatalogo/carrusel1.jpg" alt="Carrusel 1">
+      <img src="imagenescatalogo/carrusel2.jpg" alt="Carrusel 2">
+    </div>
+  </div>
+  <div class="galeria-controles">
+    <button onclick="moverGaleria(-1)"><i class="fas fa-chevron-left"></i></button>
+    <button onclick="moverGaleria(1)"><i class="fas fa-chevron-right"></i></button>
+  </div>
 </section>
+
+<main class="destacados">
+  <h2>Productos destacados</h2>
+  <div id="contenedorDestacados" class="destacados-grid"></div>
+</main>
+
 <div class="modal" id="carritoModal">
-<div class="modal-content carrito">
-<span class="close-modal" id="cerrarCarrito">×</span>
-<h2>Carrito</h2>
-<ul id="listaCarrito"></ul>
-<p>Total: $<span id="totalCarrito">0</span></p>
-<button id="vaciarCarrito">Vaciar carrito</button>
+  <div class="modal-content carrito">
+    <span class="close-modal" id="cerrarCarrito">×</span>
+    <h2>Carrito</h2>
+    <ul id="listaCarrito"></ul>
+    <p>Total: $<span id="totalCarrito">0</span></p>
+    <button id="vaciarCarrito">Vaciar carrito</button>
+  </div>
 </div>
-</div>
+
 <script src="script.js"></script>
 </body>
 </html>
