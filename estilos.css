@@ -1,128 +1,51 @@
 
-/* === General === */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
-
+/* ==== Scroll Suave === */
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  background: #fff;
-  color: #333;
-}
-
-/* === Header === */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 25px;
-  background: white;
+/* ==== Filtro Material === */
+#filtroMaterial {
+  padding: 8px 12px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 10px 20px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-top: 5px;
+  background: white;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #f0a41c;
-}
-
-.nav-links {
-  display: flex;
-  gap: 40px;
-}
-
-.nav-links a {
+/* ==== Atajos de Categoría === */
+#categoriasNav a {
   text-decoration: none;
   color: #333;
-  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  display: inline-block;
+  transition: background 0.3s;
+  margin: 5px;
 }
 
-.icons {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+#categoriasNav a:hover {
+  background-color: #ffe2b3;
 }
 
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  color: #333;
+/* ==== Títulos de Categoría === */
+#contenedorCatalogo section {
+  margin-bottom: 50px;
+  padding-top: 50px;
 }
 
-/* === Carrusel === */
-.galeria-fondo {
-  background: #fef5e7;
-  padding: 50px 0;
-  text-align: center;
-}
-
-.galeria-container {
-  position: relative;
-  width: 930px;
-  margin: auto;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.galeria-slider {
-  display: flex;
-  transition: transform 0.6s ease;
-  width: max-content;
-  scroll-behavior: smooth;
-}
-
-.galeria-slider img {
-  width: 300px;
-  flex-shrink: 0;
-  object-fit: cover;
-  margin-right: 10px;
-  border-radius: 10px;
-  opacity: 0.5;
-  transition: opacity 0.4s ease;
-}
-
-.galeria-slider img.central {
-  opacity: 1;
-}
-
-.galeria-controles {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-  gap: 20px;
-}
-
-.galeria-controles button {
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: #f0a41c;
-  cursor: pointer;
-}
-
-/* === Productos destacados === */
-.destacados {
-  padding: 60px 20px;
-  background: #fffef9;
-  text-align: center;
-}
-
-.destacados h2 {
-  font-size: 28px;
-  color: #f0a41c;
+#contenedorCatalogo section h2 {
   margin-bottom: 30px;
+  font-size: 24px;
+  color: #f0a41c;
+  text-align: center;
 }
 
+/* ==== Productos ==== */
 .destacados-grid {
   display: flex;
   flex-wrap: wrap;
@@ -130,7 +53,6 @@ body {
   gap: 30px;
 }
 
-/* === Producto individual === */
 .producto {
   width: 220px;
   background: white;
@@ -161,111 +83,12 @@ body {
   font-weight: bold;
 }
 
-.btn-agregar {
-  background-color: #f0a41c;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
+/* ==== Carrusel ==== */
+.galeria-slider img {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
 }
 
-.btn-agregar:hover {
-  background-color: #d98c17;
-}
-
-/* === Modal carrito === */
-.modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.modal-content.carrito {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  text-align: left;
-}
-
-.modal-content h2 {
-  margin-top: 0;
-}
-
-.modal-content ul {
-  list-style: none;
-  padding: 0;
-}
-
-.modal-content li {
-  margin-bottom: 10px;
-}
-
-.modal-content button {
-  margin-top: 10px;
-}
-
-.close-modal {
-  float: right;
-  cursor: pointer;
-  font-size: 24px;
-}
-
-/* === Sin imagen === */
-.sin-imagen {
-  width: 100%;
-  height: 200px;
-  background-color: #f0f0f0;
-  color: #999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-style: italic;
-  border-radius: 10px;
-}
-
-/* === Filtro Material y Categorías === */
-#categoriasNav a {
-  text-decoration: none;
-  color: #333;
-  padding: 6px 12px;
-  border-radius: 12px;
-  background: #f5f5f5;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  display: inline-block;
-  transition: background 0.3s;
-  margin: 5px;
-}
-#categoriasNav a:hover {
-  background-color: #ffe2b3;
-}
-
-#filtroMaterial {
-  padding: 8px 12px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-/* === Separación entre título de categoría y productos === */
-#contenedorCatalogo section {
-  margin-bottom: 50px;
-  padding-top: 50px;
-}
-#contenedorCatalogo section h2 {
-  margin-bottom: 30px;
-  font-size: 24px;
-  color: #f0a41c;
-  text-align: center;
+.galeria-slider img.central {
+  opacity: 1;
 }
