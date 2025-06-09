@@ -552,7 +552,7 @@
   {
     "id": 56,
     "nombre": "el principito y el zorro",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/el-principito-y-el zorro.jpg",
     "stock": 6,
     "categoria": "tv",
@@ -562,7 +562,7 @@
   {
     "id": 57,
     "nombre": "corazon distorsionado",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/corazon-distorsionado.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -572,7 +572,7 @@
   {
     "id": 58,
     "nombre": "alien en ovni",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/alien-en-ovni.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -582,7 +582,7 @@
   {
     "id": 59,
     "nombre": "avion de papel en el espacio",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/avion-de-papel-en-el-espacio.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -592,7 +592,7 @@
   {
     "id": 60,
     "nombre": "ovni con caras distorsionadas",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/ovni-con-caras-distorsionadas.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -602,7 +602,7 @@
   {
     "id": 61,
     "nombre": "esqueleto ",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/esqueleto.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -612,7 +612,7 @@
   {
     "id": 62,
     "nombre": "escandalosos en la luna ",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/escandalosos-en-la-luna.jpg",
     "stock": 6,
     "categoria": "tv",
@@ -622,7 +622,7 @@
   {
     "id": 63,
     "nombre": "fox apilado",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/fox-apilado.jpg",
     "stock": 6,
     "categoria": "marcas",
@@ -632,7 +632,7 @@
   {
     "id": 64,
     "nombre": "stoner",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/stoner.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -642,7 +642,7 @@
   {
     "id": 65,
     "nombre": "honguitos psicodelicos",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/honguitos-psicodelicos.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
@@ -652,7 +652,7 @@
   {
     "id": 66,
     "nombre": "fantasmita",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/fantasmita.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -662,7 +662,7 @@
   {
     "id": 67,
     "nombre": "mr burns alien",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/mr-burns-alien.jpg",
     "stock": 6,
     "categoria": "tv",
@@ -672,7 +672,7 @@
   {
     "id": 68,
     "nombre": "cara distorsionada",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/cara-distorsionada.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -682,7 +682,7 @@
   {
     "id": 69,
     "nombre": "gato con dos cabezas",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/gato-con-dos-cabezas.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
@@ -692,7 +692,7 @@
   {
     "id": 70,
     "nombre": "honguitos ",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/honguitos.jpg",
     "stock": 1,
     "categoria": "Naturaleza/aventura",
@@ -702,7 +702,7 @@
   {
     "id": 71,
     "nombre": "caritas deformadas",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/caritas-deformadas.jpg",
     "stock": 3,
     "categoria": "Vareidad",
@@ -712,7 +712,7 @@
   {
     "id": 72,
     "nombre": "aliens y planetas",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/aliens-y-planetas.jpg",
     "stock": 3,
     "categoria": "Vareidad",
@@ -722,7 +722,7 @@
   {
     "id": 73,
     "nombre": "mariposa de olas",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/mariposa-de-olas.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
@@ -732,8 +732,8 @@
   {
     "id": 74,
     "nombre": "mar de noche ",
-    "precio": 800,
-    "imagen": "imagenescatalogo/mar-de-noche.jpg ",
+    "precio": 1000,
+    "imagen": "imagenescatalogo/mar-de-noche.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
     "material": "vinilo dorado",
@@ -742,7 +742,7 @@
   {
     "id": 75,
     "nombre": "gato con tercer ojo ",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/gato-con-tercer-ojo.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
@@ -752,7 +752,7 @@
   {
     "id": 76,
     "nombre": "sol rapunzel",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/sol-rapunzel.jpg",
     "stock": 6,
     "categoria": "tv",
@@ -762,7 +762,7 @@
   {
     "id": 77,
     "nombre": "alien en ovni",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/alien-en-ovni.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -772,7 +772,7 @@
   {
     "id": 78,
     "nombre": "leopardo con corazones",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/leopardo-con-corazones.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
@@ -782,7 +782,7 @@
   {
     "id": 79,
     "nombre": "mano con ojo",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/mano-con-ojo.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -792,7 +792,7 @@
   {
     "id": 80,
     "nombre": "gatitos jin y jan",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/gatitos-jin-y-jan.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
@@ -802,7 +802,7 @@
   {
     "id": 81,
     "nombre": "fogata",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/fogata.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
@@ -812,7 +812,7 @@
   {
     "id": 82,
     "nombre": "homero buda",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/homero-buda.jpg",
     "stock": 6,
     "categoria": "tv",
@@ -822,7 +822,7 @@
   {
     "id": 83,
     "nombre": "adventure",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/adventure.jpg",
     "stock": 6,
     "categoria": "Naturaleza/aventura",
@@ -832,7 +832,7 @@
   {
     "id": 84,
     "nombre": "ojo de olas",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/ojo-de-olas.jpg",
     "stock": 6,
     "categoria": "Vareidad",
@@ -842,7 +842,7 @@
   {
     "id": 85,
     "nombre": "fernet",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/fernet.jpg",
     "stock": 6,
     "categoria": "Argentina",
@@ -852,7 +852,7 @@
   {
     "id": 86,
     "nombre": "sodastereo",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/sodastereo.jpg",
     "stock": 6,
     "categoria": "Musica",
@@ -862,7 +862,7 @@
   {
     "id": 87,
     "nombre": "logo harry potter",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/logo-harry-potter.jpg",
     "stock": 10,
     "categoria": "tv",
@@ -872,7 +872,7 @@
   {
     "id": 88,
     "nombre": "ojo psicodelico",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/ojo-psicodelico.jpg",
     "stock": 3,
     "categoria": "Vareidad",
@@ -882,7 +882,7 @@
   {
     "id": 89,
     "nombre": "hot wheels",
-    "precio": 800,
+    "precio": 1000,
     "imagen": "imagenescatalogo/hot-wheels.jpg",
     "stock": 8,
     "categoria": "marcas",
