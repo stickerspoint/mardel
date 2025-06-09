@@ -183,8 +183,9 @@ body {
 
 .producto img {
   width: 100%;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .producto h3 {
