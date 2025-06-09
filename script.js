@@ -101,3 +101,75 @@ document.addEventListener("DOMContentLoaded", () => {
   actualizarGaleria(document.querySelectorAll('#galeriaSlider img'));
   renderizarDestacados();
 });
+document.addEventListener("DOMContentLoaded", async () => {
+  const contenedor = document.getElementById("contenedorCatalogo");
+  if (!contenedor) return;
+
+  try {
+    const res = await fetch("productos.json");
+    const productos = await res.json();
+
+    productos.forEach((producto) => {
+      const div = document.createElement("div");
+      div.classList.add("producto");
+      div.setAttribute("data-material", (producto.material || "").toLowerCase().trim());
+
+      const img = document.createElement("img");
+      img.src = producto.imagen;
+      img.alt = producto.nombre;
+
+      const nombre = document.createElement("h3");
+      nombre.textContent = producto.nombre;
+
+      const precio = document.createElement("p");
+      precio.textContent = `$${producto.precio}`;
+
+      div.appendChild(img);
+      div.appendChild(nombre);
+      div.appendChild(precio);
+
+      contenedor.appendChild(div);
+    });
+  } catch (error) {
+    console.error("Error al cargar productos:", error);
+  }
+
+  // Buscador
+  const buscador = document.getElementById("buscador");
+  if (buscador) {
+    buscador.addEventListener("input", function () {
+      const filtro = this.value.toLowerCase();
+      document.querySelectorAll(".producto").forEach(prod => {
+        const nombre = prod.querySelector("h3").textContent.toLowerCase();
+        prod.style.display = nombre.includes(filtro) ? "" : "none";
+      });
+    });
+  }
+
+  // Filtro por material
+  const filtroMaterial = document.getElementById("filtroMaterial");
+  if (filtroMaterial) {
+    filtroMaterial.addEventListener("change", function () {
+      const valor = this.value.toLowerCase().trim();
+      document.querySelectorAll(".producto").forEach(prod => {
+        const mat = (prod.getAttribute("data-material") || "").toLowerCase().trim();
+        prod.style.display = (!valor || mat === valor) ? "" : "none";
+      });
+    });
+  }
+
+  // Scroll suave en atajos de categorías
+  document.querySelectorAll('#categoriasNav a').forEach(enlace => {
+    enlace.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').substring(1);
+      const seccion = document.getElementById(targetId);
+      if (seccion) {
+        window.scrollTo({
+          top: seccion.offsetTop - 40,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+});
