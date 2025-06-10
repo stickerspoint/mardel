@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Referencias a elementos comunes (pueden existir en ambas páginas o solo en una)
-    const shoppingCartIcon = document.querySelector('.fa-shopping-cart');
+    const shoppingCartIcon = document.querySelector('.fa-shopping-cart'); // Este es tu icono del carrito
     const carritoModal = document.getElementById('carritoModal');
     const cerrarCarrito = document.getElementById('cerrarCarrito');
     const listaCarrito = document.getElementById('listaCarrito');
@@ -21,7 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (shoppingCartIcon) {
-        shoppingCartIcon.addEventListener('click', toggleCarritoModal);
+        // *** CAMBIO APLICADO AQUÍ ***
+        shoppingCartIcon.addEventListener('click', (e) => {
+            e.stopPropagation(); // <--- ¡Esta es la línea clave para detener la propagación del evento!
+            toggleCarritoModal();
+        });
     }
 
     if (cerrarCarrito) {
@@ -87,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carrito.forEach(item => {
                 const li = document.createElement('li');
                 li.innerHTML = `${item.nombre} x ${item.cantidad} - $${item.precio * item.cantidad}
-                                 <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
+                                     <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
                 listaCarrito.appendChild(li);
                 total += item.precio * item.cantidad;
             });
@@ -150,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
                 // Eliminar caracteres no alfanuméricos y espacios para crear un ID válido
-                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '').replace(/\s/g, ''); 
+                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '').replace(/\s/g, '');
                 const section = document.createElement('section');
                 section.id = sectionId;
                 section.innerHTML = `<h2>${categoria}</h2><div class="destacados-grid"></div>`;
@@ -264,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Volver a obtener las referencias ya con los clones
         imagenesCarrusel = galeriaSlider.querySelectorAll('img');
-        
+
         // El índice inicial debe ajustarse para que empiece en la primera imagen real
         // (después del clon del último elemento)
         indiceActualCarrusel = 1; // La primera imagen real está en el índice 1 (el clon está en el 0)
@@ -284,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (imagenesCarrusel[indiceActualCarrusel]) {
                 imagenesCarrusel[indiceActualCarrusel].classList.add('central');
             }
-            
+
             // Calcular el desplazamiento:
             // Cada imagen tiene un ancho de (100%/3 - 20px) + 20px de margen = 100%/3
             // Así que el ancho efectivo de una "ranura" de imagen es (contenedor.offsetWidth / 3)
@@ -296,11 +300,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // El punto de partida es el índice que quieres centrar, que es `indiceActualCarrusel`.
             // La posición ideal para centrar es la segunda de las tres, que es visualmente `1`.
             // Por lo tanto, el desplazamiento es `-(indiceActualCarrusel - 1)` * ancho de una ranura.
-            
+
             // Calculamos el ancho de una "ranura" de imagen (el ancho total del slider dividido por 3)
-            const anchoRanura = galeriaSlider.offsetWidth / 3; 
+            const anchoRanura = galeriaSlider.offsetWidth / 3;
             const offset = -(indiceActualCarrusel - 1) * anchoRanura; // Calcular el desplazamiento necesario
-            
+
             galeriaSlider.style.transform = `translateX(${offset}px)`;
         }
 
@@ -316,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const anchoRanura = galeriaSlider.offsetWidth / 3;
                     galeriaSlider.style.transform = `translateX(${-(indiceActualCarrusel - 1) * anchoRanura}px)`;
                     // Forzar un reflow para que el cambio de transform sea instantáneo antes de la siguiente transición
-                    galeriaSlider.offsetHeight; 
+                    galeriaSlider.offsetHeight;
                 }
                 actualizarCarrusel();
             });
@@ -333,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const anchoRanura = galeriaSlider.offsetWidth / 3;
                     galeriaSlider.style.transform = `translateX(${-(indiceActualCarrusel - 1) * anchoRanura}px)`;
                     // Forzar un reflow para que el cambio de transform sea instantáneo antes de la siguiente transición
-                    galeriaSlider.offsetHeight; 
+                    galeriaSlider.offsetHeight;
                 }
                 actualizarCarrusel();
             });
@@ -344,6 +348,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // y los anchos de las imágenes sean correctos.
         setTimeout(() => {
             actualizarCarrusel();
-        }, 100); 
+        }, 100);
     }
 });

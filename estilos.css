@@ -1,4 +1,12 @@
 /* Estilos Generales */
+html {
+    box-sizing: border-box; /* Añadido: Para incluir padding y border en el ancho/alto */
+}
+
+*, *::before, *::after {
+    box-sizing: inherit; /* Añadido: Para que todos los elementos hereden el box-sizing */
+}
+
 :root {
     --color-primario: #f0c14b; /* Amarillo dorado */
     --color-secundario: #f0a41c; /* Naranja oscuro */
@@ -27,6 +35,7 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
+    /* box-sizing: border-box; <-- Ya no es necesario aquí si está globalmente en html y * */
 }
 
 .logo {
@@ -35,10 +44,15 @@ body {
     color: var(--color-secundario);
 }
 
+.nav-links {
+    display: flex; /* Añadido para un mejor control del espaciado si los enlaces no son solo `a` */
+    gap: 15px; /* Espacio entre los enlaces, si se necesita */
+}
+
 .nav-links a {
     color: var(--color-texto);
     text-decoration: none;
-    margin: 0 15px;
+    /* margin: 0 15px; <-- Se puede reemplazar por gap en .nav-links si es un flex container */
     font-size: 16px;
     transition: color 0.3s ease;
 }
