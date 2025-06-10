@@ -1,61 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo - StickersPoint</title>
-  <link rel="stylesheet" href="estilos.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catálogo - StickersPoint</title>
+  <link rel="stylesheet" href="estilos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body>
 
 <header class="header">
-  <div class="logo">StickersPoint</div> 
-  <nav class="nav-links">
-    <a href="index.html">Inicio</a>
-    <a href="catalogo.html">Productos</a>
-    <a href="#">Contacto</a>
-  </nav>
-  <div class="icons">
-    <button class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
-  </div>
+  <div class="logo">StickersPoint</div> 
+  <nav class="nav-links">
+    <a href="index.html">Inicio</a>
+    <a href="catalogo.html">Productos</a>
+    <a href="#">Contacto</a>
+  </nav>
+  <div class="icons">
+        <button id="cartIconBtn" class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+  </div>
 </header>
 
 <div class="catalogo-container">
-  <h1>Catálogo</h1>
+  <h1>Catálogo</h1>
 
-  <div class="catalogo-filtros">
-    <input type="text" id="buscador" placeholder="Buscar producto...">
-    <nav id="categoriasNav">
-      <a href="#Naturaleza/aventura">Naturaleza/aventura</a>
-      <a href="#Variedad">Variedad</a>
-      <a href="#Musica">Musica</a>
-      <a href="#Argentina">Argentina</a>
-      <a href="#Marcas">Marcas</a>
-      <a href="#TV">TV</a>
-    </nav>
- <select id="filtroMaterial">
-        <option value="">Todos los Materiales</option>
-        <option value="vinilo dorado">Vinilo Dorado</option>
-        <option value="vinilo blanco">Vinilo Blanco</option>
-        <option value="vinilo holografico">Vinilo Holográfico</option>
-        <option value="vinilo holografico triangulitos">Vinilo Holográfico Triangulitos</option>
-        <option value="vinilo fotoluminiscente">Vinilo Fotoluminiscente</option>
-    </select>
+  <div class="catalogo-filtros">
+    <input type="text" id="buscador" placeholder="Buscar producto...">
+    <nav id="categoriasNav">
+      <a href="#Naturalezaaventura">Naturaleza/aventura</a>       <a href="#Variedad">Variedad</a>
+      <a href="#Musica">Musica</a>
+      <a href="#Argentina">Argentina</a>
+      <a href="#Marcas">Marcas</a>
+      <a href="#TV">TV</a>
+    </nav>
+  <select id="filtroMaterial">
+        <option value="">Todos los Materiales</option>
+        <option value="vinilo dorado">Vinilo Dorado</option>
+        <option value="vinilo blanco">Vinilo Blanco</option>
+        <option value="vinilo holografico">Vinilo Holográfico</option>
+        <option value="vinilo holografico triangulitos">Vinilo Holográfico Triangulitos</option>
+        <option value="vinilo fotoluminiscente">Vinilo Fotoluminiscente</option>
+    </select>
 </div>
 
-  <div id="contenedorCatalogo">
-    </div>
+  <div id="contenedorCatalogo">
+    </div>
 </div>
 
 <div class="modal" id="carritoModal">
-  <div class="modal-content carrito">
-    <span class="close-modal" id="cerrarCarrito">×</span>
-    <h2>Carrito</h2>
-    <ul id="listaCarrito"></ul>
-    <p>Total: $<span id="totalCarrito">0</span></p>
-    <button id="vaciarCarrito">Vaciar carrito</button>
-  </div>
+  <div class="modal-content carrito">
+    <span class="close-modal" id="cerrarCarrito">×</span>
+    <h2>Carrito</h2>
+    <ul id="listaCarrito"></ul>
+    <p>Total: $<span id="totalCarrito">0</span></p>
+    <button id="vaciarCarrito">Vaciar carrito</button>
+  </div>
 </div>
 
 <script src="script.js"></script>
