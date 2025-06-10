@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             carrito.forEach(item => {
                 const li = document.createElement('li');
-                li.innerHTML = `${item.nombre} x ${item.cantidad} - $${item.precio * item.cantidad} 
+                li.innerHTML = `${item.nombre} x ${item.cantidad} - $${item.precio * item.cantidad}
                                 <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
                 listaCarrito.appendChild(li);
                 total += item.precio * item.cantidad;
@@ -195,4 +195,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-});
+
+    // --- Lógica del Carrusel (PEGA ESTO AQUÍ) ---
+    const galeriaSlider = document.getElementById('galeriaSlider');
+    const imagenesCarrusel = galeriaSlider ? galeriaSlider.querySelectorAll('img') : [];
+    let indiceActualCarrusel = 0;
+
+    // Asegúrate de que las imágenes existan antes de inicializar el carrusel
+    if (imagenesCarrusel.length > 0) {
+        actualizarCarrusel();
+    }
+
+    window.moverGaleria = (direccion) => {
+        if (imagenesCarrusel.length === 0) return;
+
+        indiceActualCarrusel += direccion;
+
+        // Lógica para que el carrusel sea infinito
+        if (indiceActualCarrusel >= imagenesCarrusel.length) {
+            indiceActualCarrusel = 0;
+        } else if (indiceActualCarrusel < 0) {
+            indiceActualCarrusel = imagenesCarrusel.length - 1;
+        }
+
+        actualizarCarrusel();
+    };
+
+    function actualizarCarrusel() {
+        const offset = -indiceActualCarrusel * 100;
+        galeriaSlider.style.transform = `translateX(${offset}%)`;
+    }
+
+    // Opcional: Carrusel automático
+    // let intervaloCarrusel = setInterval(() => moverGaleria(1), 5000); // Cambia cada 5 segundos
+
+    // Opcional: Detener carrusel automático al pasar el mouse
+    // galeriaSlider.parentElement.addEventListener('mouseenter', () => {
+    //     clearInterval(intervaloCarrusel);
+    // });
+    // galeriaSlider.parentElement.addEventListener('mouseleave', () => {
+    //     intervaloCarrusel = setInterval(() => moverGaleria(1), 5000);
+    // });
+    // --- Fin Lógica del Carrusel ---
+
+}); // <-- La llave final de DOMContentLoaded
