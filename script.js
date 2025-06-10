@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Referencias a elementos comunes (pueden existir en ambas páginas o solo en una)
-    const shoppingCartIcon = document.querySelector('.fa-shopping-cart'); // Este es tu icono del carrito
+    // Referencias a elementos comunes
+    const shoppingCartBtn = document.getElementById('cartIconBtn'); // Seleccionamos el botón por su ID
     const carritoModal = document.getElementById('carritoModal');
     const cerrarCarrito = document.getElementById('cerrarCarrito');
     const listaCarrito = document.getElementById('listaCarrito');
@@ -12,30 +12,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Funcionalidad del Carrito (Común a ambas páginas si el modal está presente) ---
 
     // Función para mostrar/ocultar el modal del carrito
-    const toggleCarritoModal = () => {
+    const toggleCarritoModal = (e) => {
+        if (e && typeof e.stopPropagation === 'function') { // Asegura que 'e' existe y tiene stopPropagation
+            e.stopPropagation(); // Detiene la propagación del evento que activó el modal
+        }
         if (carritoModal) {
-            // Alternar la propiedad display directamente
             carritoModal.style.display = carritoModal.style.display === 'flex' ? 'none' : 'flex';
             renderizarCarrito(); // Asegura que el carrito se actualice cada vez que se abre
         }
     };
 
-    if (shoppingCartIcon) {
-        // *** CAMBIO APLICADO AQUÍ ***
-        shoppingCartIcon.addEventListener('click', (e) => {
-            e.stopPropagation(); // <--- ¡Esta es la línea clave para detener la propagación del evento!
-            toggleCarritoModal();
-        });
+    // Abre el carrito solo al hacer clic en el botón del carrito
+    if (shoppingCartBtn) {
+        shoppingCartBtn.addEventListener('click', toggleCarritoModal); // Pasamos la función directamente
     }
 
+    // Cierra el carrito al hacer clic en el botón de cerrar
     if (cerrarCarrito) {
         cerrarCarrito.addEventListener('click', toggleCarritoModal);
     }
 
+    // Cierra el modal si se hace clic fuera del contenido del modal
     if (carritoModal) {
-        // Cierra el modal si se hace clic fuera del contenido
         carritoModal.addEventListener('click', (e) => {
-            if (e.target === carritoModal) {
+            if (e.target === carritoModal) { // Solo si el clic es directamente en el fondo del modal
                 toggleCarritoModal();
             }
         });
@@ -43,15 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para agregar un producto al carrito
     const agregarAlCarrito = (productoId) => {
-        // 'productos' es una variable global definida en el scope del catalogo.html
-        // Si no estamos en catalogo.html, productos estará vacío o indefinido.
         if (!window.productos || window.productos.length === 0) {
             console.warn("Intentando agregar al carrito sin productos cargados. ¿Estás en la página del catálogo?");
             return;
         }
 
         const productoExistente = carrito.find(item => item.id === productoId);
-        const productoEnCatalogo = window.productos.find(prod => prod.id === productoId); // Usar window.productos
+        const productoEnCatalogo = window.productos.find(prod => prod.id === productoId);
 
         if (!productoEnCatalogo) {
             console.error(`Producto con ID ${productoId} no encontrado en el catálogo.`);
@@ -123,12 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Renderizar el carrito al cargar la página si el modal está presente
-    if (carritoModal) {
-        renderizarCarrito();
-    }
-
-
     // --- Lógica específica para la página 'catalogo.html' ---
     const contenedorCatalogo = document.getElementById('contenedorCatalogo');
     const buscador = document.getElementById('buscador');
@@ -141,8 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contenedorCatalogo) { // Esto asegura que solo se ejecute en catalogo.html
         // Función para generar las cards de productos
         const generarCardsProductos = (productosParaMostrar) => {
-            if (!contenedorCatalogo) return; // Doble chequeo por si acaso
-            contenedorCatalogo.innerHTML = ''; // Limpia el contenedor principal
+            if (!contenedorCatalogo) return;
+            contenedorCatalogo.innerHTML = '';
             const categoriasMap = new Map();
 
             productosParaMostrar.forEach(producto => {
@@ -153,8 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
-                // Eliminar caracteres no alfanuméricos y espacios para crear un ID válido
-                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '').replace(/\s/g, '');
+                // Genera un ID compatible con el href del menú de categorías
+                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, ''); // Elimina caracteres no alfanuméricos
                 const section = document.createElement('section');
                 section.id = sectionId;
                 section.innerHTML = `<h2>${categoria}</h2><div class="destacados-grid"></div>`;
@@ -170,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     productoDiv.dataset.material = producto.material;
 
-                    const imagenSrc = producto.imagen ? producto.imagen : 'sin-imagen.jpg'; // Ruta por defecto si no hay imagen
+                    const imagenSrc = producto.imagen ? producto.imagen : 'sin-imagen.jpg';
                     const imagenAlt = producto.nombre;
 
                     productoDiv.innerHTML = `
@@ -254,13 +246,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtnGaleria = document.getElementById('prevBtnGaleria');
     const nextBtnGaleria = document.getElementById('nextBtnGaleria');
     let imagenesCarrusel = [];
-    let indiceActualCarrusel = 0; // Índice de la imagen que estará en la posición CENTRAL de las 3 visibles.
+    let indiceActualCarrusel = 0;
 
     if (galeriaSlider) { // Esto asegura que solo se ejecute en index.html
         imagenesCarrusel = galeriaSlider.querySelectorAll('img');
 
         // Duplicar las imágenes al principio y al final para un bucle continuo
-        // Esto crea un efecto "infinito" sin saltos abruptos.
         const primerElemento = imagenesCarrusel[0].cloneNode(true);
         const ultimoElemento = imagenesCarrusel[imagenesCarrusel.length - 1].cloneNode(true);
         galeriaSlider.appendChild(primerElemento);
@@ -270,57 +261,33 @@ document.addEventListener('DOMContentLoaded', () => {
         imagenesCarrusel = galeriaSlider.querySelectorAll('img');
 
         // El índice inicial debe ajustarse para que empiece en la primera imagen real
-        // (después del clon del último elemento)
-        indiceActualCarrusel = 1; // La primera imagen real está en el índice 1 (el clon está en el 0)
+        indiceActualCarrusel = 1;
 
         function actualizarCarrusel() {
             if (imagenesCarrusel.length === 0) return;
 
-            // Transición suave
             galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
 
-            // Remover la clase 'central' de todas las imágenes
             imagenesCarrusel.forEach(img => img.classList.remove('central'));
 
-            // Aplicar la clase 'central' a la imagen actual (la que está en el centro visual)
-            // Cuando mostramos 3 imágenes y la central está en la posición 1 del display (visual),
-            // la imagen con la clase 'central' es la que está en `indiceActualCarrusel`.
             if (imagenesCarrusel[indiceActualCarrusel]) {
                 imagenesCarrusel[indiceActualCarrusel].classList.add('central');
             }
 
-            // Calcular el desplazamiento:
-            // Cada imagen tiene un ancho de (100%/3 - 20px) + 20px de margen = 100%/3
-            // Así que el ancho efectivo de una "ranura" de imagen es (contenedor.offsetWidth / 3)
-            // Si queremos que el elemento en `indiceActualCarrusel` esté en la posición central de las 3 visibles,
-            // necesitamos mover el slider de tal forma que ese elemento se alinee con el centro.
-            // Para el índice 1 (primera imagen real), queremos que no se mueva.
-            // Para el índice 2, queremos moverlo 1 ranura a la izquierda.
-            // Para el índice 0 (el clon), queremos moverlo 1 ranura a la derecha.
-            // El punto de partida es el índice que quieres centrar, que es `indiceActualCarrusel`.
-            // La posición ideal para centrar es la segunda de las tres, que es visualmente `1`.
-            // Por lo tanto, el desplazamiento es `-(indiceActualCarrusel - 1)` * ancho de una ranura.
-
-            // Calculamos el ancho de una "ranura" de imagen (el ancho total del slider dividido por 3)
             const anchoRanura = galeriaSlider.offsetWidth / 3;
-            const offset = -(indiceActualCarrusel - 1) * anchoRanura; // Calcular el desplazamiento necesario
-
+            const offset = -(indiceActualCarrusel - 1) * anchoRanura;
             galeriaSlider.style.transform = `translateX(${offset}px)`;
         }
 
-        // Asignar event listeners a los botones de navegación del carrusel
         if (prevBtnGaleria) {
             prevBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel--;
                 if (indiceActualCarrusel < 0) {
-                    // Si llegamos al principio, saltamos al clon del final (índice real -2)
-                    // y luego hacemos la transición suave a la imagen real equivalente
-                    galeriaSlider.style.transition = 'none'; // Desactivar la transición para el salto
-                    indiceActualCarrusel = imagenesCarrusel.length - 2; // -2 porque el último es el clon
+                    galeriaSlider.style.transition = 'none';
+                    indiceActualCarrusel = imagenesCarrusel.length - 2;
                     const anchoRanura = galeriaSlider.offsetWidth / 3;
                     galeriaSlider.style.transform = `translateX(${-(indiceActualCarrusel - 1) * anchoRanura}px)`;
-                    // Forzar un reflow para que el cambio de transform sea instantáneo antes de la siguiente transición
-                    galeriaSlider.offsetHeight;
+                    galeriaSlider.offsetHeight; // Forzar reflow
                 }
                 actualizarCarrusel();
             });
@@ -330,22 +297,17 @@ document.addEventListener('DOMContentLoaded', () => {
             nextBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel++;
                 if (indiceActualCarrusel >= imagenesCarrusel.length) {
-                    // Si llegamos al final, saltamos al clon del principio (índice real 1)
-                    // y luego hacemos la transición suave a la imagen real equivalente
-                    galeriaSlider.style.transition = 'none'; // Desactivar la transición para el salto
-                    indiceActualCarrusel = 1; // Volver a la primera imagen real
+                    galeriaSlider.style.transition = 'none';
+                    indiceActualCarrusel = 1;
                     const anchoRanura = galeriaSlider.offsetWidth / 3;
                     galeriaSlider.style.transform = `translateX(${-(indiceActualCarrusel - 1) * anchoRanura}px)`;
-                    // Forzar un reflow para que el cambio de transform sea instantáneo antes de la siguiente transición
-                    galeriaSlider.offsetHeight;
+                    galeriaSlider.offsetHeight; // Forzar reflow
                 }
                 actualizarCarrusel();
             });
         }
 
         // Inicializar el carrusel en la carga
-        // Retrasamos un poco la actualización inicial para asegurar que el DOM esté completamente renderizado
-        // y los anchos de las imágenes sean correctos.
         setTimeout(() => {
             actualizarCarrusel();
         }, 100);

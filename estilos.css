@@ -26,7 +26,7 @@ body {
 .header {
     background-color: #ffffff;
     padding: 10px 20px;
-    display: flex;
+    display: flex; /* CAMBIADO: Antes era 'none', ahora es 'flex' para que sea visible */
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -35,7 +35,6 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
-    /* box-sizing: border-box; <-- Ya no es necesario aquí si está globalmente en html y * */
 }
 
 .logo {
@@ -45,14 +44,13 @@ body {
 }
 
 .nav-links {
-    display: flex; /* Añadido para un mejor control del espaciado si los enlaces no son solo `a` */
-    gap: 15px; /* Espacio entre los enlaces, si se necesita */
+    display: flex;
+    gap: 15px;
 }
 
 .nav-links a {
     color: var(--color-texto);
     text-decoration: none;
-    /* margin: 0 15px; <-- Se puede reemplazar por gap en .nav-links si es un flex container */
     font-size: 16px;
     transition: color 0.3s ease;
 }
@@ -62,7 +60,7 @@ body {
 }
 
 .icons {
-    display: flex; /* Para alinear el icono del carrito */
+    display: flex;
     align-items: center;
 }
 
@@ -81,7 +79,7 @@ body {
 
 /* Modal del Carrito */
 .modal {
-    display: none; /* Oculto por defecto */
+    display: none; /* Oculto por defecto - ¡CORRECCIÓN CLAVE AQUÍ! */
     position: fixed;
     z-index: 1001; /* Más alto que el header */
     left: 0;
@@ -90,14 +88,14 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-    display: flex; /* Para centrar el modal con flexbox */
+    /* Se elimina la línea 'display: flex;' duplicada que lo hacía visible por defecto */
     justify-content: center;
     align-items: center;
 }
 
 .modal-content.carrito {
     background-color: #fefefe;
-    margin: auto; /* Para centrar si no se usa flex */
+    margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
@@ -197,7 +195,7 @@ body {
 }
 
 .catalogo-filtros button,
-.catalogo-filtros select { /* Añadido select para estilo */
+.catalogo-filtros select {
     background-color: var(--color-primario);
     color: white;
     border: none;
@@ -209,7 +207,7 @@ body {
 }
 
 .catalogo-filtros button:hover,
-.catalogo-filtros select:hover { /* Añadido select para estilo */
+.catalogo-filtros select:hover {
     background-color: var(--color-secundario);
 }
 
@@ -224,7 +222,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
-    min-width: 150px; /* Para que los inputs no sean demasiado pequeños */
+    min-width: 150px;
 }
 
 .catalogo-filtros nav {
@@ -286,8 +284,8 @@ section h2 {
 
 .producto img {
     max-width: 100%;
-    height: 180px; /* Altura fija para las imágenes */
-    object-fit: contain; /* Para que la imagen se ajuste sin cortarse */
+    height: 180px;
+    object-fit: contain;
     margin-bottom: 15px;
     border-radius: 5px;
 }
@@ -296,7 +294,7 @@ section h2 {
     font-size: 18px;
     color: var(--color-texto);
     margin-bottom: 10px;
-    flex-grow: 1; /* Permite que el título ocupe espacio si es largo */
+    flex-grow: 1;
 }
 
 .producto p {
@@ -346,63 +344,63 @@ section h2 {
 
 /* Carrusel */
 .galeria-fondo {
-    background-color: var(--color-fondo-claro); /* Fondo amarillo claro */
+    background-color: var(--color-fondo-claro);
     padding: 50px 0;
     text-align: center;
 }
 
 .galeria-container {
-    max-width: 700px; /* Ajusta este valor según el tamaño deseado para las 3 imágenes */
+    max-width: 700px;
     margin: 0 auto;
     overflow: hidden;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    position: relative; /* Para posicionar las flechas si se usan absolute dentro */
-    padding-bottom: 20px; /* Añade espacio en la parte inferior para que no se pegue */
+    position: relative;
+    padding-bottom: 20px;
 }
 
 .galeria-slider {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    padding: 10px 0; /* Padding vertical para espacio, si es necesario */
-    justify-content: flex-start; /* Alinea al inicio, el translateX moverá el grupo */
-    align-items: center; /* Alinea verticalmente las imágenes */
+    padding: 10px 0;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .galeria-slider img {
-    flex-shrink: 0; /* Evita que las imágenes se encojan */
-    width: calc(100% / 3 - 20px); /* Para 3 imágenes visibles, restando los márgenes */
-    margin: 0 10px; /* Espacio entre imágenes */
+    flex-shrink: 0;
+    width: calc(100% / 3 - 20px);
+    margin: 0 10px;
     border-radius: 8px;
     object-fit: cover;
-    height: 250px; /* Altura fija para todas las imágenes del carrusel */
-    transition: all 0.3s ease; /* Transición para efectos de cambio de tamaño */
+    height: 250px;
+    transition: all 0.3s ease;
 }
 
 .galeria-slider img.central {
-    transform: scale(1.05); /* Ligeramente más grande la imagen central */
-    box-shadow: none; /* Esto quitará la sombra amarilla */
+    transform: scale(1.05);
+    box-shadow: none;
 }
 
 .galeria-controles {
-    margin-top: 20px; /* Espacio entre el carrusel y las flechas */
+    margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 30px; /* Espacio entre las flechas */
+    gap: 30px;
 }
 
 .galeria-controles button {
-    background-color: transparent; /* Fondo transparente */
-    color: var(--color-primario); /* Color amarillo definido en :root */
-    border: none; /* Sin borde */
-    padding: 5px 10px; /* Ajusta el padding si es necesario */
-    border-radius: 0; /* Sin bordes redondeados */
+    background-color: transparent;
+    color: var(--color-primario);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 0;
     cursor: pointer;
-    font-size: 2.5em; /* Tamaño del icono de la flecha */
+    font-size: 2.5em;
     transition: opacity 0.3s ease, transform 0.2s ease;
 }
 
 .galeria-controles button:hover {
-    opacity: 0.8; /* Ligeramente opaco al pasar el mouse */
-    transform: scale(1.1); /* Ligeramente más grande al pasar el mouse */
-}s
+    opacity: 0.8;
+    transform: scale(1.1);
+}
