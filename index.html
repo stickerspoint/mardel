@@ -17,10 +17,23 @@
         <a href="#">Contacto</a>
     </nav>
     <div class="icons">
-        <button id="cartIconBtn" class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+        <button id="cartIconBtn" class="icon-btn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count"></span> </button>
     </div>
 </header>
 
+<div id="miniCarritoNotificacion" class="mini-carrito-notificacion">
+    <div class="mini-carrito-contenido">
+        <span class="cerrar-notificacion" id="cerrarNotificacion">×</span>
+        <img id="notificacionImagen" src="" alt="Producto">
+        <p id="notificacionNombre">Producto agregado</p>
+        <p id="notificacionPrecio">1 x $0.00</p>
+        <p id="notificacionMensaje">¡Agregado al carrito!</p>
+        <p>Total (<span id="notificacionCantidadTotal">0</span> productos): $<span id="notificacionTotal">0</span></p>
+        <button id="verCarritoDesdeNotificacion">Ver carrito</button>
+    </div>
+</div>
 <section class="bienvenida" style="background-color: #fff5e9; padding: 60px 20px;">
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 60px;">
         <div style="max-width: 500px; text-align: center;">
@@ -37,7 +50,7 @@
             <img src="imagenescatalogo/carrusel1.jpg" alt="Imagen 1">
             <img src="imagenescatalogo/carrusel2.jpg" alt="Imagen 2">
             <img src="imagenescatalogo/carrusel3.jpg" alt="Imagen 3">
-            </div>
+        </div>
     </div>
     <div class="galeria-controles">
         <button id="prevBtnGaleria" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
@@ -45,6 +58,11 @@
     </div>
 </section>
 
+<section class="productos-destacados">
+    <h2>Productos Destacados</h2>
+    <div id="contenedorDestacados" class="destacados-grid">
+        </div>
+</section>
 <div class="modal" id="carritoModal">
     <div class="modal-content carrito">
         <span class="close-modal" id="cerrarCarrito">×</span>

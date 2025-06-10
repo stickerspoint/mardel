@@ -71,10 +71,26 @@ body {
     cursor: pointer;
     color: var(--color-texto);
     transition: color 0.3s ease;
+    position: relative; /* Para posicionar el contador */
 }
 
 .icon-btn:hover {
     color: var(--color-primario);
+}
+
+/* NUEVO: Estilos para el contador de items en el carrito */
+.cart-count {
+    font-size: 0.8em;
+    vertical-align: super; /* Para que el número quede un poco más arriba */
+    background-color: var(--color-secundario); /* Color de fondo del número */
+    color: white;
+    border-radius: 50%; /* Para que sea un círculo */
+    padding: 2px 6px;
+    margin-left: 5px; /* Espacio entre el icono y el número */
+    min-width: 20px; /* Asegura un tamaño mínimo para el círculo */
+    text-align: center;
+    display: inline-block; /* Para que el padding y min-width funcionen */
+    line-height: 1; /* Centra el texto verticalmente */
 }
 
 /* Modal del Carrito */
@@ -403,4 +419,101 @@ section h2 {
 .galeria-controles button:hover {
     opacity: 0.8;
     transform: scale(1.1);
+}
+
+/* NUEVO: Estilos para el mini-carrito de notificación */
+.mini-carrito-notificacion {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 80px; /* Un poco debajo del header */
+    right: 20px;
+    z-index: 1002; /* Más alto que el carrito principal */
+    background-color: #fefefe;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    width: 280px; /* Ancho fijo para la notificación */
+    font-size: 14px;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out; /* Animación de entrada */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mini-carrito-notificacion .mini-carrito-contenido {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar contenido */
+    text-align: center;
+}
+
+.mini-carrito-notificacion .cerrar-notificacion {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.mini-carrito-notificacion .cerrar-notificacion:hover {
+    color: #333;
+}
+
+.mini-carrito-notificacion img {
+    width: 60px; /* Tamaño de la imagen del producto */
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.mini-carrito-notificacion p {
+    margin: 3px 0;
+    color: var(--color-texto);
+}
+
+.mini-carrito-notificacion #notificacionNombre {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.mini-carrito-notificacion #notificacionPrecio {
+    color: var(--color-primario);
+    font-weight: bold;
+}
+
+.mini-carrito-notificacion #notificacionMensaje {
+    color: green; /* Color para el mensaje de agregado */
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.mini-carrito-notificacion #notificacionTotal,
+.mini-carrito-notificacion #notificacionCantidadTotal {
+    font-weight: bold;
+    color: var(--color-secundario);
+    font-size: 15px;
+}
+
+.mini-carrito-notificacion #verCarritoDesdeNotificacion {
+    background-color: var(--color-secundario);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.mini-carrito-notificacion #verCarritoDesdeNotificacion:hover {
+    background-color: #d88e1a;
 }

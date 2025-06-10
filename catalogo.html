@@ -17,10 +17,23 @@
         <a href="#">Contacto</a>
     </nav>
     <div class="icons">
-        <button id="cartIconBtn" class="icon-btn"><i class="fas fa-shopping-cart"></i></button>
+        <button id="cartIconBtn" class="icon-btn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count"></span> </button>
     </div>
 </header>
 
+<div id="miniCarritoNotificacion" class="mini-carrito-notificacion">
+    <div class="mini-carrito-contenido">
+        <span class="cerrar-notificacion" id="cerrarNotificacion">×</span>
+        <img id="notificacionImagen" src="" alt="Producto">
+        <p id="notificacionNombre">Producto agregado</p>
+        <p id="notificacionPrecio">1 x $0.00</p>
+        <p id="notificacionMensaje">¡Agregado al carrito!</p>
+        <p>Total (<span id="notificacionCantidadTotal">0</span> productos): $<span id="notificacionTotal">0</span></p>
+        <button id="verCarritoDesdeNotificacion">Ver carrito</button>
+    </div>
+</div>
 <div class="catalogo-container">
     <h1>Catálogo</h1>
 
