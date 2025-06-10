@@ -1,236 +1,198 @@
-// Variable global para almacenar todos los productos cargados
-// Esto nos permitirá filtrar y buscar sin volver a cargar el JSON
-let todosLosProductos = [];
+document.addEventListener('DOMContentLoaded', () => {
+    const contenedorCatalogo = document.getElementById('contenedorCatalogo');
+    const buscador = document.getElementById('buscador');
+    const filtroMaterial = document.getElementById('filtroMaterial');
+    const categoriasNav = document.getElementById('categoriasNav');
+    const carritoModal = document.getElementById('carritoModal');
+    const cerrarCarrito = document.getElementById('cerrarCarrito');
+    const listaCarrito = document.getElementById('listaCarrito');
+    const totalCarrito = document.getElementById('totalCarrito');
+    const vaciarCarritoBtn = document.getElementById('vaciarCarrito');
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-// --- Carrusel (Para index.html) ---
-let galeriaIndice = 0; // Inicia en 0 para ser el primer elemento del array
+    // Función para mostrar/ocultar el modal del carrito
+    const toggleCarritoModal = () => {
+        carritoModal.style.display = carritoModal.style.display === 'flex' ? 'none' : 'flex';
+        renderizarCarrito();
+    };
 
-function moverGaleria(direccion) {
-    const galeria = document.getElementById('galeriaSlider');
-    if (!galeria) return; // Salir si no hay carrusel en la página
+    // Abre el modal del carrito al hacer clic en el ícono del carrito
+    document.querySelector('.fa-shopping-cart').addEventListener('click', toggleCarritoModal);
 
-    const slides = galeria.querySelectorAll('img');
-    const totalSlides = slides.length;
-
-    if (totalSlides === 0) return;
-
-    galeriaIndice += direccion;
-
-    // Ajustar el índice para que siempre esté dentro de los límites
-    if (galeriaIndice < 0) {
-        galeriaIndice = totalSlides - 1; // Volver al final si se va al principio
-    } else if (galeriaIndice >= totalSlides) {
-        galeriaIndice = 0; // Volver al principio si se va al final
-    }
-
-    actualizarGaleria(slides);
-}
-
-function actualizarGaleria(slides) {
-    if (!slides || slides.length === 0) return;
-
-    slides.forEach(slide => {
-        slide.classList.remove('central');
-        slide.style.opacity = '0.5';
+    // Cierra el modal del carrito
+    cerrarCarrito.addEventListener('click', toggleCarritoModal);
+    carritoModal.addEventListener('click', (e) => {
+        if (e.target === carritoModal) {
+            toggleCarritoModal();
+        }
     });
 
-    // Asegurarse de que el slide existe antes de intentar acceder a él
-    if (slides[galeriaIndice]) {
-        slides[galeriaIndice].classList.add('central');
-        slides[galeriaIndice].style.opacity = '1';
-    }
+    // Función para agregar un producto al carrito
+    const agregarAlCarrito = (productoId) => {
+        const productoExistente = carrito.find(item => item.id === productoId);
+        const productoEnCatalogo = productos.find(prod => prod.id === productoId);
 
-    // Calcula el desplazamiento. Ajuste para que la imagen central quede... bueno, central.
-    // Asumiendo que `galeria-slider img` tiene 300px de ancho y 10px de margen derecho.
-    const anchoImagenConMargen = 300 + 10;
-    const desplazamiento = galeriaIndice * anchoImagenConMargen;
-    document.getElementById('galeriaSlider').style.transform = `translateX(-${desplazamiento}px)`;
-}
-
-// --- Carrito de Compras ---
-function agregarAlCarrito(producto) {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    carrito.push(producto);
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-    alert(`${producto.nombre} agregado al carrito!`); // Notificación simple para el usuario
-    mostrarCarrito(); // Actualizar el modal si está abierto
-}
-
-function mostrarCarrito() {
-    const lista = document.getElementById("listaCarrito");
-    const total = document.getElementById("totalCarrito");
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
-    lista.innerHTML = ""; // Limpiar la lista antes de renderizar
-    let sumaTotal = 0;
-
-    if (carrito.length === 0) {
-        lista.innerHTML = "<li>El carrito está vacío.</li>";
-    } else {
-        carrito.forEach((item, index) => {
-            const li = document.createElement("li");
-            li.innerHTML = `
-                ${item.nombre} - $${item.precio}
-                <button data-index="${index}" class="eliminar-item">X</button>
-            `;
-            lista.appendChild(li);
-            sumaTotal += item.precio;
-        });
-    }
-
-    total.textContent = sumaTotal.toFixed(2); // Formatear a 2 decimales
-    document.getElementById("carritoModal").style.display = "flex";
-}
-
-function vaciarCarrito() {
-    localStorage.removeItem("carrito");
-    mostrarCarrito(); // Actualizar la vista del carrito
-}
-
-// --- Carga y Renderizado de Productos del Catálogo (para catalogo.html) ---
-async function cargarYRenderizarProductos() {
-    const contenedor = document.getElementById("contenedorCatalogo");
-    // Si no estamos en catalogo.html, esta función no hace nada
-    if (!contenedor) return;
-
-    contenedor.innerHTML = ''; // Limpiar el contenido actual del catálogo
-
-    try {
-        const res = await fetch("productos.json");
-        todosLosProductos = await res.json(); // Guardar productos en la variable global
-
-        // Opcional: Crear secciones para cada categoría (si tu HTML no las tiene fijas)
-        // Por ahora, simplemente agregamos todos los productos directamente al contenedorCatalogo
-        // Si más adelante quieres agrupar por categorías, lo hacemos aquí.
-        // Dado tu catalogo.html actual, los productos se agregan directo.
-
-        todosLosProductos.forEach(producto => {
-            const div = document.createElement("div");
-            div.classList.add("producto");
-            div.setAttribute("data-material", (producto.material || "").toLowerCase().trim());
-            div.setAttribute("data-nombre", (producto.nombre || "").toLowerCase().trim()); // Añadir data-nombre para el buscador
-
-            // Comprobar si el producto está fuera de stock
-            const estaFueraDeStock = producto.stock <= 0;
-            if (estaFueraDeStock) {
-                div.classList.add("fuera-stock");
+        if (productoExistente) {
+            if (productoExistente.cantidad < productoEnCatalogo.stock) {
+                productoExistente.cantidad++;
+                alert(`¡${productoEnCatalogo.nombre} agregado al carrito! Cantidad: ${productoExistente.cantidad}`);
+            } else {
+                alert(`¡No hay más stock de ${productoEnCatalogo.nombre}!`);
             }
+        } else {
+            if (productoEnCatalogo && productoEnCatalogo.stock > 0) {
+                carrito.push({ ...productoEnCatalogo, cantidad: 1 });
+                alert(`¡${productoEnCatalogo.nombre} agregado al carrito!`);
+            } else {
+                alert(`¡${productoEnCatalogo.nombre} está fuera de stock!`);
+            }
+        }
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        renderizarCarrito();
+    };
 
-            div.innerHTML = `
-                ${producto.imagen
-                    ? `<img src="${producto.imagen}" alt="${producto.nombre}">`
-                    : `<div class="sin-imagen">Imagen no disponible</div>`}
-                <h3>${producto.nombre}</h3>
-                <p>$${producto.precio}</p>
-                <button class="btn-agregar" ${estaFueraDeStock ? 'disabled' : ''}>
-                    ${estaFueraDeStock ? 'Sin Stock' : 'Agregar al carrito'}
-                </button>
-            `;
-            // Asignar el evento al botón "Agregar al carrito"
-            div.querySelector(".btn-agregar").addEventListener("click", () => agregarAlCarrito(producto));
-            contenedor.appendChild(div);
+    // Función para renderizar el carrito
+    const renderizarCarrito = () => {
+        listaCarrito.innerHTML = '';
+        let total = 0;
+        if (carrito.length === 0) {
+            listaCarrito.innerHTML = '<li>El carrito está vacío.</li>';
+        } else {
+            carrito.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `${item.nombre} x ${item.cantidad} - $${item.precio * item.cantidad} 
+                                <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
+                listaCarrito.appendChild(li);
+                total += item.precio * item.cantidad;
+            });
+        }
+        totalCarrito.textContent = total;
+        // Agrega event listeners a los botones de eliminar
+        document.querySelectorAll('.btn-eliminar').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const productoId = parseInt(e.currentTarget.dataset.id);
+                eliminarDelCarrito(productoId);
+            });
         });
+    };
 
-        // Una vez que los productos están cargados y renderizados, inicializamos los filtros y buscador
-        inicializarFiltrosYBusqueda();
+    // Función para eliminar un producto del carrito
+    const eliminarDelCarrito = (productoId) => {
+        carrito = carrito.filter(item => item.id !== productoId);
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        renderizarCarrito();
+    };
 
-    } catch (error) {
-        console.error("Error al cargar productos:", error);
-    }
-}
-
-// --- Función de Filtrado y Busqueda Unificada ---
-function filtrarProductos() {
-    const buscador = document.getElementById("buscador");
-    const filtroMaterial = document.getElementById("filtroMaterial");
-
-    const textoBusqueda = buscador ? buscador.value.toLowerCase().trim() : '';
-    const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase().trim() : '';
-
-    document.querySelectorAll(".producto").forEach(prod => {
-        const nombreProducto = (prod.getAttribute("data-nombre") || "").toLowerCase();
-        const materialProducto = (prod.getAttribute("data-material") || "").toLowerCase();
-
-        const coincideBusqueda = nombreProducto.includes(textoBusqueda);
-        const coincideMaterial = (!materialSeleccionado || materialProducto === materialSeleccionado);
-
-        prod.style.display = (coincideBusqueda && coincideMaterial) ? "" : "none"; // Muestra o oculta
+    // Vaciar carrito
+    vaciarCarritoBtn.addEventListener('click', () => {
+        carrito = [];
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        renderizarCarrito();
+        alert('Se ha vaciado el carrito.');
     });
 
-    // Opcional: Ocultar secciones de categorías si están vacías después del filtro
-    // Esto es relevante si en el futuro generas secciones dinámicamente como habíamos hablado.
-    // Por ahora, con un solo contenedor, no es estrictamente necesario, pero es buena práctica.
-    const contenedorCatalogo = document.getElementById("contenedorCatalogo");
-    if (contenedorCatalogo) {
-        const productosVisibles = contenedorCatalogo.querySelectorAll('.producto[style="display: block;"], .producto:not([style*="display: none"])').length;
-        // Podrías mostrar un mensaje si no hay productos visibles
-        // if (productosVisibles === 0) { console.log("No hay productos que coincidan con la búsqueda/filtro"); }
-    }
-}
+    // Función para generar las cards de productos
+    const generarCardsProductos = (productosParaMostrar) => {
+        contenedorCatalogo.innerHTML = ''; // Limpia el contenedor principal
+        const categoriasMap = new Map();
 
+        // Agrupar productos por categoría
+        productosParaMostrar.forEach(producto => {
+            if (!categoriasMap.has(producto.categoria)) {
+                categoriasMap.set(producto.categoria, []);
+            }
+            categoriasMap.get(producto.categoria).push(producto);
+        });
 
-// --- Inicialización de Event Listeners para Filtros y Buscador (para catalogo.html) ---
-function inicializarFiltrosYBusqueda() {
-    const buscador = document.getElementById("buscador");
-    if (buscador) {
-        buscador.addEventListener("input", filtrarProductos);
-    }
+        // Generar secciones para cada categoría
+        for (const [categoria, productos] of categoriasMap.entries()) {
+            const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, ''); // Limpiar el nombre para el ID
+            const section = document.createElement('section');
+            section.id = sectionId;
+            section.innerHTML = `<h2>${categoria}</h2><div class="destacados-grid"></div>`;
+            contenedorCatalogo.appendChild(section);
 
-    const filtroMaterial = document.getElementById("filtroMaterial");
-    if (filtroMaterial) {
-        filtroMaterial.addEventListener("change", filtrarProductos);
-    }
+            const gridContainer = section.querySelector('.destacados-grid');
 
-    // Scroll suave en atajos de categorías (si aplicable en catalogo.html)
-    document.querySelectorAll('#categoriasNav a').forEach(enlace => {
-        enlace.addEventListener('click', function(e) {
+            productos.forEach(producto => {
+                const productoDiv = document.createElement('div');
+                productoDiv.classList.add('producto');
+                if (producto.stock === 0) {
+                    productoDiv.classList.add('fuera-stock');
+                }
+                productoDiv.dataset.material = producto.material;
+
+                const imagenSrc = producto.imagen ? producto.imagen : 'sin-imagen.jpg';
+                const imagenAlt = producto.nombre;
+
+                productoDiv.innerHTML = `
+                    <img src="${imagenSrc}" alt="${imagenAlt}">
+                    <h3>${producto.nombre}</h3>
+                    <p>$${producto.precio}</p>
+                    ${producto.stock > 0 ? `<button class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>` : '<span class="sin-stock">FUERA DE STOCK</span>'}
+                `;
+                gridContainer.appendChild(productoDiv);
+            });
+        }
+
+        // Agrega event listeners a los botones "Agregar al carrito"
+        document.querySelectorAll('.btn-agregar').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const productoId = parseInt(e.currentTarget.dataset.id);
+                agregarAlCarrito(productoId);
+            });
+        });
+    };
+
+    // Carga los productos desde el JSON
+    let productos = []; // Almacena todos los productos cargados
+    fetch('productos.json')
+        .then(response => response.json())
+        .then(data => {
+            productos = data; // Guarda los productos en la variable global
+            generarCardsProductos(productos); // Genera las cards inicialmente
+            renderizarCarrito(); // Renderiza el carrito al cargar la página
+        })
+        .catch(error => console.error('Error al cargar los productos:', error));
+
+    // Funcionalidad del buscador
+    buscador.addEventListener('input', () => {
+        const textoBusqueda = buscador.value.toLowerCase();
+        const materialSeleccionado = filtroMaterial.value.toLowerCase();
+
+        const productosFiltrados = productos.filter(producto => {
+            const coincideNombre = producto.nombre.toLowerCase().includes(textoBusqueda);
+            const coincideMaterial = !materialSeleccionado || producto.material.toLowerCase() === materialSeleccionado;
+            return coincideNombre && coincideMaterial;
+        });
+        generarCardsProductos(productosFiltrados);
+    });
+
+    // Funcionalidad del filtro por material
+    filtroMaterial.addEventListener('change', () => {
+        const textoBusqueda = buscador.value.toLowerCase();
+        const materialSeleccionado = filtroMaterial.value.toLowerCase();
+
+        const productosFiltrados = productos.filter(producto => {
+            const coincideNombre = producto.nombre.toLowerCase().includes(textoBusqueda);
+            const coincideMaterial = !materialSeleccionado || producto.material.toLowerCase() === materialSeleccionado;
+            return coincideNombre && coincideMaterial;
+        });
+        generarCardsProductos(productosFiltrados);
+    });
+
+    // Funcionalidad para el scroll suave a las categorías
+    categoriasNav.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
             e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
+            const targetId = e.target.getAttribute('href').substring(1);
             const seccion = document.getElementById(targetId);
             if (seccion) {
                 window.scrollTo({
-                    top: seccion.offsetTop - 40, // Ajuste para el header fijo
+                    top: seccion.offsetTop - 80, // Ajusta el offset si tu header es fijo
                     behavior: 'smooth'
                 });
             }
-        });
-    });
-}
-
-
-// --- Event Listener Principal al Cargar el DOM ---
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Inicializar Carrusel (solo si estamos en index.html)
-    const galeriaSlider = document.getElementById('galeriaSlider');
-    if (galeriaSlider) {
-        const slides = galeriaSlider.querySelectorAll('img');
-        if (slides.length > 0) {
-            actualizarGaleria(slides);
-            // Si tienes botones para el carrusel en index.html, agrega los listeners aquí
-            document.querySelector('.galeria-controles button:first-child').addEventListener('click', () => moverGaleria(-1));
-            document.querySelector('.galeria-controles button:last-child').addEventListener('click', () => moverGaleria(1));
-        }
-    }
-
-    // 2. Cargar y Renderizar Productos (solo si estamos en catalogo.html)
-    // Esta función también inicializa los filtros y buscador después de cargar los productos
-    cargarYRenderizarProductos();
-
-    // 3. Eventos del Carrito (aplica a ambas páginas si el modal está en ambas)
-    document.querySelector(".fa-shopping-cart").addEventListener("click", mostrarCarrito);
-    document.getElementById("cerrarCarrito").addEventListener("click", () => {
-        document.getElementById("carritoModal").style.display = "none";
-    });
-    document.getElementById("vaciarCarrito").addEventListener("click", vaciarCarrito);
-
-    // Delegación de eventos para eliminar ítems del carrito (solo una vez)
-    document.getElementById("listaCarrito").addEventListener("click", e => {
-        if (e.target.classList.contains("eliminar-item")) {
-            const index = e.target.dataset.index;
-            let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-            carrito.splice(index, 1); // Elimina 1 elemento en la posición 'index'
-            localStorage.setItem("carrito", JSON.stringify(carrito));
-            mostrarCarrito(); // Actualizar la vista del carrito
         }
     });
 });
