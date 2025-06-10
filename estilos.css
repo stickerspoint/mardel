@@ -294,7 +294,7 @@ section h2 {
 
 /* Carrusel */
 .galeria-fondo {
-    background-color: #fff5e9;
+    background-color: var(--color-fondo-claro); /* Fondo amarillo claro */
     padding: 50px 0;
     text-align: center;
 }
@@ -329,7 +329,7 @@ section h2 {
 
 .galeria-slider img.central {
     transform: scale(1.05); /* Ligeramente más grande la imagen central */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra amarilla para destacar */
+    box-shadow: none; /* Esto quitará la sombra amarilla */
 }
 
 .galeria-controles {
