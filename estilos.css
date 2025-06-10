@@ -96,11 +96,11 @@
 /* Estilos para la barra de navegación de categorías y filtros */
 .filtros-categorias {
     display: flex;
-    /* flex-wrap: wrap;  <-- Asegúrate de que esta línea NO ESTÉ o esté comentada */
     justify-content: center; /* Centra los elementos horizontalmente */
     gap: 20px; /* Aumenta el espacio entre el grupo de enlaces y el select */
     margin-bottom: 30px;
     align-items: center; /* Alinea verticalmente los elementos (categoriasNav y filtroMaterial) */
+    flex-wrap: wrap; /* Permite que se envuelvan en pantallas pequeñas */
 }
 
 #categoriasNav {
@@ -114,17 +114,35 @@
     text-decoration: none;
     color: #f0c14b; /* Color amarillo/naranja del texto */
     padding: 8px 15px; /* Espacio interno alrededor del texto */
-    border: 2px solid #f0c14b; /* **Aquí el reborde!** Borde de 2px sólido y del color amarillo/naranja */
-    border-radius: 5px; /* Bordes ligeramente redondeados */
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Transición suave al pasar el mouse */
+    border: 2px solid #f0c14b; /* Reborde del color de la marca */
+    border-radius: 8px; /* Bordes redondeados, igual que el filtro */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Transición suave */
     font-weight: bold; /* Para que el texto sea más notable */
     white-space: nowrap; /* Evita que el texto del enlace se rompa en varias líneas */
+    background-color: #fff5e9; /* Fondo claro, igual que el filtro y el body */
 }
 
 .filtros-categorias a:hover {
     background-color: #f0c14b; /* Fondo amarillo/naranja al pasar el mouse */
     color: #fff; /* Texto blanco al pasar el mouse (para buen contraste) */
     border-color: #f0c14b; /* Mantiene el color del borde al pasar el mouse */
+}
+
+#filtroMaterial {
+    padding: 10px 15px; /* Ajustado para que se parezca más a los botones */
+    border-radius: 8px; /* Un poco más redondeado */
+    border: 2px solid #f0c14b; /* Borde del color de la marca */
+    font-size: 1em;
+    background-color: #fff5e9; /* Fondo claro, como el body */
+    color: #333; /* Color de texto oscuro por defecto */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+#filtroMaterial:hover {
+    background-color: #f0c14b; /* Fondo amarillo/naranja al pasar el mouse */
+    color: #fff; /* Texto blanco al pasar el mouse */
+    border-color: #f0c14b; /* Mantiene el color del borde */
 }
 
 
@@ -280,15 +298,17 @@ body {
 }
 
 /* Estilos para el buscador y filtros */
-.filtros-categorias {
-    margin-top: 20px;
-}
-#filtroMaterial {
+/* El contenedor .filtros-categorias ya está definido arriba */
+#buscador {
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 1em;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box; /* Para que el padding y border no aumenten el ancho */
 }
+
 
 /* Media queries para responsividad */
 @media (max-width: 768px) {
@@ -308,6 +328,7 @@ body {
     .filtros-categorias {
         flex-direction: column; /* Vuelve a columna en pantallas pequeñas */
         align-items: center;
+        gap: 15px; /* Reducir un poco el espacio en móvil */
     }
     #buscador, #filtroMaterial {
         width: 95%;
@@ -315,6 +336,7 @@ body {
     }
     #categoriasNav {
         margin-top: 10px; /* Espacio extra si se envuelve en móviles */
+        gap: 10px; /* Reducir espacio entre enlaces en móvil */
     }
 }
 
@@ -333,6 +355,10 @@ body {
     }
     .filtros-categorias a {
         padding: 6px 10px; /* Reduce padding en pantallas muy pequeñas */
+        font-size: 0.9em;
+    }
+    #filtroMaterial {
+        padding: 8px 12px; /* Ajustar padding en móvil */
         font-size: 0.9em;
     }
 }
