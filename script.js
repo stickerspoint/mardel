@@ -196,46 +196,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Lógica del Carrusel (PEGA ESTO AQUÍ) ---
+// --- Lógica del Carrusel (ACTUALIZADO) ---
     const galeriaSlider = document.getElementById('galeriaSlider');
     const imagenesCarrusel = galeriaSlider ? galeriaSlider.querySelectorAll('img') : [];
+    const numVisible = 3; // Número de imágenes visibles
     let indiceActualCarrusel = 0;
 
-    // Asegúrate de que las imágenes existan antes de inicializar el carrusel
-    if (imagenesCarrusel.length > 0) {
-        actualizarCarrusel();
+    function actualizarCarrusel() {
+        if (imagenesCarrusel.length === 0) return;
+
+        // Asegurar que el índice actual esté dentro de los límites
+        if (indiceActualCarrusel < 0) {
+            indiceActualCarrusel = imagenesCarrusel.length - 1;
+        } else if (indiceActualCarrusel >= imagenesCarrusel.length) {
+            indiceActualCarrusel = 0;
+        }
+
+        // Remover la clase 'central' de todas las imágenes
+        imagenesCarrusel.forEach(img => img.classList.remove('central'));
+
+        // Añadir la clase 'central' a la imagen central
+        const indiceCentral = indiceActualCarrusel;
+        if (imagenesCarrusel.length > indiceCentral) {
+            imagenesCarrusel.item(indiceCentral).classList.add('central');
+        }
+
+        // Calcular el desplazamiento para centrar la imagen central
+        const anchoImagen = imagenesCarrusel.length > 0 ? imagenesCarrusel.item(0).offsetWidth + 20 : 0; // Ancho de la imagen + margen
+        const offset = -(indiceActualCarrusel - 1) * anchoImagen; // Desplaza para que la central esté en la posición 2 (índice 1) de 3
+
+        galeriaSlider.style.transform = `translateX(${offset}px)`;
     }
 
     window.moverGaleria = (direccion) => {
         if (imagenesCarrusel.length === 0) return;
 
         indiceActualCarrusel += direccion;
-
-        // Lógica para que el carrusel sea infinito
-        if (indiceActualCarrusel >= imagenesCarrusel.length) {
-            indiceActualCarrusel = 0;
-        } else if (indiceActualCarrusel < 0) {
-            indiceActualCarrusel = imagenesCarrusel.length - 1;
-        }
-
         actualizarCarrusel();
     };
 
-    function actualizarCarrusel() {
-        const offset = -indiceActualCarrusel * 100;
-        galeriaSlider.style.transform = `translateX(${offset}%)`;
+    // Inicializar el carrusel en la carga
+    if (imagenesCarrusel.length > 0) {
+        actualizarCarrusel();
     }
-
-    // Opcional: Carrusel automático
-    // let intervaloCarrusel = setInterval(() => moverGaleria(1), 5000); // Cambia cada 5 segundos
-
-    // Opcional: Detener carrusel automático al pasar el mouse
-    // galeriaSlider.parentElement.addEventListener('mouseenter', () => {
-    //     clearInterval(intervaloCarrusel);
-    // });
-    // galeriaSlider.parentElement.addEventListener('mouseleave', () => {
-    //     intervaloCarrusel = setInterval(() => moverGaleria(1), 5000);
-    // });
     // --- Fin Lógica del Carrusel ---
-
-}); // <-- La llave final de DOMContentLoaded

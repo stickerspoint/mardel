@@ -282,70 +282,75 @@ body {
     padding-top: 70px; /* Para que el contenido no quede debajo del header fijo */
     background-color: #fff5e9;
 }
-/* Estilos para la sección del Carrusel */
+/* Estilos para la sección del Carrusel (ACTUALIZADO) */
 .galeria-fondo {
-    background-color: #fff; /* O el color que prefieras para el fondo de la sección del carrusel */
+    background-color: #fff;
     padding: 40px 0;
-    position: relative; /* Necesario para posicionar los controles */
-    overflow: hidden; /* Asegura que el carrusel no se desborde */
+    position: relative;
+    overflow: hidden;
 }
 
 .galeria-container {
-    max-width: 900px; /* Ancho máximo del contenedor del carrusel */
+    max-width: 700px; /* Ajusta este valor según el tamaño deseado para las 3 imágenes */
     margin: 0 auto;
-    overflow: hidden; /* Muy importante para ocultar las imágenes que no están visibles */
-    border-radius: 10px; /* Bordes redondeados para el carrusel */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    position: relative; /* Para que las flechas de control queden bien posicionadas si están dentro del container */
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative; /* Para posicionar las flechas si se usan absolute dentro */
 }
 
 .galeria-slider {
-    display: flex; /* Hace que las imágenes se alineen horizontalmente */
-    width: 100%; /* El JS ajustará esto si es necesario, pero las imágenes individuales lo manejan */
-    transition: transform 0.5s ease-in-out; /* Transición suave al mover las imágenes */
+    display: flex;
+    width: auto; /* El ancho se calculará con JS */
+    transition: transform 0.5s ease-in-out;
+    justify-content: center; /* Centra el contenido para el efecto de las 3 imágenes */
 }
 
 .galeria-slider img {
-    width: 100%; /* Cada imagen ocupará el 100% del ancho del .galeria-container */
+    width: 200px; /* Ajusta este valor para el ancho de cada imagen */
     height: auto;
-    display: block; /* Elimina el espacio extra debajo de las imágenes */
-    flex-shrink: 0; /* Evita que las imágenes se encojan */
-    border-radius: 10px; /* Asegura que las imágenes tengan el mismo redondeado */
+    display: block;
+    flex-shrink: 0;
+    border-radius: 10px;
+    margin: 0 10px; /* Espacio entre las imágenes */
+    opacity: 0.6; /* Opacidad para las imágenes laterales por defecto */
+    transform: scale(0.8); /* Escala para las imágenes laterales por defecto */
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Opcional: Si quieres que la imagen central tenga algún estilo diferente, puedes usar esto,
-   aunque para un carrusel básico, usualmente todas las imágenes son iguales. */
-/* .galeria-slider img.central {
-    border: 3px solid #f0c14b;
-} */
+.galeria-slider img.central {
+    opacity: 1;
+    transform: scale(1);
+}
 
 .galeria-controles {
-    position: absolute;
-    top: 50%;
-    width: 100%;
     display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-    padding: 0 20px; /* Padding para que los botones no estén pegados a los bordes */
-    box-sizing: border-box; /* Para que el padding no afecte el width total */
-    z-index: 10; /* Asegura que los botones estén por encima de las imágenes */
+    justify-content: center; /* Centra las flechas horizontalmente */
+    margin-top: 20px; /* Espacio entre el carrusel y las flechas */
 }
 
 .galeria-controles button {
-    background-color: rgba(240, 193, 75, 0.8); /* Fondo amarillo/naranja semi-transparente */
-    color: #fff; /* Iconos blancos */
+    background-color: rgba(240, 193, 75, 0.8);
+    color: #fff;
     border: none;
-    padding: 15px 18px; /* Tamaño del botón */
-    border-radius: 50%; /* Botones circulares */
+    padding: 12px 15px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 1.5em;
+    font-size: 1.2em;
     transition: background-color 0.3s ease;
-    display: flex; /* Para centrar el icono FA */
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin: 0 10px; /* Espacio entre las flechas */
 }
 
 .galeria-controles button:hover {
-    background-color: #f0c14b; /* Color sólido al pasar el mouse */
+    background-color: #f0c14b;
+}
+
+/* Ocultar los controles laterales que ya no son necesarios */
+.galeria-fondo > .galeria-controles {
+    position: static;
+    transform: translateY(0);
+    padding: 0;
+}
+.galeria-fondo > .galeria-controles button {
+    position: relative;
 }
