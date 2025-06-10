@@ -134,7 +134,7 @@
     border: 2px solid #f0c14b;
     font-size: 1em;
     background-color: #fff5e9;
-    color: #333; /* <-- Este es el color del texto actual */
+    color: #f0c14b; /* ¡CAMBIO AQUÍ: Texto amarillo/naranja! */
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
@@ -283,81 +283,4 @@ body {
     background-color: #fff5e9;
 }
 
-.destacados {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 20px auto;
-}
-
-.destacados h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 3em;
-    color: #333;
-}
-
-/* Estilos para el buscador y filtros */
-/* El contenedor .filtros-categorias ya está definido arriba */
-#buscador {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1em;
-    width: 100%;
-    max-width: 400px;
-    box-sizing: border-box; /* Para que el padding y border no aumenten el ancho */
-}
-
-
-/* Media queries para responsividad */
-@media (max-width: 768px) {
-    .header {
-        flex-direction: column;
-        padding: 15px 15px;
-    }
-    .header .nav-links {
-        margin-top: 10px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .header .nav-links a {
-        margin: 5px 10px;
-    }
-    .filtros-categorias {
-        flex-direction: column; /* Vuelve a columna en pantallas pequeñas */
-        align-items: center;
-        gap: 15px; /* Reducir un poco el espacio en móvil */
-    }
-    #buscador, #filtroMaterial {
-        width: 95%;
-        max-width: none;
-    }
-    #categoriasNav {
-        margin-top: 10px; /* Espacio extra si se envuelve en móviles */
-        gap: 10px; /* Reducir espacio entre enlaces en móvil */
-    }
-}
-
-@media (max-width: 480px) {
-    .destacados h1 {
-        font-size: 2.5em;
-    }
-    .producto {
-        padding: 15px;
-    }
-    .producto h3 {
-        font-size: 1.3em;
-    }
-    .producto p {
-        font-size: 1.1em;
-    }
-    .filtros-categorias a {
-        padding: 6px 10px; /* Reduce padding en pantallas muy pequeñas */
-        font-size: 0.9em;
-    }
-    #filtroMaterial {
-        padding: 8px 12px; /* Ajustar padding en móvil */
-        font-size: 0.9em;
-    }
-}
+.
