@@ -17,15 +17,32 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Abre el modal del carrito al hacer clic en el ícono del carrito
-    document.querySelector('.fa-shopping-cart').addEventListener('click', toggleCarritoModal);
+    // Comprobación de que el elemento existe antes de añadir el event listener
+    const shoppingCartIcon = document.querySelector('.fa-shopping-cart');
+    if (shoppingCartIcon) {
+        shoppingCartIcon.addEventListener('click', toggleCarritoModal);
+    } else {
+        console.warn("Elemento con clase '.fa-shopping-cart' no encontrado. El ícono del carrito no funcionará.");
+    }
+
 
     // Cierra el modal del carrito
-    cerrarCarrito.addEventListener('click', toggleCarritoModal);
-    carritoModal.addEventListener('click', (e) => {
-        if (e.target === carritoModal) {
-            toggleCarritoModal();
-        }
-    });
+    if (cerrarCarrito) {
+        cerrarCarrito.addEventListener('click', toggleCarritoModal);
+    } else {
+        console.warn("Elemento con ID 'cerrarCarrito' no encontrado.");
+    }
+
+    if (carritoModal) {
+        carritoModal.addEventListener('click', (e) => {
+            if (e.target === carritoModal) {
+                toggleCarritoModal();
+            }
+        });
+    } else {
+        console.warn("Elemento con ID 'carritoModal' no encontrado.");
+    }
+
 
     // Función para agregar un producto al carrito
     const agregarAlCarrito = (productoId) => {
@@ -53,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para renderizar el carrito
     const renderizarCarrito = () => {
+        if (!listaCarrito || !totalCarrito) {
+            console.error("Error: Elementos del carrito no encontrados (listaCarrito o totalCarrito).");
+            return;
+        }
+
         listaCarrito.innerHTML = '';
         let total = 0;
         if (carrito.length === 0) {
@@ -84,12 +106,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Vaciar carrito
-    vaciarCarritoBtn.addEventListener('click', () => {
-        carrito = [];
-        localStorage.setItem('carrito', JSON.stringify(carrito));
-        renderizarCarrito();
-        alert('Se ha vaciado el carrito.');
-    });
+    if (vaciarCarritoBtn) {
+        vaciarCarritoBtn.addEventListener('click', () => {
+            carrito = [];
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            renderizarCarrito();
+            alert('Se ha vaciado el carrito.');
+        });
+    } else {
+        console.warn("Elemento con ID 'vaciarCarrito' no encontrado.");
+    }
+
 
     // Función para generar las cards de productos
     const generarCardsProductos = (productosParaMostrar) => {
@@ -222,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Lógica del Carrusel (ACTUALIZADO) ---
     const galeriaSlider = document.getElementById('galeriaSlider');
     const imagenesCarrusel = galeriaSlider ? galeriaSlider.querySelectorAll('img') : [];
-    // const numVisible = 3; // Esta variable no se usa directamente en el cálculo de offset, se puede eliminar si se quiere, o mantener como referencia.
     let indiceActualCarrusel = 0;
 
     function actualizarCarrusel() {
@@ -245,12 +271,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Calcular el desplazamiento para centrar la imagen central
-        const anchoImagenConMargen = imagenesCarrusel.length > 0 ? imagenesCarrusel.item(0).offsetWidth + 20 : 0;
+        const anchoImagenConMargen = imagenesCarrusel.length > 0 ? imagenesCarrusel.item(0).offsetWidth + 20 : 0; // +20 por 10px de margen a cada lado
         const offset = -(indiceActualCarrusel - 1) * anchoImagenConMargen; 
 
         galeriaSlider.style.transform = `translateX(${offset}px)`;
     }
 
+    // Exportar moverGaleria al objeto global window para que sea accesible desde HTML
     window.moverGaleria = (direccion) => {
         if (imagenesCarrusel.length === 0) return;
 
@@ -258,8 +285,29 @@ document.addEventListener('DOMContentLoaded', () => {
         actualizarCarrusel();
     };
 
+    // Obtener las referencias a los nuevos botones de navegación del carrusel
+    const prevBtnGaleria = document.getElementById('prevBtnGaleria');
+    const nextBtnGaleria = document.getElementById('nextBtnGaleria');
+
+    // Asignar event listeners a los botones de navegación del carrusel
+    if (prevBtnGaleria) {
+        prevBtnGaleria.addEventListener('click', () => {
+            window.moverGaleria(-1);
+        });
+    } else {
+        console.warn("Elemento con ID 'prevBtnGaleria' no encontrado.");
+    }
+
+    if (nextBtnGaleria) {
+        nextBtnGaleria.addEventListener('click', () => {
+            window.moverGaleria(1);
+        });
+    } else {
+        console.warn("Elemento con ID 'nextBtnGaleria' no encontrado.");
+    }
+
     // Inicializar el carrusel en la carga
     if (imagenesCarrusel.length > 0) {
         actualizarCarrusel();
     }
-}); // <-- ¡Esta es la ÚNICA llave de cierre para DOMContentLoaded! Debe estar al final del archivo.
+});

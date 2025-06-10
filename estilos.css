@@ -1,166 +1,81 @@
-/* Asegúrate de que el contenedor principal del catálogo sea flexible o grid */
-#contenedorCatalogo {
-    display: flex; /* O 'grid' si prefieres una cuadrícula de categorías */
-    flex-direction: column; /* Para que las secciones de categoría se apilen verticalmente */
-    gap: 40px; /* Espacio entre las secciones de categoría */
-    padding: 20px; /* Un poco de padding al contenedor general */
+/* Estilos Generales */
+:root {
+    --color-primario: #f0c14b; /* Amarillo dorado */
+    --color-secundario: #f0a41c; /* Naranja oscuro */
+    --color-texto: #333;
+    --color-fondo-claro: #fff5e9;
+    --color-fondo-oscuro: #f2f2f2;
 }
 
-/* Estilos para cada sección de categoría */
-.destacados section {
-    margin-bottom: 30px; /* Espacio entre las secciones (si el gap de #contenedorCatalogo no es suficiente) */
-}
-
-.destacados section h2 {
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 2.5em; /* Un tamaño de fuente decente para los títulos de categoría */
-    color: #333;
-    border-bottom: 2px solid #eee; /* Una línea para separar el título */
-    padding-bottom: 10px;
-}
-
-/* ESTO ES CRUCIAL: Estilos para el contenedor de la cuadrícula de productos dentro de cada categoría */
-.destacados-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
-    gap: 20px; /* Espacio entre los productos */
-    justify-items: center; /* Centra los items en la cuadrícula */
-}
-
-/* Estilos para cada producto individual */
-.producto {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    width: 100%; /* Asegura que ocupe todo el espacio disponible en su columna */
-    max-width: 300px; /* Límite para que no sean demasiado anchos */
-}
-
-.producto:hover {
-    transform: translateY(-5px);
-}
-
-.producto img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
-
-.producto h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.producto p {
-    font-size: 1.2em;
-    color: #555;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
-
-.btn-agregar {
-    background-color: #f0c14b; /* Color amarillo/naranja para el botón */
-    color: #111;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-    width: 80%;
-}
-
-.btn-agregar:hover {
-    background-color: #e4b340; /* Tono más oscuro al pasar el mouse */
-}
-
-.sin-stock {
-    background-color: #dc3545; /* Rojo para "Fuera de stock" */
-    color: white;
-    cursor: default;
-    opacity: 0.8;
-    border-radius: 5px; /* Añadido para consistencia */
-    padding: 10px 15px; /* Añadido para consistencia */
-    width: 80%; /* Añadido para consistencia */
-    display: inline-block; /* Para que el padding y width funcionen bien */
-}
-
-
-/* Estilos para la barra de navegación de categorías y filtros */
-.filtros-categorias {
-    display: flex;
-    justify-content: center; /* Centra los elementos horizontalmente */
-    gap: 20px; /* Aumenta el espacio entre el grupo de enlaces y el select */
-    margin-bottom: 30px;
-    align-items: center; /* Alinea verticalmente los elementos (categoriasNav y filtroMaterial) */
-    flex-wrap: wrap; /* Permite que se envuelvan en pantallas pequeñas */
-}
-
-#categoriasNav {
-    display: flex; /* Para que los enlaces dentro de #categoriasNav estén en una fila */
-    gap: 15px; /* Ajusta el espacio entre los enlaces individuales de categoría */
-    flex-wrap: wrap; /* Permite que los enlaces se envuelvan a la siguiente línea si no hay espacio */
-    justify-content: center; /* Centra los enlaces si se envuelven */
-}
-
-.filtros-categorias a {
-    text-decoration: none;
-    color: #f0c14b; /* Color amarillo/naranja del texto */
-    padding: 8px 15px; /* Espacio interno alrededor del texto */
-    border: 2px solid #f0c14b; /* Reborde del color de la marca */
-    border-radius: 8px; /* Bordes redondeados, igual que el filtro */
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Transición suave */
-    font-weight: bold; /* Para que el texto sea más notable */
-    white-space: nowrap; /* Evita que el texto del enlace se rompa en varias líneas */
-    background-color: #fff5e9; /* Fondo claro, igual que el filtro y el body */
-}
-
-.filtros-categorias a:hover {
-    background-color: #f0c14b; /* Fondo amarillo/naranja al pasar el mouse */
-    color: #fff; /* Texto blanco al pasar el mouse (para buen contraste) */
-    border-color: #f0c14b; /* Mantiene el color del borde al pasar el mouse */
-}
-
-#filtroMaterial {
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 2px solid #f0c14b;
-    font-size: 1em;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-top: 70px; /* Para que el contenido no quede debajo del header fijo */
     background-color: #fff5e9;
-    color: #f0c14b; /* ¡CAMBIO AQUÍ: Texto amarillo/naranja! */
+}
+
+/* Header */
+.header {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color-secundario);
+}
+
+.nav-links a {
+    color: var(--color-texto);
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--color-primario);
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    color: var(--color-texto);
+    transition: color 0.3s ease;
 }
 
-#filtroMaterial:hover {
-    background-color: #f0c14b;
-    color: #fff;
-    border-color: #f0c14b;
+.icon-btn:hover {
+    color: var(--color-primario);
 }
 
-/* Modal del carrito */
+/* Modal del Carrito */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1001; /* Más alto que el header */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
     justify-content: center;
     align-items: center;
 }
 
-.modal-content {
+.modal-content.carrito {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
@@ -169,7 +84,6 @@
     max-width: 500px;
     border-radius: 10px;
     position: relative;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .close-modal {
@@ -190,9 +104,16 @@
     cursor: pointer;
 }
 
-#listaCarrito li {
+#listaCarrito {
     list-style: none;
-    padding: 8px 0;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+#listaCarrito li {
+    padding: 10px 0;
     border-bottom: 1px dashed #eee;
     display: flex;
     justify-content: space-between;
@@ -204,90 +125,178 @@
 }
 
 .btn-eliminar {
-    background-color: #dc3545; /* Rojo para eliminar */
-    color: white;
+    background-color: transparent;
     border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
+    color: #e74c3c;
     cursor: pointer;
-    font-size: 0.8em;
+    font-size: 1.1em;
 }
 
-.btn-eliminar:hover {
-    background-color: #c82333;
+#totalCarrito {
+    font-weight: bold;
+    color: var(--color-primario);
 }
 
 #vaciarCarrito {
-    background-color: #6c757d; /* Gris para vaciar */
+    background-color: var(--color-secundario);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+#vaciarCarrito:hover {
+    background-color: #d88e1a;
+}
+
+/* Catálogo */
+.catalogo-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.catalogo-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.catalogo-filtros button {
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.catalogo-filtros button:hover {
+    background-color: var(--color-secundario);
+}
+
+.catalogo-filtros button.active {
+    background-color: var(--color-secundario);
+    font-weight: bold;
+}
+
+.catalogo-filtros input[type="text"],
+.catalogo-filtros select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+section h2 {
+    text-align: center;
+    color: var(--color-texto);
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.destacados-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 0 20px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.producto {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease-in-out;
+}
+
+.producto:hover {
+    transform: translateY(-5px);
+}
+
+.producto img {
+    max-width: 100%;
+    height: 180px; /* Altura fija para las imágenes */
+    object-fit: contain; /* Para que la imagen se ajuste sin cortarse */
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.producto h3 {
+    font-size: 18px;
+    color: var(--color-texto);
+    margin-bottom: 10px;
+    flex-grow: 1; /* Permite que el título ocupe espacio si es largo */
+}
+
+.producto p {
+    font-size: 16px;
+    color: var(--color-primario);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.producto .btn-agregar {
+    background-color: var(--color-primario);
     color: white;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 20px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
-#vaciarCarrito:hover {
-    background-color: #5a6268;
+.producto .btn-agregar:hover {
+    background-color: var(--color-secundario);
 }
 
-/* Estilos para el header fijo */
-.header {
-    position: sticky; /* Hace que el header se quede arriba al hacer scroll */
-    top: 0;
-    z-index: 100; /* Asegura que esté por encima de otros elementos */
-    background-color: #fff; /* Fondo blanco para que no se vea el contenido debajo */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Una pequeña sombra para destacarlo */
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header .logo {
+.producto .sin-stock {
+    color: #e74c3c;
     font-weight: bold;
-    font-size: 1.8em;
-    color: #f0c14b; /* ¡Color amarillo/naranja aplicado y corregido! */
+    font-size: 14px;
+    padding: 10px 0;
 }
 
-.header .nav-links a {
-    margin-left: 25px;
-    text-decoration: none;
-    color: #555;
-    font-size: 1.1em;
-    transition: color 0.3s ease;
+.producto.fuera-stock .btn-agregar {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.header .nav-links a:hover {
-    color: #f0c14b;
+
+/* Pie de Página */
+.footer {
+    background-color: var(--color-texto);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
 }
 
-.header .icons .icon-btn {
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    cursor: pointer;
-    color: #555;
-    transition: color 0.3s ease;
-}
 
-.header .icons .icon-btn:hover {
-    color: #f0c14b;
-}
-
-/* Otros estilos generales si es necesario */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding-top: 70px; /* Para que el contenido no quede debajo del header fijo */
-    background-color: #fff5e9;
-}
-/* Estilos para la sección del Carrusel (ACTUALIZADO) */
+/* Carrusel */
 .galeria-fondo {
-    background-color: #fff;
-    padding: 40px 0;
-    position: relative;
-    overflow: hidden;
+    background-color: #f2f2f2;
+    padding: 50px 0;
+    text-align: center;
 }
 
 .galeria-container {
@@ -297,60 +306,51 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative; /* Para posicionar las flechas si se usan absolute dentro */
+    padding-bottom: 20px; /* Añade espacio en la parte inferior para que no se pegue */
 }
 
 .galeria-slider {
     display: flex;
-    width: auto; /* El ancho se calculará con JS */
     transition: transform 0.5s ease-in-out;
-    justify-content: center; /* Centra el contenido para el efecto de las 3 imágenes */
+    padding: 10px 0; /* Padding vertical para espacio, si es necesario */
+    justify-content: center; /* Centra las imágenes */
+    align-items: center; /* Alinea verticalmente las imágenes */
 }
 
 .galeria-slider img {
-    width: 200px; /* Ajusta este valor para el ancho de cada imagen */
-    height: auto;
-    display: block;
-    flex-shrink: 0;
-    border-radius: 10px;
-    margin: 0 10px; /* Espacio entre las imágenes */
-    opacity: 0.6; /* Opacidad para las imágenes laterales por defecto */
-    transform: scale(0.8); /* Escala para las imágenes laterales por defecto */
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    flex-shrink: 0; /* Evita que las imágenes se encojan */
+    width: calc(100% / 3 - 20px); /* Para 3 imágenes visibles, restando los márgenes */
+    margin: 0 10px; /* Espacio entre imágenes */
+    border-radius: 8px;
+    object-fit: cover;
+    height: 250px; /* Altura fija para todas las imágenes del carrusel */
+    transition: all 0.3s ease; /* Transición para efectos de cambio de tamaño */
 }
 
 .galeria-slider img.central {
-    opacity: 1;
-    transform: scale(1);
+    transform: scale(1.05); /* Ligeramente más grande la imagen central */
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.5); /* Sombra amarilla para destacar */
 }
 
 .galeria-controles {
-    display: flex;
-    justify-content: center; /* Centra las flechas horizontalmente */
     margin-top: 20px; /* Espacio entre el carrusel y las flechas */
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Espacio entre las flechas */
 }
 
 .galeria-controles button {
-    background-color: rgba(240, 193, 75, 0.8);
-    color: #fff;
-    border: none;
-    padding: 12px 15px;
-    border-radius: 50%;
+    background-color: transparent; /* Fondo transparente */
+    color: var(--color-primario); /* Color amarillo definido en :root */
+    border: none; /* Sin borde */
+    padding: 5px 10px; /* Ajusta el padding si es necesario */
+    border-radius: 0; /* Sin bordes redondeados */
     cursor: pointer;
-    font-size: 1.2em;
-    transition: background-color 0.3s ease;
-    margin: 0 10px; /* Espacio entre las flechas */
+    font-size: 2.5em; /* Tamaño del icono de la flecha */
+    transition: opacity 0.3s ease, transform 0.2s ease;
 }
 
 .galeria-controles button:hover {
-    background-color: #f0c14b;
-}
-
-/* Ocultar los controles laterales que ya no son necesarios */
-.galeria-fondo > .galeria-controles {
-    position: static;
-    transform: translateY(0);
-    padding: 0;
-}
-.galeria-fondo > .galeria-controles button {
-    position: relative;
+    opacity: 0.8; /* Ligeramente opaco al pasar el mouse */
+    transform: scale(1.1); /* Ligeramente más grande al pasar el mouse */
 }
