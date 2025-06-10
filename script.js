@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carrito.forEach(item => {
                 const li = document.createElement('li');
                 li.innerHTML = `${item.nombre} x ${item.cantidad} - $${item.precio * item.cantidad}
-                                <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
+                                 <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
                 listaCarrito.appendChild(li);
                 total += item.precio * item.cantidad;
             });
@@ -196,16 +196,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-// --- Lógica del Carrusel (ACTUALIZADO) ---
+    // --- Lógica del Carrusel (ACTUALIZADO) ---
     const galeriaSlider = document.getElementById('galeriaSlider');
     const imagenesCarrusel = galeriaSlider ? galeriaSlider.querySelectorAll('img') : [];
-    const numVisible = 3; // Número de imágenes visibles
+    // const numVisible = 3; // Esta variable no se usa directamente en el cálculo de offset, se puede eliminar si se quiere, o mantener como referencia.
     let indiceActualCarrusel = 0;
 
     function actualizarCarrusel() {
         if (imagenesCarrusel.length === 0) return;
 
-        // Asegurar que el índice actual esté dentro de los límites
+        // Asegurar que el índice actual esté dentro de los límites para un bucle infinito
         if (indiceActualCarrusel < 0) {
             indiceActualCarrusel = imagenesCarrusel.length - 1;
         } else if (indiceActualCarrusel >= imagenesCarrusel.length) {
@@ -222,8 +222,79 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Calcular el desplazamiento para centrar la imagen central
-        const anchoImagen = imagenesCarrusel.length > 0 ? imagenesCarrusel.item(0).offsetWidth + 20 : 0; // Ancho de la imagen + margen
-        const offset = -(indiceActualCarrusel - 1) * anchoImagen; // Desplaza para que la central esté en la posición 2 (índice 1) de 3
+        // NOTA: Asegúrate que las imágenes tengan un ancho definido en CSS para que offsetWidth funcione.
+        // El '+ 20' es por el margin de 10px a cada lado (margin: 0 10px; -> 10px izquierda + 10px derecha)
+        const anchoImagenConMargen = imagenesCarrusel.length > 0 ? imagenesCarrusel.item(0).offsetWidth + 20 : 0;
+        
+        // Calculamos el offset para centrar la imagen actual.
+        // Si tienes 3 imágenes visibles y la del centro es 'indiceActualCarrusel',
+        // necesitas mover el slider de tal forma que la imagen de 'indiceActualCarrusel'
+        // quede en la posición central de las 3 visibles.
+        // Esto depende del ancho del contenedor y de las imágenes.
+        // Una forma común es que el offset sea para alinear el *inicio* de la imagen central
+        // o que el centro de la imagen central esté en el centro del contenedor visible.
+        // Aquí ajustamos para que la imagen central esté visualmente al centro de las 3.
+        // Si el carrusel muestra 3 imágenes, y la central es la que tiene `indiceActualCarrusel`,
+        // la primera imagen visible estaría en `indiceActualCarrusel - 1`.
+        // El `translateX` debe mover el slider para que `indiceActualCarrusel - 1` quede al inicio del contenedor.
+        // O más simplemente, calcular la posición para que la imagen central se vea en el medio.
+        
+        // Asumiendo que quieres que la imagen con indiceActualCarrusel se centre:
+        // El offset es el desplazamiento negativo de la posición de la imagen central
+        // menos la mitad del ancho del contenedor visible.
+        // Esto puede ser complejo si no manejamos el ancho del contenedor visible con JS también.
+
+        // Volviendo a la lógica original de mover por anchos de imagen.
+        // Si queremos que la imagen central sea la de `indiceActualCarrusel`, y se muestren 3,
+        // necesitamos que el slider se desplace lo suficiente para que la imagen
+        // `indiceActualCarrusel` quede en la posición del medio de las 3.
+        // Esto significa que la imagen `indiceActualCarrusel - 1` debería estar visible a la izquierda.
+        // Por lo tanto, el desplazamiento necesario es `-(indiceActualCarrusel - 1) * anchoImagenConMargen`.
+        // Si `indiceActualCarrusel` es 0, `0 - 1 = -1`. `offset = -(-1) * anchoImagen = 1 * anchoImagen`.
+        // Esto movería el slider hacia la derecha.
+        // Si `indiceActualCarrusel` es 1, `1 - 1 = 0`. `offset = -(0) * anchoImagen = 0`. No se mueve.
+        // Si `indiceActualCarrusel` es 2, `2 - 1 = 1`. `offset = -(1) * anchoImagen`. Se mueve a la izquierda.
+
+        // Esta lógica de offset depende mucho de cómo se esté comportando el flexbox y los márgenes.
+        // A veces, es más robusto calcular el centro del slider y el centro de la imagen central.
+
+        // Probemos con el offset original que ya usabas:
+        const offset = -indiceActualCarrusel * anchoImagenConMargen; 
+        
+        // Para centrar 3 imágenes:
+        // Si el slider tiene `display: flex` y `justify-content: center` en el CSS,
+        // Y cada imagen tiene un `width` fijo y `margin`,
+        // la idea es que el `transform: translateX` desplace el grupo de imágenes
+        // de tal forma que la imagen con `indiceActualCarrusel` se "alinee" con el centro.
+        // El cálculo de `-(indiceActualCarrusel - 1) * anchoImagen` es para mover
+        // la imagen que está *antes* de la central al inicio del viewport,
+        // logrando que la central esté en el medio.
+        
+        // Si el carrusel tiene un ancho de contenedor visible y los elementos están centrados por flexbox,
+        // el `translateX` necesita mover el *primer elemento visible* a una posición específica.
+        // En un carrusel de 3, el `indiceActualCarrusel` es la imagen central.
+        // La imagen que debe estar a la izquierda es `indiceActualCarrusel - 1`.
+        // La imagen que debe estar a la derecha es `indiceActualCarrusel + 1`.
+
+        // Vamos a mantener la lógica que te di que apunta a centrar el "grupo" de 3,
+        // asumiendo que el CSS `justify-content: center` ya hace parte del trabajo.
+        // El `offset` debe desplazar el `galeria-slider` de modo que la imagen `indiceActualCarrusel`
+        // se mueva a la posición central.
+
+        // Si la imagen 0 debe estar en el centro, y se muestran 3, la imagen -1 debe estar al principio del viewport.
+        // El offset es la distancia desde el inicio del galeriaSlider hasta el inicio de la imagen que queremos ver en el centro.
+        // Y luego desplazarla al centro del contenedor.
+        // Esto es más complejo.
+
+        // Simplifiquemos y volvamos a la lógica que te di que parecía más directa para 3 imágenes:
+        // `const offset = -(indiceActualCarrusel - 1) * anchoImagenConMargen;`
+        // Esta línea desplaza el slider de tal forma que la imagen que está en
+        // `indiceActualCarrusel - 1` se alinee al inicio del contenedor visible.
+        // Esto tiene sentido para lograr que la imagen `indiceActualCarrusel` quede en el medio.
+
+        // Comprobemos si `anchoImagenConMargen` está dando un valor.
+        // console.log('Ancho de imagen con margen:', anchoImagenConMargen);
+        // console.log('Offset calculado:', offset);
 
         galeriaSlider.style.transform = `translateX(${offset}px)`;
     }
@@ -232,11 +303,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (imagenesCarrusel.length === 0) return;
 
         indiceActualCarrusel += direccion;
+        // La función actualizarCarrusel() se encargará de los límites y el bucle infinito.
         actualizarCarrusel();
     };
 
     // Inicializar el carrusel en la carga
     if (imagenesCarrusel.length > 0) {
-        actualizarCarrusel();
+        // Establecer el índice inicial para que la primera imagen aparezca en el centro
+        // Por ejemplo, si tienes 3 imágenes: 0, 1, 2. Si quieres que la imagen 0 sea la central al inicio:
+        // indiceActualCarrusel = 0; // O la imagen que quieres que empiece en el centro.
+        actualizarCarrusel(); // Llama a la función para posicionar el carrusel
     }
-    // --- Fin Lógica del Carrusel ---
+}); // <-- ¡Esta es la ÚNICA llave de cierre para DOMContentLoaded! Debe estar al final del archivo.
