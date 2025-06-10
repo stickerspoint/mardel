@@ -129,22 +129,21 @@
 }
 
 #filtroMaterial {
-    padding: 10px 15px; /* Ajustado para que se parezca más a los botones */
-    border-radius: 8px; /* Un poco más redondeado */
-    border: 2px solid #f0c14b; /* Borde del color de la marca */
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 2px solid #f0c14b;
     font-size: 1em;
-    background-color: #fff5e9; /* Fondo claro, como el body */
-    color: #333; /* Color de texto oscuro por defecto */
+    background-color: #fff5e9;
+    color: #333; /* <-- Este es el color del texto actual */
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 #filtroMaterial:hover {
-    background-color: #f0c14b; /* Fondo amarillo/naranja al pasar el mouse */
-    color: #fff; /* Texto blanco al pasar el mouse */
-    border-color: #f0c14b; /* Mantiene el color del borde */
+    background-color: #f0c14b;
+    color: #fff;
+    border-color: #f0c14b;
 }
-
 
 /* Modal del carrito */
 .modal {
