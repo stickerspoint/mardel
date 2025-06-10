@@ -47,6 +47,11 @@ body {
     color: var(--color-primario);
 }
 
+.icons {
+    display: flex; /* Para alinear el icono del carrito */
+    align-items: center;
+}
+
 .icon-btn {
     background: none;
     border: none;
@@ -71,19 +76,21 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
+    display: flex; /* Para centrar el modal con flexbox */
     justify-content: center;
     align-items: center;
 }
 
 .modal-content.carrito {
     background-color: #fefefe;
-    margin: auto;
+    margin: auto; /* Para centrar si no se usa flex */
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 500px;
     border-radius: 10px;
     position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .close-modal {
@@ -159,16 +166,24 @@ body {
     padding: 0 20px;
 }
 
+.catalogo-container h1 {
+    text-align: center;
+    color: var(--color-texto);
+    margin-bottom: 30px;
+    font-size: 32px;
+}
+
 .catalogo-filtros {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     align-items: center;
     justify-content: center;
 }
 
-.catalogo-filtros button {
+.catalogo-filtros button,
+.catalogo-filtros select { /* Añadido select para estilo */
     background-color: var(--color-primario);
     color: white;
     border: none;
@@ -179,7 +194,8 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.catalogo-filtros button:hover {
+.catalogo-filtros button:hover,
+.catalogo-filtros select:hover { /* Añadido select para estilo */
     background-color: var(--color-secundario);
 }
 
@@ -194,7 +210,29 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
+    min-width: 150px; /* Para que los inputs no sean demasiado pequeños */
 }
+
+.catalogo-filtros nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.catalogo-filtros nav a {
+    background-color: var(--color-primario);
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.catalogo-filtros nav a:hover {
+    background-color: var(--color-secundario);
+}
+
 
 section {
     margin-bottom: 40px;
@@ -313,7 +351,7 @@ section h2 {
     display: flex;
     transition: transform 0.5s ease-in-out;
     padding: 10px 0; /* Padding vertical para espacio, si es necesario */
-    justify-content: center; /* Centra las imágenes */
+    justify-content: flex-start; /* Alinea al inicio, el translateX moverá el grupo */
     align-items: center; /* Alinea verticalmente las imágenes */
 }
 

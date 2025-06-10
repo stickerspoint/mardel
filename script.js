@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para mostrar/ocultar el modal del carrito
     const toggleCarritoModal = () => {
         if (carritoModal) {
+            // Alternar la propiedad display directamente
             carritoModal.style.display = carritoModal.style.display === 'flex' ? 'none' : 'flex';
             renderizarCarrito(); // Asegura que el carrito se actualice cada vez que se abre
         }
@@ -66,9 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(`¡${productoEnCatalogo.nombre} agregado al carrito!`);
             } else {
                 alert(`¡${productoEnCatalogo.nombre} está fuera de stock!`);
-            {
-                alert(`¡${productoEnCatalogo.nombre} está fuera de stock!`);
-            }
             }
         }
         localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -151,7 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
-                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
+                // Eliminar caracteres no alfanuméricos y espacios para crear un ID válido
+                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '').replace(/\s/g, ''); 
                 const section = document.createElement('section');
                 section.id = sectionId;
                 section.innerHTML = `<h2>${categoria}</h2><div class="destacados-grid"></div>`;
@@ -167,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     productoDiv.dataset.material = producto.material;
 
-                    const imagenSrc = producto.imagen ? producto.imagen : 'sin-imagen.jpg';
+                    const imagenSrc = producto.imagen ? producto.imagen : 'sin-imagen.jpg'; // Ruta por defecto si no hay imagen
                     const imagenAlt = producto.nombre;
 
                     productoDiv.innerHTML = `
@@ -236,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const seccion = document.getElementById(targetId);
                     if (seccion) {
                         window.scrollTo({
-                            top: seccion.offsetTop - 80,
+                            top: seccion.offsetTop - 80, // Ajusta este valor si tu header tiene otra altura
                             behavior: 'smooth'
                         });
                     }
@@ -251,39 +250,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtnGaleria = document.getElementById('prevBtnGaleria');
     const nextBtnGaleria = document.getElementById('nextBtnGaleria');
     let imagenesCarrusel = [];
-    let indiceActualCarrusel = 0;
+    let indiceActualCarrusel = 0; // Índice de la imagen que estará en la posición CENTRAL de las 3 visibles.
 
     if (galeriaSlider) { // Esto asegura que solo se ejecute en index.html
         imagenesCarrusel = galeriaSlider.querySelectorAll('img');
 
+        // Duplicar las imágenes al principio y al final para un bucle continuo
+        // Esto crea un efecto "infinito" sin saltos abruptos.
+        const primerElemento = imagenesCarrusel[0].cloneNode(true);
+        const ultimoElemento = imagenesCarrusel[imagenesCarrusel.length - 1].cloneNode(true);
+        galeriaSlider.appendChild(primerElemento);
+        galeriaSlider.insertBefore(ultimoElemento, imagenesCarrusel[0]);
+
+        // Volver a obtener las referencias ya con los clones
+        imagenesCarrusel = galeriaSlider.querySelectorAll('img');
+        
+        // El índice inicial debe ajustarse para que empiece en la primera imagen real
+        // (después del clon del último elemento)
+        indiceActualCarrusel = 1; // La primera imagen real está en el índice 1 (el clon está en el 0)
+
         function actualizarCarrusel() {
             if (imagenesCarrusel.length === 0) return;
 
-            // Ajustar el índice para un bucle infinito
-            if (indiceActualCarrusel < 0) {
-                indiceActualCarrusel = imagenesCarrusel.length - 1;
-            } else if (indiceActualCarrusel >= imagenesCarrusel.length) {
-                indiceActualCarrusel = 0;
-            }
+            // Transición suave
+            galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
 
             // Remover la clase 'central' de todas las imágenes
             imagenesCarrusel.forEach(img => img.classList.remove('central'));
 
-            // Aplicar la clase 'central' a la imagen actual
-            if (imagenesCarrusel.length > indiceActualCarrusel) {
-                imagenesCarrusel.item(indiceActualCarrusel).classList.add('central');
+            // Aplicar la clase 'central' a la imagen actual (la que está en el centro visual)
+            // Cuando mostramos 3 imágenes y la central está en la posición 1 del display (visual),
+            // la imagen con la clase 'central' es la que está en `indiceActualCarrusel`.
+            if (imagenesCarrusel[indiceActualCarrusel]) {
+                imagenesCarrusel[indiceActualCarrusel].classList.add('central');
             }
-
+            
             // Calcular el desplazamiento:
-            // Queremos que la imagen `indiceActualCarrusel` esté en el centro de la vista.
-            // Si hay 3 imágenes visibles en el `galeria-slider`, la imagen central es la segunda (índice 1).
-            // Entonces, el desplazamiento necesario es para que la imagen `indiceActualCarrusel` se mueva a la posición visual 1.
-            // Si la imagen `indiceActualCarrusel` es la primera (índice 0), necesitamos moverla 1 posición a la derecha.
-            // Si es la segunda (índice 1), no necesitamos moverla (0).
-            // Si es la tercera (índice 2), necesitamos moverla 1 posición a la izquierda.
-            // Esto se logra con `-(indiceActualCarrusel - 1)`
-            const anchoImagenConMargen = imagenesCarrusel[0].offsetWidth + 20; // Ancho + márgenes (10px a cada lado)
-            const offset = -(indiceActualCarrusel - 1) * anchoImagenConMargen; 
+            // Cada imagen tiene un ancho de (100%/3 - 20px) + 20px de margen = 100%/3
+            // Así que el ancho efectivo de una "ranura" de imagen es (contenedor.offsetWidth / 3)
+            // Si queremos que el elemento en `indiceActualCarrusel` esté en la posición central de las 3 visibles,
+            // necesitamos mover el slider de tal forma que ese elemento se alinee con el centro.
+            // Para el índice 1 (primera imagen real), queremos que no se mueva.
+            // Para el índice 2, queremos moverlo 1 ranura a la izquierda.
+            // Para el índice 0 (el clon), queremos moverlo 1 ranura a la derecha.
+            // El punto de partida es el índice que quieres centrar, que es `indiceActualCarrusel`.
+            // La posición ideal para centrar es la segunda de las tres, que es visualmente `1`.
+            // Por lo tanto, el desplazamiento es `-(indiceActualCarrusel - 1)` * ancho de una ranura.
+            
+            // Calculamos el ancho de una "ranura" de imagen (el ancho total del slider dividido por 3)
+            const anchoRanura = galeriaSlider.offsetWidth / 3; 
+            const offset = -(indiceActualCarrusel - 1) * anchoRanura; // Calcular el desplazamiento necesario
             
             galeriaSlider.style.transform = `translateX(${offset}px)`;
         }
@@ -292,6 +308,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (prevBtnGaleria) {
             prevBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel--;
+                if (indiceActualCarrusel < 0) {
+                    // Si llegamos al principio, saltamos al clon del final (índice real -2)
+                    // y luego hacemos la transición suave a la imagen real equivalente
+                    galeriaSlider.style.transition = 'none'; // Desactivar la transición para el salto
+                    indiceActualCarrusel = imagenesCarrusel.length - 2; // -2 porque el último es el clon
+                    const anchoRanura = galeriaSlider.offsetWidth / 3;
+                    galeriaSlider.style.transform = `translateX(${-(indiceActualCarrusel - 1) * anchoRanura}px)`;
+                    // Forzar un reflow para que el cambio de transform sea instantáneo antes de la siguiente transición
+                    galeriaSlider.offsetHeight; 
+                }
                 actualizarCarrusel();
             });
         }
@@ -299,11 +325,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nextBtnGaleria) {
             nextBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel++;
+                if (indiceActualCarrusel >= imagenesCarrusel.length) {
+                    // Si llegamos al final, saltamos al clon del principio (índice real 1)
+                    // y luego hacemos la transición suave a la imagen real equivalente
+                    galeriaSlider.style.transition = 'none'; // Desactivar la transición para el salto
+                    indiceActualCarrusel = 1; // Volver a la primera imagen real
+                    const anchoRanura = galeriaSlider.offsetWidth / 3;
+                    galeriaSlider.style.transform = `translateX(${-(indiceActualCarrusel - 1) * anchoRanura}px)`;
+                    // Forzar un reflow para que el cambio de transform sea instantáneo antes de la siguiente transición
+                    galeriaSlider.offsetHeight; 
+                }
                 actualizarCarrusel();
             });
         }
 
         // Inicializar el carrusel en la carga
-        actualizarCarrusel();
+        // Retrasamos un poco la actualización inicial para asegurar que el DOM esté completamente renderizado
+        // y los anchos de las imágenes sean correctos.
+        setTimeout(() => {
+            actualizarCarrusel();
+        }, 100); 
     }
 });
