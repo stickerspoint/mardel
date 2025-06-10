@@ -1,4 +1,4 @@
-[
+[[
     {
         "id": 1,
         "nombre": "Zorro bebe",
@@ -551,7 +551,7 @@
     },
     {
         "id": 55,
-        "nombre": "ariana grande  positions ",
+        "nombre": "ariana grande positions ",
         "precio": 800,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 3,

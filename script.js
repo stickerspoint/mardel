@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Referencias a elementos comunes
-    const shoppingCartBtn = document.getElementById('cartIconBtn'); // Seleccionamos el botón por su ID
-    const cartCountSpan = document.querySelector('.cart-count'); // NUEVO: Contador de items en el carrito
+    const shoppingCartBtn = document.getElementById('cartIconBtn');
+    const cartCountSpan = document.querySelector('.cart-count');
     const carritoModal = document.getElementById('carritoModal');
     const cerrarCarrito = document.getElementById('cerrarCarrito');
     const listaCarrito = document.getElementById('listaCarrito');
     const totalCarrito = document.getElementById('totalCarrito');
     const vaciarCarritoBtn = document.getElementById('vaciarCarrito');
 
-    // NUEVO: Referencias a elementos del mini-carrito de notificación
+    // Referencias a elementos del mini-carrito de notificación
     const miniCarritoNotificacion = document.getElementById('miniCarritoNotificacion');
     const cerrarNotificacionBtn = document.getElementById('cerrarNotificacion');
     const notificacionImagen = document.getElementById('notificacionImagen');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carritoModal.style.display = carritoModal.style.display === 'flex' ? 'none' : 'flex';
             renderizarCarrito(); // Asegura que el carrito se actualice cada vez que se abre
         }
-        // NUEVO: Cerrar la notificación del mini-carrito si el modal principal se abre
+        // Cerrar la notificación del mini-carrito si el modal principal se abre
         if (miniCarritoNotificacion && carritoModal.style.display === 'flex') {
             miniCarritoNotificacion.style.display = 'none';
         }
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // NUEVO: Funcionalidad para la notificación del mini-carrito
+    // Funcionalidad para la notificación del mini-carrito
     const mostrarNotificacionCarrito = (producto, cantidadAgregada) => {
         if (miniCarritoNotificacion) {
             notificacionImagen.src = producto.imagen;
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalItemsEnCarrito = carrito.reduce((sum, item) => sum + item.cantidad, 0);
             const totalMontoCarrito = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
             notificacionCantidadTotal.textContent = totalItemsEnCarrito;
-            notificacionTotal.textContent = totalMontoCarrito;
+            notificacionTotal.textContent = totalMontoCarrito.toFixed(2); // Formatear a 2 decimales
 
             miniCarritoNotificacion.style.display = 'block';
 
@@ -105,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleCarritoModal(); // Abre el modal principal del carrito
         });
     }
-
 
     // Función para agregar un producto al carrito
     const agregarAlCarrito = (productoId) => {
@@ -147,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarNotificacionCarrito(productoEnCatalogo, cantidadAgregada); // Muestra la notificación
     };
 
-    // Función para renderizar el carrito
+    // Función para renderizar el carrito (modal principal)
     const renderizarCarrito = () => {
         if (!listaCarrito || !totalCarrito) {
             return; // Salir si los elementos del carrito no están presentes en esta página
@@ -161,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carrito.forEach(item => {
                 const li = document.createElement('li');
                 li.innerHTML = `${item.nombre} x ${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}
-                                <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
+                                 <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
                 listaCarrito.appendChild(li);
                 total += item.precio * item.cantidad;
             });
@@ -182,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('carrito', JSON.stringify(carrito));
         renderizarCarrito();
         updateCartCount(); // Actualiza el contador al eliminar
-        // No se muestra alerta al eliminar, solo se actualiza el carrito.
     };
 
     // Vaciar carrito
@@ -205,17 +203,103 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             window.productos = data; // Asigna a window.productos
-            // Lógica específica para cada página después de cargar los productos
+            
+            // Lógica específica para cada página DESPUÉS de cargar los productos
             if (document.getElementById('contenedorCatalogo')) { // Si estamos en catalogo.html
-                generarCardsProductos(window.productos);
+                mostrarTodosLosProductos(); // Llama a la función que mostrará todo el catálogo
             }
             if (document.getElementById('contenedorDestacados')) { // Si estamos en index.html
                 cargarProductosDestacados();
             }
+            
             renderizarCarrito(); // Renderiza el carrito inicial
             updateCartCount(); // Actualiza el contador del carrito al cargar la página
         })
         .catch(error => console.error('Error al cargar los productos:', error));
+
+
+    // --- Funciones para generar y mostrar productos (comunes o específicas) ---
+
+    // Función auxiliar para crear una sola card de producto
+    const crearCardProducto = (producto, contenedor) => {
+        const productoDiv = document.createElement('div');
+        productoDiv.classList.add('producto');
+        if (producto.stock === 0) {
+            productoDiv.classList.add('fuera-stock');
+        }
+        productoDiv.dataset.material = producto.material; // Añadir data-material para filtros
+
+        const imagenSrc = producto.imagen ? producto.imagen : 'imagenescatalogo/sin-imagen.jpg'; // Ruta por defecto
+        const imagenAlt = producto.nombre;
+
+        productoDiv.innerHTML = `
+            <img src="${imagenSrc}" alt="${imagenAlt}">
+            <h3>${producto.nombre}</h3>
+            <p>$${producto.precio}</p>
+            ${producto.stock > 0 ? `<button class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>` : '<span class="sin-stock">FUERA DE STOCK</span>'}
+        `;
+        contenedor.appendChild(productoDiv);
+    };
+
+    // Función para generar las cards de productos en un contenedor dado
+    const generarCardsProductos = (productosParaMostrar, contenedor) => {
+        if (!contenedor) return;
+
+        contenedor.innerHTML = ''; // Limpiar el contenedor antes de añadir nuevos productos
+
+        const esCatalogoCompleto = (contenedor.id === 'contenedorCatalogo');
+
+        if (esCatalogoCompleto) {
+            // Agrupar por categoría solo si es el catálogo completo
+            const categoriasMap = new Map();
+            productosParaMostrar.forEach(producto => {
+                if (!categoriasMap.has(producto.categoria)) {
+                    categoriasMap.set(producto.categoria, []);
+                }
+                categoriasMap.get(producto.categoria).push(producto);
+            });
+
+            for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
+                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, ''); // Limpia la categoría para usarla como ID
+                const section = document.createElement('section');
+                section.id = sectionId;
+                section.className = 'categoria-productos'; // Clase para aplicar estilos de sección de categoría
+                section.innerHTML = `<h2>${categoria}</h2><div class="productos-grid"></div>`; // Grid para productos dentro de la categoría
+                contenedor.appendChild(section);
+
+                const gridContainer = section.querySelector('.productos-grid'); // Selecciona el grid DENTRO de la sección
+                productosDeCategoria.forEach(producto => crearCardProducto(producto, gridContainer));
+            }
+        } else {
+            // Si no es el catálogo completo (ej. destacados), simplemente añadirlos al contenedor
+            productosParaMostrar.forEach(producto => crearCardProducto(producto, contenedor));
+        }
+
+        // Asignar event listeners a los botones "Agregar al carrito"
+        contenedor.querySelectorAll('.btn-agregar').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const productoId = parseInt(e.currentTarget.dataset.id);
+                agregarAlCarrito(productoId);
+            });
+        });
+    };
+
+    // Función para mostrar todos los productos (para catalogo.html)
+    window.mostrarTodosLosProductos = () => { // Se expone globalmente para ser llamada desde catalogo.html
+        if (document.getElementById('contenedorCatalogo') && window.productos.length > 0) {
+            generarCardsProductos(window.productos, document.getElementById('contenedorCatalogo'));
+        }
+    };
+    
+    // Lógica para productos destacados (Solo para index.html)
+    // Se expone globalmente para ser llamada desde index.html
+    window.cargarProductosDestacados = () => {
+        const contenedorDestacados = document.getElementById('contenedorDestacados');
+        if (contenedorDestacados && window.productos.length > 0) {
+            const productosFiltrados = window.productos.filter(producto => producto.destacado);
+            generarCardsProductos(productosFiltrados, contenedorDestacados);
+        }
+    };
 
 
     // --- Lógica específica para la página 'catalogo.html' ---
@@ -224,107 +308,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtroMaterial = document.getElementById('filtroMaterial');
     const categoriasNav = document.getElementById('categoriasNav');
 
-    if (contenedorCatalogo) { // Esto asegura que solo se ejecute en catalogo.html
-        // Función para generar las cards de productos (usada por catálogo y destacados)
-        const generarCardsProductos = (productosParaMostrar, contenedor) => {
-            if (!contenedor) return; // Asegurarse de que el contenedor exista
-
-            contenedor.innerHTML = '';
-            // Si es el catálogo completo, agrupamos por categoría.
-            // Si es el de destacados, no necesitamos agrupar.
-            const esCatalogoCompleto = (contenedor === contenedorCatalogo);
-            const categoriasMap = new Map();
-
-            if (esCatalogoCompleto) {
-                productosParaMostrar.forEach(producto => {
-                    if (!categoriasMap.has(producto.categoria)) {
-                        categoriasMap.set(producto.categoria, []);
-                    }
-                    categoriasMap.get(producto.categoria).push(producto);
-                });
-
-                for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
-                    const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
-                    const section = document.createElement('section');
-                    section.id = sectionId;
-                    section.innerHTML = `<h2>${categoria}</h2><div class="destacados-grid"></div>`; // Se reutiliza la clase
-                    contenedor.appendChild(section);
-
-                    const gridContainer = section.querySelector('.destacados-grid');
-                    productosDeCategoria.forEach(producto => crearCardProducto(producto, gridContainer));
-                }
-            } else { // Si no es el catálogo completo (ej. destacados)
-                productosParaMostrar.forEach(producto => crearCardProducto(producto, contenedor));
-            }
-
-            // Asignar event listeners a los botones "Agregar al carrito"
-            contenedor.querySelectorAll('.btn-agregar').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const productoId = parseInt(e.currentTarget.dataset.id);
-                    agregarAlCarrito(productoId);
-                });
-            });
-        };
-
-        // Función auxiliar para crear una sola card de producto
-        const crearCardProducto = (producto, contenedor) => {
-            const productoDiv = document.createElement('div');
-            productoDiv.classList.add('producto');
-            if (producto.stock === 0) {
-                productoDiv.classList.add('fuera-stock');
-            }
-            productoDiv.dataset.material = producto.material;
-
-            const imagenSrc = producto.imagen ? producto.imagen : 'imagenescatalogo/sin-imagen.jpg'; // Ruta por defecto
-            const imagenAlt = producto.nombre;
-
-            productoDiv.innerHTML = `
-                <img src="${imagenSrc}" alt="${imagenAlt}">
-                <h3>${producto.nombre}</h3>
-                <p>$${producto.precio}</p>
-                ${producto.stock > 0 ? `<button class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>` : '<span class="sin-stock">FUERA DE STOCK</span>'}
-            `;
-            contenedor.appendChild(productoDiv);
-        };
-
-
-        // Funcionalidad del buscador (solo en catalogo.html)
+    if (contenedorCatalogo) { // Esto asegura que solo se ejecute la lógica del catálogo en catalogo.html
+        // Funcionalidad del buscador
         if (buscador) {
             buscador.addEventListener('input', () => {
                 const textoBusqueda = buscador.value.toLowerCase();
                 const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
+                const categoriaSeleccionada = categoriasNav ? categoriasNav.querySelector('.active-category')?.dataset.categoria || 'Todos' : 'Todos';
+
 
                 const productosFiltrados = window.productos.filter(producto => {
                     const coincideNombre = producto.nombre.toLowerCase().includes(textoBusqueda);
-                    const coincideMaterial = !materialSeleccionado || producto.material.toLowerCase() === materialSeleccionado;
-                    return coincideNombre && coincideMaterial;
+                    const coincideMaterial = !materialSeleccionado || materialSeleccionado === '' || producto.material.toLowerCase() === materialSeleccionado;
+                    const coincideCategoria = categoriaSeleccionada === 'Todos' || producto.categoria.toLowerCase().includes(categoriaSeleccionada.toLowerCase());
+                    return coincideNombre && coincideMaterial && coincideCategoria;
                 });
-                generarCardsProductos(productosFiltrados, contenedorCatalogo); // Pasar contenedorCatalogo
+                generarCardsProductos(productosFiltrados, contenedorCatalogo);
             });
         }
 
-        // Funcionalidad del filtro por material (solo en catalogo.html)
+        // Funcionalidad del filtro por material
         if (filtroMaterial) {
             filtroMaterial.addEventListener('change', () => {
                 const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
                 const materialSeleccionado = filtroMaterial.value.toLowerCase();
+                const categoriaSeleccionada = categoriasNav ? categoriasNav.querySelector('.active-category')?.dataset.categoria || 'Todos' : 'Todos';
 
                 const productosFiltrados = window.productos.filter(producto => {
                     const coincideNombre = producto.nombre.toLowerCase().includes(textoBusqueda);
-                    const coincideMaterial = !materialSeleccionado || producto.material.toLowerCase() === materialSeleccionado;
-                    return coincideNombre && coincideMaterial;
+                    const coincideMaterial = !materialSeleccionado || materialSeleccionado === '' || producto.material.toLowerCase() === materialSeleccionado;
+                    const coincideCategoria = categoriaSeleccionada === 'Todos' || producto.categoria.toLowerCase().includes(categoriaSeleccionada.toLowerCase());
+                    return coincideNombre && coincideMaterial && coincideCategoria;
                 });
-                generarCardsProductos(productosFiltrados, contenedorCatalogo); // Pasar contenedorCatalogo
+                generarCardsProductos(productosFiltrados, contenedorCatalogo);
             });
         }
 
-        // Funcionalidad para el scroll suave a las categorías (solo en catalogo.html)
+        // Funcionalidad de filtro por categoría (para los enlaces de navegación de categorías)
         if (categoriasNav) {
             categoriasNav.addEventListener('click', (e) => {
-                if (e.target.tagName === 'A') {
-                    e.preventDefault();
-                    const targetId = e.target.getAttribute('href').substring(1);
-                    const seccion = document.getElementById(targetId);
+                e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+                if (e.target.tagName === 'A' && e.target.classList.contains('filtro-categoria')) {
+                    const categoria = e.target.dataset.categoria;
+
+                    // Remover la clase 'active-category' de todos los enlaces y añadirla al clicado
+                    categoriasNav.querySelectorAll('.filtro-categoria').forEach(link => {
+                        link.classList.remove('active-category');
+                    });
+                    e.target.classList.add('active-category');
+
+                    const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
+                    const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
+
+                    const productosFiltrados = window.productos.filter(producto => {
+                        const coincideNombre = producto.nombre.toLowerCase().includes(textoBusqueda);
+                        const coincideMaterial = !materialSeleccionado || materialSeleccionado === '' || producto.material.toLowerCase() === materialSeleccionado;
+                        const coincideCategoria = categoria === 'Todos' || producto.categoria.toLowerCase().includes(categoria.toLowerCase());
+                        return coincideNombre && coincideMaterial && coincideCategoria;
+                    });
+                    generarCardsProductos(productosFiltrados, contenedorCatalogo);
+
+                    // Si hay una sección para la categoría, hacer scroll suave a ella
+                    const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
+                    const seccion = document.getElementById(sectionId);
                     if (seccion) {
                         window.scrollTo({
                             top: seccion.offsetTop - 80, // Ajusta este valor si tu header tiene otra altura
@@ -335,17 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     } // Fin if (contenedorCatalogo)
-
-    // --- NUEVO: Lógica para productos destacados (Solo para index.html) ---
-    const contenedorDestacados = document.getElementById('contenedorDestacados');
-
-    const cargarProductosDestacados = () => {
-        if (contenedorDestacados && window.productos.length > 0) {
-            const productosFiltrados = window.productos.filter(producto => producto.destacado);
-            generarCardsProductos(productosFiltrados, contenedorDestacados);
-        }
-    };
-
 
     // --- Lógica del Carrusel (Solo para index.html) ---
     const galeriaSlider = document.getElementById('galeriaSlider');
@@ -377,46 +412,40 @@ document.addEventListener('DOMContentLoaded', () => {
             imagenesCarrusel.forEach(img => img.classList.remove('central'));
 
             // Calcular el ancho de un "slot" (cada imagen)
-            // Se asume que siempre hay 3 imágenes visibles en el carrusel real
-            const anchoSlot = galeriaSlider.offsetWidth / 3;
+            const anchoContenedor = galeriaSlider.parentElement.offsetWidth; // Ancho del .galeria-container
+            const anchoSlot = anchoContenedor / 3; // Suponiendo 3 imágenes visibles
 
             // Calcular el offset para centrar la imagen actual (indiceActualCarrusel)
-            // El primer elemento real está en indice 1.
-            // Para mostrar indiceActualCarrusel, la posición del transform debe ser
-            // (1 - indiceActualCarrusel) * anchoSlot, ya que la imagen "0" es el clon del último
-            // y la imagen "longitud-1" es el clon del primero.
             // Queremos que la imagen en `indiceActualCarrusel` esté en la posición central de los 3 visibles.
             // Para eso, necesitamos desplazar el slider de forma que el centro de la imagen
             // en `indiceActualCarrusel` quede en el centro del `galeria-container`.
-            // Si tenemos 3 imágenes visibles, el centro de la "ventana" está en `1.5 * anchoSlot`.
-            // La imagen `indiceActualCarrusel` comienza en `indiceActualCarrusel * anchoSlot`.
-            // Por lo tanto, el desplazamiento necesario es `(1.5 - indiceActualCarrusel) * anchoSlot`.
-            const offset = (1.5 - indiceActualCarrusel) * anchoSlot - (anchoSlot / 2); // Ajuste adicional para centrar si es necesario
+            // La posición inicial del slider sin mover es 0.
+            // La imagen en `indiceActualCarrusel` (incluyendo clones) se encuentra en `indiceActualCarrusel * anchoSlot` desde el inicio del slider.
+            // Para centrarla en la vista, necesitamos mover el slider hacia la izquierda.
+            // El centro de la vista está en `1 * anchoSlot` (la segunda de las tres visibles).
+            // Entonces el desplazamiento es `(indiceActualCarrusel - 1) * anchoSlot`.
+            const offset = -(indiceActualCarrusel - 1) * anchoSlot; // Mover hacia la izquierda
 
             galeriaSlider.style.transform = `translateX(${offset}px)`;
 
             // Añadir clase 'central' a la imagen realmente central (visual)
-            const centralImageIndex = Math.floor(galeriaSlider.children.length / 2); // Índice de la imagen central en la vista
-            // Esto necesita ser ajustado para reflejar la imagen real que está en el centro.
-            // Ya que tenemos clones, y el transform mueve el grupo, la imagen "central"
-            // es la que corresponde a `indiceActualCarrusel`.
+            // La imagen central visible es `imagenesCarrusel[indiceActualCarrusel]`
             if (imagenesCarrusel[indiceActualCarrusel]) {
                 imagenesCarrusel[indiceActualCarrusel].classList.add('central');
             }
         }
 
-
         if (prevBtnGaleria) {
             prevBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel--;
-                galeriaSlider.style.transition = 'transform 0.5s ease-in-out'; // Asegurar la transición
+                galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
                 actualizarCarrusel();
                 if (indiceActualCarrusel < 1) { // Si hemos llegado al clon del último
                     setTimeout(() => {
-                        galeriaSlider.style.transition = 'none'; // Desactivar transición
+                        galeriaSlider.style.transition = 'none';
                         indiceActualCarrusel = imagenesCarrusel.length - 2; // Ir a la penúltima (última real)
-                        actualizarCarrusel(); // Actualizar inmediatamente sin transición
-                    }, 500); // Mismo tiempo que la transición
+                        actualizarCarrusel();
+                    }, 500);
                 }
             });
         }
@@ -424,14 +453,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nextBtnGaleria) {
             nextBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel++;
-                galeriaSlider.style.transition = 'transform 0.5s ease-in-out'; // Asegurar la transición
+                galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
                 actualizarCarrusel();
                 if (indiceActualCarrusel >= imagenesCarrusel.length - 1) { // Si hemos llegado al clon del primero
                     setTimeout(() => {
-                        galeriaSlider.style.transition = 'none'; // Desactivar transición
+                        galeriaSlider.style.transition = 'none';
                         indiceActualCarrusel = 1; // Ir a la segunda (primera real)
-                        actualizarCarrusel(); // Actualizar inmediatamente sin transición
-                    }, 500); // Mismo tiempo que la transición
+                        actualizarCarrusel();
+                    }, 500);
                 }
             });
         }
@@ -440,9 +469,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             actualizarCarrusel();
         }, 100);
+
+        // Ajustar el carrusel si la ventana cambia de tamaño
+        window.addEventListener('resize', actualizarCarrusel);
     } // Fin if (galeriaSlider)
 
-    // Llama a renderizarCarrito y updateCartCount al inicio para cargar el estado del carrito
-    // y el contador al cargar CUALQUIER página (index.html o catalogo.html)
-    // Esto se mueve al .then() del fetch de productos.json para asegurar que `window.productos` esté cargado.
+    // Nota: Las llamadas iniciales a renderizarCarrito y updateCartCount
+    // se movieron DENTRO del .then() del fetch de productos.json
+    // para asegurar que los productos estén cargados antes de interactuar con el carrito.
 });

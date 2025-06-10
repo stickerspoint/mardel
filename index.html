@@ -19,7 +19,8 @@
     <div class="icons">
         <button id="cartIconBtn" class="icon-btn">
             <i class="fas fa-shopping-cart"></i>
-            <span class="cart-count"></span> </button>
+            <span class="cart-count"></span> 
+        </button>
     </div>
 </header>
 
@@ -74,5 +75,14 @@
 </div>
 
 <script src="script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Asegúrate de que cargarProductosDestacados se llame solo si el contenedor existe
+        if (document.getElementById('contenedorDestacados')) {
+            cargarProductosDestacados();
+        }
+        actualizarContadorCarrito(); // Asegurarse de que el contador del carrito se actualice al cargar
+    });
+</script>
 </body>
 </html>

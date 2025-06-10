@@ -19,7 +19,8 @@
     <div class="icons">
         <button id="cartIconBtn" class="icon-btn">
             <i class="fas fa-shopping-cart"></i>
-            <span class="cart-count"></span> </button>
+            <span class="cart-count"></span> 
+        </button>
     </div>
 </header>
 
@@ -40,13 +41,13 @@
     <div class="catalogo-filtros">
         <input type="text" id="buscador" placeholder="Buscar producto...">
         <nav id="categoriasNav">
-            <a href="#Naturalezaaventura">Naturaleza/aventura</a>
-            <a href="#Variedad">Variedad</a>
-            <a href="#Musica">Musica</a>
-            <a href="#Argentina">Argentina</a>
-            <a href="#Marcas">Marcas</a>
-            <a href="#TV">TV</a>
-        </nav>
+            <a href="#" data-categoria="Naturaleza/aventura" class="filtro-categoria">Naturaleza/aventura</a>
+            <a href="#" data-categoria="Variedad" class="filtro-categoria">Variedad</a>
+            <a href="#" data-categoria="Musica" class="filtro-categoria">Musica</a>
+            <a href="#" data-categoria="Argentina" class="filtro-categoria">Argentina</a>
+            <a href="#" data-categoria="Marcas" class="filtro-categoria">Marcas</a>
+            <a href="#" data-categoria="TV" class="filtro-categoria">TV</a>
+            <a href="#" data-categoria="Todos" class="filtro-categoria">Todos</a> </nav>
         <select id="filtroMaterial">
             <option value="">Todos los Materiales</option>
             <option value="vinilo dorado">Vinilo Dorado</option>
@@ -72,5 +73,14 @@
 </div>
 
 <script src="script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Asegúrate de que mostrarTodosLosProductos se llame solo si el contenedor existe
+        if (document.getElementById('contenedorCatalogo')) {
+            mostrarTodosLosProductos();
+        }
+        actualizarContadorCarrito(); // Asegurarse de que el contador del carrito se actualice al cargar
+    });
+</script>
 </body>
 </html>

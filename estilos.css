@@ -78,7 +78,7 @@ body {
     color: var(--color-primario);
 }
 
-/* NUEVO: Estilos para el contador de items en el carrito */
+/* Estilos para el contador de items en el carrito */
 .cart-count {
     font-size: 0.8em;
     vertical-align: super; /* Para que el número quede un poco más arriba */
@@ -104,7 +104,6 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-    /* Se elimina la línea 'display: flex;' duplicada que lo hacía visible por defecto */
     justify-content: center;
     align-items: center;
 }
@@ -261,6 +260,13 @@ body {
     background-color: var(--color-secundario);
 }
 
+/* Nuevo: Estilo para la categoría activa en el catálogo */
+.catalogo-filtros nav a.active-category {
+    background-color: var(--color-secundario);
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Opcional: para resaltar más */
+}
+
 
 section {
     margin-bottom: 40px;
@@ -273,7 +279,9 @@ section h2 {
     font-size: 28px;
 }
 
-.destacados-grid {
+/* Estilos para las secciones de productos (destacados y categorías del catálogo) */
+.destacados-grid,
+.productos-grid { /* Añadido .productos-grid para usarlo en el catálogo */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 30px;
@@ -281,6 +289,18 @@ section h2 {
     justify-content: center;
     align-items: stretch;
 }
+
+/* Contenedor para cada sección de categoría en el catálogo */
+.categoria-productos {
+    margin-top: 40px; /* Espacio entre secciones de categoría */
+    padding-top: 20px; /* Para que el scroll a la categoría no quede pegado al título */
+    border-top: 1px solid #eee; /* Opcional: un separador visual entre categorías */
+}
+.categoria-productos:first-of-type {
+    margin-top: 0;
+    border-top: none;
+}
+
 
 .producto {
     background-color: #ffffff;
@@ -372,7 +392,7 @@ section h2 {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative;
-    padding-bottom: 20px;
+    /* padding-bottom: 20px; */ /* Eliminado padding-bottom duplicado con margin en galeria-slider */
 }
 
 .galeria-slider {
@@ -381,12 +401,14 @@ section h2 {
     padding: 10px 0;
     justify-content: flex-start;
     align-items: center;
+    margin: 0 -10px; /* Contrarresta los márgenes laterales de las imágenes */
 }
 
 .galeria-slider img {
     flex-shrink: 0;
-    width: calc(100% / 3 - 20px);
-    margin: 0 10px;
+    width: calc(100% / 3); /* Ajustado para que el ancho total de las 3 img sea 100% */
+    padding: 0 10px; /* Padding para el espacio entre imágenes */
+    box-sizing: border-box; /* Incluir padding en el ancho */
     border-radius: 8px;
     object-fit: cover;
     height: 250px;
@@ -421,7 +443,7 @@ section h2 {
     transform: scale(1.1);
 }
 
-/* NUEVO: Estilos para el mini-carrito de notificación */
+/* Estilos para el mini-carrito de notificación */
 .mini-carrito-notificacion {
     display: none; /* Oculto por defecto */
     position: fixed;
