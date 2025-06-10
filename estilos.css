@@ -65,8 +65,8 @@
     font-weight: bold;
 }
 
-.btn-agregar, .sin-stock {
-    background-color: #fff5e9; /* Un color amarillo de Amazon */
+.btn-agregar {
+    background-color: #f0c14b; /* Color amarillo/naranja para el botón */
     color: #111;
     border: none;
     padding: 10px 15px;
@@ -78,7 +78,7 @@
 }
 
 .btn-agregar:hover {
-    background-color: #e4b340;
+    background-color: #e4b340; /* Tono más oscuro al pasar el mouse */
 }
 
 .sin-stock {
@@ -86,22 +86,47 @@
     color: white;
     cursor: default;
     opacity: 0.8;
+    border-radius: 5px; /* Añadido para consistencia */
+    padding: 10px 15px; /* Añadido para consistencia */
+    width: 80%; /* Añadido para consistencia */
+    display: inline-block; /* Para que el padding y width funcionen bien */
 }
 
-/* Estilos para la barra de navegación de categorías */
+
+/* Estilos para la barra de navegación de categorías y filtros */
+.filtros-categorias {
+    display: flex;
+    /* flex-wrap: wrap;  <-- Asegúrate de que esta línea NO ESTÉ o esté comentada */
+    justify-content: center; /* Centra los elementos horizontalmente */
+    gap: 20px; /* Aumenta el espacio entre el grupo de enlaces y el select */
+    margin-bottom: 30px;
+    align-items: center; /* Alinea verticalmente los elementos (categoriasNav y filtroMaterial) */
+}
+
+#categoriasNav {
+    display: flex; /* Para que los enlaces dentro de #categoriasNav estén en una fila */
+    gap: 15px; /* Ajusta el espacio entre los enlaces individuales de categoría */
+    flex-wrap: wrap; /* Permite que los enlaces se envuelvan a la siguiente línea si no hay espacio */
+    justify-content: center; /* Centra los enlaces si se envuelven */
+}
+
 .filtros-categorias a {
     text-decoration: none;
-    color: ##fff5e9; /* Color de enlace azul */
-    padding: 8px 15px;
-    border: 1px solid ##fff5e9;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
+    color: #f0c14b; /* Color amarillo/naranja del texto */
+    padding: 8px 15px; /* Espacio interno alrededor del texto */
+    border: 2px solid #f0c14b; /* **Aquí el reborde!** Borde de 2px sólido y del color amarillo/naranja */
+    border-radius: 5px; /* Bordes ligeramente redondeados */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Transición suave al pasar el mouse */
+    font-weight: bold; /* Para que el texto sea más notable */
+    white-space: nowrap; /* Evita que el texto del enlace se rompa en varias líneas */
 }
 
 .filtros-categorias a:hover {
-    background-color: ##fff5e9;
-    color: white;
+    background-color: #f0c14b; /* Fondo amarillo/naranja al pasar el mouse */
+    color: #fff; /* Texto blanco al pasar el mouse (para buen contraste) */
+    border-color: #f0c14b; /* Mantiene el color del borde al pasar el mouse */
 }
+
 
 /* Modal del carrito */
 .modal {
@@ -205,7 +230,7 @@
 .header .logo {
     font-weight: bold;
     font-size: 1.8em;
-    color: #f0a41c; /* ¡Color amarillo/naranja aplicado! */
+    color: #f0c14b; /* ¡Color amarillo/naranja aplicado y corregido! */
 }
 
 .header .nav-links a {
@@ -281,12 +306,15 @@ body {
         margin: 5px 10px;
     }
     .filtros-categorias {
-        flex-direction: column;
+        flex-direction: column; /* Vuelve a columna en pantallas pequeñas */
         align-items: center;
     }
     #buscador, #filtroMaterial {
         width: 95%;
         max-width: none;
+    }
+    #categoriasNav {
+        margin-top: 10px; /* Espacio extra si se envuelve en móviles */
     }
 }
 
@@ -302,5 +330,9 @@ body {
     }
     .producto p {
         font-size: 1.1em;
+    }
+    .filtros-categorias a {
+        padding: 6px 10px; /* Reduce padding en pantallas muy pequeñas */
+        font-size: 0.9em;
     }
 }
