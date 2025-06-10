@@ -91,15 +91,15 @@
 /* Estilos para la barra de navegación de categorías */
 .filtros-categorias a {
     text-decoration: none;
-    color: #007bff; /* Color de enlace azul */
+    color: ##f0c14b; /* Color de enlace azul */
     padding: 8px 15px;
-    border: 1px solid #007bff;
+    border: 1px solid ##f0c14b;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .filtros-categorias a:hover {
-    background-color: #007bff;
+    background-color: ##f0c14b;
     color: white;
 }
 
@@ -238,7 +238,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding-top: 70px; /* Para que el contenido no quede debajo del header fijo */
-    background-color: #f8f8f8;
+    background-color: #f0c14b;
 }
 
 .destacados {
