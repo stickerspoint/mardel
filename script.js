@@ -146,6 +146,14 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarNotificacionCarrito(productoEnCatalogo, cantidadAgregada); // Muestra la notificación
     };
 
+    // Función para eliminar un producto del carrito (faltaba esta en tu script, pero es importante)
+    const eliminarDelCarrito = (productoId) => {
+        carrito = carrito.filter(item => item.id !== productoId);
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        renderizarCarrito();
+        updateCartCount();
+    };
+
     // Función para renderizar el carrito (modal principal)
     const renderizarCarrito = () => {
         if (!listaCarrito || !totalCarrito) {
@@ -213,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Funciones para generar y mostrar productos (comunes o específicas) ---
 
     // Función auxiliar para crear una sola card de producto
-    const crearCardProducto = (producto) => { // Eliminar el parámetro 'contenedor' aquí
+    const crearCardProducto = (producto) => {
         const productoDiv = document.createElement('div');
         productoDiv.classList.add('producto');
         if (producto.stock === 0) {
@@ -232,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>$${producto.precio}</p>
             ${producto.stock > 0 ? `<button class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>` : '<span class="sin-stock">FUERA DE STOCK</span>'}
         `;
-        return productoDiv; // Retornar el div para que sea añadido por la función padre
+        return productoDiv;
     };
 
     // Función para generar las cards de productos en un contenedor dado
@@ -272,7 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
                      categoriasNav.appendChild(link);
                  });
             }
-
 
             for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
                 const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, ''); // Limpia la categoría para usarla como ID
@@ -331,6 +338,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
 
             // Obtener todos los productos individualmente renderizados en el DOM
+            // Mostrar todas las secciones de categoría antes de aplicar los filtros individuales
+            document.querySelectorAll('.categoria-productos').forEach(section => {
+                section.style.display = 'block'; // Asegura que todas las secciones estén visibles por defecto para los atajos
+            });
+
+
             document.querySelectorAll('.producto').forEach(productoDiv => {
                 const nombreProducto = productoDiv.querySelector('h3').textContent.toLowerCase();
                 const materialProducto = productoDiv.dataset.material.toLowerCase();
@@ -340,13 +353,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Si ambos filtros coinciden, mostrar el producto, de lo contrario ocultarlo
                 if (coincideNombre && coincideMaterial) {
-                    productoDiv.style.display = 'block'; // O el display original, si no es 'block'
+                    productoDiv.style.display = 'block';
                 } else {
                     productoDiv.style.display = 'none';
                 }
             });
 
-            // Opcional: Ocultar secciones de categoría si no tienen productos visibles
+            // Ocultar secciones de categoría si NO tienen productos visibles después de aplicar filtros
             document.querySelectorAll('.categoria-productos').forEach(section => {
                 const productosVisiblesEnSeccion = section.querySelectorAll('.producto:not([style*="display: none"])');
                 if (productosVisiblesEnSeccion.length === 0) {
@@ -373,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             categoriasNav.addEventListener('click', (e) => {
                 e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
                 if (e.target.tagName === 'A' && e.target.classList.contains('filtro-categoria')) {
-                    const categoria = e.target.dataset.categoria;
+                    const categoriaSeleccionada = e.target.dataset.categoria;
 
                     // Remover la clase 'active-category' de todos los enlaces y añadirla al clicado
                     categoriasNav.querySelectorAll('.filtro-categoria').forEach(link => {
@@ -381,42 +394,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     e.target.classList.add('active-category');
 
-                    if (categoria === 'Todos') {
-                        // Si se selecciona "Todos", mostrar todos los productos y categorías
-                        document.querySelectorAll('.categoria-productos').forEach(section => {
-                            section.style.display = 'block';
-                            section.querySelectorAll('.producto').forEach(prod => prod.style.display = 'block');
+                    // Al hacer clic en una categoría, primero re-aplicar los filtros generales
+                    // para asegurarse de que todos los productos estén en su estado inicial visible/oculto
+                    // según buscador y material, antes de hacer el scroll.
+                    aplicarFiltrosVisuales(); // <-- CLAVE: Esto mantiene la visibilidad de otras categorías/productos según los filtros de búsqueda/material.
+
+                    if (categoriaSeleccionada === 'Todos') {
+                        // Para "Todos", solo scroll al inicio de la página o al contenedor principal
+                        window.scrollTo({
+                            top: 0, // O contenedorCatalogo.offsetTop - 80;
+                            behavior: 'smooth'
                         });
-                        // Asegurarse de que los filtros de buscador y material se apliquen al estado "Todos"
-                        aplicarFiltrosVisuales();
-                        window.scrollTo({ top: 0, behavior: 'smooth' }); // Volver arriba
                     } else {
-                        // Ocultar todas las categorías/productos y mostrar solo la seleccionada
-                        document.querySelectorAll('.categoria-productos').forEach(section => {
-                            section.style.display = 'none'; // Oculta la sección completa
-                        });
-                        const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
+                        // Para una categoría específica, hacer scroll suave a esa sección.
+                        // La visibilidad de las otras categorías NO CAMBIA AQUÍ.
+                        const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
                         const seccion = document.getElementById(sectionId);
                         if (seccion) {
-                            seccion.style.display = 'block'; // Muestra la sección de la categoría seleccionada
-                            // Aplicar los filtros de búsqueda y material solo a los productos dentro de esta sección
-                            seccion.querySelectorAll('.producto').forEach(productoDiv => {
-                                const nombreProducto = productoDiv.querySelector('h3').textContent.toLowerCase();
-                                const materialProducto = productoDiv.dataset.material.toLowerCase();
-                                const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
-                                const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
-
-                                const coincideNombre = nombreProducto.includes(textoBusqueda);
-                                const coincideMaterial = !materialSeleccionado || materialSeleccionado === '' || materialProducto === materialSeleccionado;
-
-                                if (coincideNombre && coincideMaterial) {
-                                    productoDiv.style.display = 'block';
-                                } else {
-                                    productoDiv.style.display = 'none';
-                                }
-                            });
-
-                            // Desplazarse suavemente a la sección
                             window.scrollTo({
                                 top: seccion.offsetTop - 80, // Ajusta este valor si tu header tiene otra altura
                                 behavior: 'smooth'
@@ -488,6 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (nextBtnGaleria) {
+            // Se corrigió el nombre de la variable de 'nextBtnCarrusel' a 'nextBtnGaleria'
             nextBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel++;
                 galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
