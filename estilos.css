@@ -1,0 +1,541 @@
+/* Estilos Generales */
+html {
+    box-sizing: border-box; /* Añadido: Para incluir padding y border en el ancho/alto */
+}
+
+*, *::before, *::after {
+    box-sizing: inherit; /* Añadido: Para que todos los elementos hereden el box-sizing */
+}
+
+:root {
+    --color-primario: #f0c14b; /* Amarillo dorado */
+    --color-secundario: #f0a41c; /* Naranja oscuro */
+    --color-texto: #333;
+    --color-fondo-claro: #fff5e9;
+    --color-fondo-oscuro: #f2f2f2;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-top: 70px; /* Para que el contenido no quede debajo del header fijo */
+    background-color: #fff5e9;
+}
+
+/* Header */
+.header {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    display: flex; /* CAMBIADO: Antes era 'none', ahora es 'flex' para que sea visible */
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color-secundario);
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links a {
+    color: var(--color-texto);
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--color-primario);
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--color-texto);
+    transition: color 0.3s ease;
+    position: relative; /* Para posicionar el contador */
+}
+
+.icon-btn:hover {
+    color: var(--color-primario);
+}
+
+/* Estilos para el contador de items en el carrito */
+.cart-count {
+    font-size: 0.8em;
+    vertical-align: super; /* Para que el número quede un poco más arriba */
+    background-color: var(--color-secundario); /* Color de fondo del número */
+    color: white;
+    border-radius: 50%; /* Para que sea un círculo */
+    padding: 2px 6px;
+    margin-left: 5px; /* Espacio entre el icono y el número */
+    min-width: 20px; /* Asegura un tamaño mínimo para el círculo */
+    text-align: center;
+    display: inline-block; /* Para que el padding y min-width funcionen */
+    line-height: 1; /* Centra el texto verticalmente */
+}
+
+/* Modal del Carrito */
+.modal {
+    display: none; /* Oculto por defecto - ¡CORRECCIÓN CLAVE AQUÍ! */
+    position: fixed;
+    z-index: 1001; /* Más alto que el header */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content.carrito {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#listaCarrito {
+    list-style: none;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+#listaCarrito li {
+    padding: 10px 0;
+    border-bottom: 1px dashed #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#listaCarrito li:last-child {
+    border-bottom: none;
+}
+
+.btn-eliminar {
+    background-color: transparent;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+#totalCarrito {
+    font-weight: bold;
+    color: var(--color-primario);
+}
+
+#vaciarCarrito {
+    background-color: var(--color-secundario);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+#vaciarCarrito:hover {
+    background-color: #d88e1a;
+}
+
+/* Catálogo */
+.catalogo-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.catalogo-container h1 {
+    text-align: center;
+    color: var(--color-texto);
+    margin-bottom: 30px;
+    font-size: 32px;
+}
+
+.catalogo-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.catalogo-filtros button,
+.catalogo-filtros select {
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.catalogo-filtros button:hover,
+.catalogo-filtros select:hover {
+    background-color: var(--color-secundario);
+}
+
+.catalogo-filtros button.active {
+    background-color: var(--color-secundario);
+    font-weight: bold;
+}
+
+.catalogo-filtros input[type="text"],
+.catalogo-filtros select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    min-width: 150px;
+}
+
+.catalogo-filtros nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.catalogo-filtros nav a {
+    background-color: var(--color-primario);
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.catalogo-filtros nav a:hover {
+    background-color: var(--color-secundario);
+}
+
+/* Nuevo: Estilo para la categoría activa en el catálogo */
+.catalogo-filtros nav a.active-category {
+    background-color: var(--color-secundario);
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Opcional: para resaltar más */
+}
+
+
+section {
+    margin-bottom: 40px;
+}
+
+section h2 {
+    text-align: center;
+    color: var(--color-texto);
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+/* Estilos para las secciones de productos (destacados y categorías del catálogo) */
+.destacados-grid,
+.productos-grid { /* Añadido .productos-grid para usarlo en el catálogo */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 0 20px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+/* Contenedor para cada sección de categoría en el catálogo */
+.categoria-productos {
+    margin-top: 40px; /* Espacio entre secciones de categoría */
+    padding-top: 20px; /* Para que el scroll a la categoría no quede pegado al título */
+    border-top: 1px solid #eee; /* Opcional: un separador visual entre categorías */
+}
+.categoria-productos:first-of-type {
+    margin-top: 0;
+    border-top: none;
+}
+
+
+.producto {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease-in-out;
+}
+
+.producto:hover {
+    transform: translateY(-5px);
+}
+
+.producto img {
+    max-width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.producto h3 {
+    font-size: 18px;
+    color: var(--color-texto);
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.producto p {
+    font-size: 16px;
+    color: var(--color-primario);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.producto .btn-agregar {
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.producto .btn-agregar:hover {
+    background-color: var(--color-secundario);
+}
+
+.producto .sin-stock {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 0;
+}
+
+.producto.fuera-stock .btn-agregar {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* Pie de Página */
+.footer {
+    background-color: var(--color-texto);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+
+/* Carrusel */
+.galeria-fondo {
+    background-color: var(--color-fondo-claro);
+    padding: 50px 0;
+    text-align: center;
+}
+
+.galeria-container {
+    max-width: 700px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    /* padding-bottom: 20px; */ /* Eliminado padding-bottom duplicado con margin en galeria-slider */
+}
+
+.galeria-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    padding: 10px 0;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 -10px; /* Contrarresta los márgenes laterales de las imágenes */
+}
+
+.galeria-slider img {
+    flex-shrink: 0;
+    width: calc(100% / 3); /* Ajustado para que el ancho total de las 3 img sea 100% */
+    padding: 0 10px; /* Padding para el espacio entre imágenes */
+    box-sizing: border-box; /* Incluir padding en el ancho */
+    border-radius: 8px;
+    object-fit: cover;
+    height: 250px;
+    transition: all 0.3s ease;
+}
+
+.galeria-slider img.central {
+    transform: scale(1.05);
+    box-shadow: none;
+}
+
+.galeria-controles {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.galeria-controles button {
+    background-color: transparent;
+    color: var(--color-primario);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 2.5em;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.galeria-controles button:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+/* Estilos para el mini-carrito de notificación */
+.mini-carrito-notificacion {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 80px; /* Un poco debajo del header */
+    right: 20px;
+    z-index: 1002; /* Más alto que el carrito principal */
+    background-color: #fefefe;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    width: 280px; /* Ancho fijo para la notificación */
+    font-size: 14px;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out; /* Animación de entrada */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mini-carrito-notificacion .mini-carrito-contenido {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar contenido */
+    text-align: center;
+}
+
+.mini-carrito-notificacion .cerrar-notificacion {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.mini-carrito-notificacion .cerrar-notificacion:hover {
+    color: #333;
+}
+
+.mini-carrito-notificacion img {
+    width: 60px; /* Tamaño de la imagen del producto */
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.mini-carrito-notificacion p {
+    margin: 3px 0;
+    color: var(--color-texto);
+}
+
+.mini-carrito-notificacion #notificacionNombre {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.mini-carrito-notificacion #notificacionPrecio {
+    color: var(--color-primario);
+    font-weight: bold;
+}
+
+.mini-carrito-notificacion #notificacionMensaje {
+    color: green; /* Color para el mensaje de agregado */
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.mini-carrito-notificacion #notificacionTotal,
+.mini-carrito-notificacion #notificacionCantidadTotal {
+    font-weight: bold;
+    color: var(--color-secundario);
+    font-size: 15px;
+}
+
+.mini-carrito-notificacion #verCarritoDesdeNotificacion {
+    background-color: var(--color-secundario);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.mini-carrito-notificacion #verCarritoDesdeNotificacion:hover {
+    background-color: #d88e1a;
+}

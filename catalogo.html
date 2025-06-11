@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Catálogo - StickersPoint</title>
+    <link rel="stylesheet" href="estilos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">StickersPoint</div>
+    <nav class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Productos</a>
+        <a href="#">Contacto</a>
+    </nav>
+    <div class="icons">
+        <button id="cartIconBtn" class="icon-btn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count"></span> 
+        </button>
+    </div>
+</header>
+
+<div id="miniCarritoNotificacion" class="mini-carrito-notificacion">
+    <div class="mini-carrito-contenido">
+        <span class="cerrar-notificacion" id="cerrarNotificacion">×</span>
+        <img id="notificacionImagen" src="" alt="Producto">
+        <p id="notificacionNombre">Producto agregado</p>
+        <p id="notificacionPrecio">1 x $0.00</p>
+        <p id="notificacionMensaje">¡Agregado al carrito!</p>
+        <p>Total (<span id="notificacionCantidadTotal">0</span> productos): $<span id="notificacionTotal">0</span></p>
+        <button id="verCarritoDesdeNotificacion">Ver carrito</button>
+    </div>
+</div>
+<div class="catalogo-container">
+    <h1>Catálogo</h1>
+
+    <div class="catalogo-filtros">
+        <input type="text" id="buscador" placeholder="Buscar producto...">
+        <nav id="categoriasNav">
+            <a href="#" data-categoria="Naturaleza/aventura" class="filtro-categoria">Naturaleza/aventura</a>
+            <a href="#" data-categoria="Variedad" class="filtro-categoria">Variedad</a>
+            <a href="#" data-categoria="Musica" class="filtro-categoria">Musica</a>
+            <a href="#" data-categoria="Argentina" class="filtro-categoria">Argentina</a>
+            <a href="#" data-categoria="Marcas" class="filtro-categoria">Marcas</a>
+            <a href="#" data-categoria="TV" class="filtro-categoria">TV</a>
+            <a href="#" data-categoria="Todos" class="filtro-categoria">Todos</a> </nav>
+        <select id="filtroMaterial">
+            <option value="">Todos los Materiales</option>
+            <option value="vinilo dorado">Vinilo Dorado</option>
+            <option value="vinilo blanco">Vinilo Blanco</option>
+            <option value="vinilo holografico">Vinilo Holográfico</option>
+            <option value="vinilo holografico triangulitos">Vinilo Holográfico Triangulitos</option>
+            <option value="vinilo fotoluminiscente">Vinilo Fotoluminiscente</option>
+        </select>
+    </div>
+
+    <div id="contenedorCatalogo">
+        </div>
+</div>
+
+<div class="modal" id="carritoModal">
+    <div class="modal-content carrito">
+        <span class="close-modal" id="cerrarCarrito">×</span>
+        <h2>Carrito</h2>
+        <ul id="listaCarrito"></ul>
+        <p>Total: $<span id="totalCarrito">0</span></p>
+        <button id="vaciarCarrito">Vaciar carrito</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Asegúrate de que mostrarTodosLosProductos se llame solo si el contenedor existe
+        if (document.getElementById('contenedorCatalogo')) {
+            mostrarTodosLosProductos();
+        }
+        actualizarContadorCarrito(); // Asegurarse de que el contador del carrito se actualice al cargar
+    });
+</script>
+</body>
+</html>
