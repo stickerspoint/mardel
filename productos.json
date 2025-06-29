@@ -365,7 +365,8 @@
     {
         "id": 34,
         "nombre": " porrito kawaii",
-        "precio": 800,
+        "precio": 8
+00,
         "imagen": "imagenescatalogo/porrito-kawaii.jpg",
         "stock": 6,
         "categoria": "Variedad",
