@@ -284,10 +284,10 @@ section h2 {
 .productos-grid { /* Añadido .productos-grid para usarlo en el catálogo */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 0 10px;
+    gap: 30px;
+    padding: 0 20px;
     justify-content: center;
-    align-items: stretch;
+    align-items: center
 }
 
 /* Contenedor para cada sección de categoría en el catálogo */
