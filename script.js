@@ -31,10 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
     window.productos = []; // Aquí se almacenarán todos los productos cargados desde JSON
 
-    // --- Lógica específica para la página 'catalogo.html' (MOVIDA AQUÍ) ---
-    // Esto asegura que solo se ejecute la lógica del catálogo en catalogo.html
-    // y que 'aplicarFiltros' esté definida antes de ser llamada.
-    if (contenedorCatalogo) { 
+    // --- Lógica específica para la página 'catalogo.html' (RE-UBICADA AQUÍ) ---
+    // Esto asegura que 'aplicarFiltros' esté definida y sus listeners se configuren
+    // antes de que se intente llamar en el fetch, si 'contenedorCatalogo' existe.
+    if (contenedorCatalogo) {
 
         // Función central para aplicar todos los filtros (buscador, material, categoría)
         // y renderizar los productos.
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     producto.categoria.toLowerCase() === categoriaActiva.toLowerCase()
                 );
             }
-            
+
             generarCardsProductos(productosFiltrados, contenedorCatalogo, true); // true indica que es el catálogo completo
         };
 
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carrito.forEach(item => {
                 const li = document.createElement('li');
                 li.innerHTML = `${item.nombre} x ${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}
-                                     <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
+                                           <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
                 listaCarrito.appendChild(li);
                 total += item.precio * item.cantidad;
             });
@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Re-generar los enlaces de categoría en el HTML para incluir "Todos" y el orden
             if (categoriasNav && todasLasCategorias.length > 0) {
-                 // Mantener el "Todos" activo por defecto si no hay otra categoría seleccionada
+                   // Mantener el "Todos" activo por defecto si no hay otra categoría seleccionada
                 const currentActiveCategory = categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria;
                 categoriasNav.innerHTML = `<a href="#" data-categoria="Todos" class="filtro-categoria ${currentActiveCategory === 'Todos' || !currentActiveCategory ? 'active-category' : ''}">Todos</a>`;
 
