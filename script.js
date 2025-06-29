@@ -31,6 +31,87 @@ document.addEventListener('DOMContentLoaded', () => {
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
     window.productos = []; // Aquí se almacenarán todos los productos cargados desde JSON
 
+    // --- Lógica específica para la página 'catalogo.html' (MOVIDA AQUÍ) ---
+    // Esto asegura que solo se ejecute la lógica del catálogo en catalogo.html
+    // y que 'aplicarFiltros' esté definida antes de ser llamada.
+    if (contenedorCatalogo) { 
+
+        // Función central para aplicar todos los filtros (buscador, material, categoría)
+        // y renderizar los productos.
+        const aplicarFiltros = () => {
+            let productosFiltrados = [...window.productos]; // Siempre empieza con todos los productos
+
+            const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
+            const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
+            const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
+
+            // Filtrar por búsqueda
+            if (textoBusqueda) {
+                productosFiltrados = productosFiltrados.filter(producto =>
+                    producto.nombre.toLowerCase().includes(textoBusqueda)
+                );
+            }
+
+            // Filtrar por material
+            if (materialSeleccionado && materialSeleccionado !== '') {
+                productosFiltrados = productosFiltrados.filter(producto =>
+                    producto.material.toLowerCase() === materialSeleccionado
+                );
+            }
+
+            // Filtrar por categoría (solo si no es "Todos")
+            if (categoriaActiva && categoriaActiva !== 'Todos') {
+                productosFiltrados = productosFiltrados.filter(producto =>
+                    producto.categoria.toLowerCase() === categoriaActiva.toLowerCase()
+                );
+            }
+            
+            generarCardsProductos(productosFiltrados, contenedorCatalogo, true); // true indica que es el catálogo completo
+        };
+
+        // Event Listeners para los filtros
+        if (buscador) {
+            buscador.addEventListener('input', aplicarFiltros);
+        }
+        if (filtroMaterial) {
+            filtroMaterial.addEventListener('change', aplicarFiltros);
+        }
+        if (categoriasNav) {
+            categoriasNav.addEventListener('click', (e) => {
+                e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+                if (e.target.tagName === 'A' && e.target.classList.contains('filtro-categoria')) {
+                    // Remover la clase 'active-category' de todos y añadirla al clicado
+                    categoriasNav.querySelectorAll('.filtro-categoria').forEach(link => {
+                        link.classList.remove('active-category');
+                    });
+                    e.target.classList.add('active-category');
+
+                    const categoriaSeleccionada = e.target.dataset.categoria;
+
+                    aplicarFiltros(); // Vuelve a renderizar con la categoría activa
+
+                    // Scroll suave a la categoría, si no es "Todos"
+                    if (categoriaSeleccionada !== 'Todos') {
+                        const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
+                        const seccion = document.getElementById(sectionId);
+                        if (seccion) {
+                            window.scrollTo({
+                                top: seccion.offsetTop - 80, // Ajusta este valor si tu header tiene otra altura
+                                behavior: 'smooth'
+                            });
+                        }
+                    } else {
+                        // Para "Todos", scroll al inicio del contenedor del catálogo
+                        window.scrollTo({
+                            top: contenedorCatalogo.offsetTop - 80, // Ajusta según tu diseño
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        }
+    } // Fin if (contenedorCatalogo)
+
     // --- Funcionalidad del Carrito (Común a ambas páginas si el modal está presente) ---
 
     // Función para actualizar el contador de items en el ícono del carrito
@@ -178,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carrito.forEach(item => {
                 const li = document.createElement('li');
                 li.innerHTML = `${item.nombre} x ${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}
-                                 <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
+                                     <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
                 listaCarrito.appendChild(li);
                 total += item.precio * item.cantidad;
             });
@@ -297,6 +378,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // --- Lógica para productos destacados (Solo para index.html) ---
+    const cargarProductosDestacados = () => {
+        const contenedorDestacados = document.getElementById('contenedorDestacados');
+        if (contenedorDestacados && window.productos.length > 0) {
+            const productosFiltrados = window.productos.filter(producto => producto.destacado);
+            generarCardsProductos(productosFiltrados, contenedorDestacados, false); // false indica que NO es el catálogo completo
+        }
+    };
+
     // --- Carga inicial de productos desde JSON ---
     fetch('productos.json')
         .then(response => {
@@ -312,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (contenedorCatalogo) { // Si estamos en catalogo.html
                 // Se llama a aplicarFiltros para que muestre el catálogo inicial (todos los productos)
                 // y también para que configure los listeners de los filtros.
-                aplicarFiltros();
+                aplicarFiltros(); // <--- Ahora 'aplicarFiltros' ya estará definida aquí
             }
             if (document.getElementById('contenedorDestacados')) { // Si estamos en index.html
                 cargarProductosDestacados();
@@ -322,101 +412,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCartCount(); // Actualiza el contador del carrito al cargar la página
         })
         .catch(error => console.error('Error al cargar los productos:', error));
-
-
-    // --- Lógica específica para la página 'catalogo.html' ---
-    if (contenedorCatalogo) { // Esto asegura que solo se ejecute la lógica del catálogo en catalogo.html
-
-        // Función central para aplicar todos los filtros (buscador, material, categoría)
-        // y renderizar los productos.
-        const aplicarFiltros = () => {
-            let productosFiltrados = [...window.productos]; // Siempre empieza con todos los productos
-
-            const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
-            const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
-            const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
-
-            // Filtrar por búsqueda
-            if (textoBusqueda) {
-                productosFiltrados = productosFiltrados.filter(producto =>
-                    producto.nombre.toLowerCase().includes(textoBusqueda)
-                );
-            }
-
-            // Filtrar por material
-            if (materialSeleccionado && materialSeleccionado !== '') {
-                productosFiltrados = productosFiltrados.filter(producto =>
-                    producto.material.toLowerCase() === materialSeleccionado
-                );
-            }
-
-            // Filtrar por categoría (solo si no es "Todos")
-            if (categoriaActiva && categoriaActiva !== 'Todos') {
-                productosFiltrados = productosFiltrados.filter(producto =>
-                    producto.categoria.toLowerCase() === categoriaActiva.toLowerCase()
-                );
-            }
-            
-            // Si la búsqueda y/o el filtro de material están activos,
-            // y la categoría activa NO es "Todos", la sección de la categoría activa
-            // podría no mostrar los resultados correctos si sus productos están filtrados.
-            // La nueva lógica de `generarCardsProductos` al agrupar por categoría
-            // manejará esto automáticamente.
-
-            generarCardsProductos(productosFiltrados, contenedorCatalogo, true); // true indica que es el catálogo completo
-        };
-
-        // Event Listeners para los filtros
-        if (buscador) {
-            buscador.addEventListener('input', aplicarFiltros);
-        }
-        if (filtroMaterial) {
-            filtroMaterial.addEventListener('change', aplicarFiltros);
-        }
-        if (categoriasNav) {
-            categoriasNav.addEventListener('click', (e) => {
-                e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
-                if (e.target.tagName === 'A' && e.target.classList.contains('filtro-categoria')) {
-                    // Remover la clase 'active-category' de todos y añadirla al clicado
-                    categoriasNav.querySelectorAll('.filtro-categoria').forEach(link => {
-                        link.classList.remove('active-category');
-                    });
-                    e.target.classList.add('active-category');
-
-                    const categoriaSeleccionada = e.target.dataset.categoria;
-
-                    aplicarFiltros(); // Vuelve a renderizar con la categoría activa
-
-                    // Scroll suave a la categoría, si no es "Todos"
-                    if (categoriaSeleccionada !== 'Todos') {
-                        const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
-                        const seccion = document.getElementById(sectionId);
-                        if (seccion) {
-                            window.scrollTo({
-                                top: seccion.offsetTop - 80, // Ajusta este valor si tu header tiene otra altura
-                                behavior: 'smooth'
-                            });
-                        }
-                    } else {
-                        // Para "Todos", scroll al inicio del contenedor del catálogo
-                        window.scrollTo({
-                            top: contenedorCatalogo.offsetTop - 80, // Ajusta según tu diseño
-                            behavior: 'smooth'
-                        });
-                    }
-                }
-            });
-        }
-    } // Fin if (contenedorCatalogo)
-
-    // Lógica para productos destacados (Solo para index.html)
-    const cargarProductosDestacados = () => {
-        const contenedorDestacados = document.getElementById('contenedorDestacados');
-        if (contenedorDestacados && window.productos.length > 0) {
-            const productosFiltrados = window.productos.filter(producto => producto.destacado);
-            generarCardsProductos(productosFiltrados, contenedorDestacados, false); // false indica que NO es el catálogo completo
-        }
-    };
 
     // --- Lógica del Carrusel (Solo para index.html) ---
     const galeriaSlider = document.getElementById('galeriaSlider');
