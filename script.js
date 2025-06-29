@@ -1,3 +1,5 @@
+// script.js
+
 document.addEventListener('DOMContentLoaded', () => {
     // Referencias a elementos comunes
     const shoppingCartBtn = document.getElementById('cartIconBtn');
@@ -19,7 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const notificacionTotal = document.getElementById('notificacionTotal');
     const verCarritoDesdeNotificacionBtn = document.getElementById('verCarritoDesdeNotificacion');
 
+    // Referencias a elementos específicos del catálogo
+    const contenedorCatalogo = document.getElementById('contenedorCatalogo');
+    const buscador = document.getElementById('buscador');
+    const filtroMaterial = document.getElementById('filtroMaterial');
+    const categoriasNav = document.getElementById('categoriasNav');
+
+    // Variables globales (declaradas al inicio del DOMContentLoaded)
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    window.productos = []; // Aquí se almacenarán todos los productos cargados desde JSON
 
     // --- Funcionalidad del Carrito (Común a ambas páginas si el modal está presente) ---
 
@@ -146,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarNotificacionCarrito(productoEnCatalogo, cantidadAgregada); // Muestra la notificación
     };
 
-    // Función para eliminar un producto del carrito (faltaba esta en tu script, pero es importante)
+    // Función para eliminar un producto del carrito
     const eliminarDelCarrito = (productoId) => {
         carrito = carrito.filter(item => item.id !== productoId);
         localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -194,30 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Carga de productos (común a ambas páginas para el contexto) ---
-    // Declarar productos a nivel global para que sea accesible desde agregarAlCarrito
-    window.productos = [];
-
-    // Carga los productos desde el JSON una única vez al cargar el script
-    fetch('productos.json')
-        .then(response => response.json())
-        .then(data => {
-            window.productos = data; // Asigna a window.productos
-
-            // Lógica específica para cada página DESPUÉS de cargar los productos
-            if (document.getElementById('contenedorCatalogo')) { // Si estamos en catalogo.html
-                mostrarTodosLosProductos(); // Llama a la función que mostrará todo el catálogo
-            }
-            if (document.getElementById('contenedorDestacados')) { // Si estamos en index.html
-                cargarProductosDestacados();
-            }
-
-            renderizarCarrito(); // Renderiza el carrito inicial
-            updateCartCount(); // Actualiza el contador del carrito al cargar la página
-        })
-        .catch(error => console.error('Error al cargar los productos:', error));
-
-
     // --- Funciones para generar y mostrar productos (comunes o específicas) ---
 
     // Función auxiliar para crear una sola card de producto
@@ -244,53 +230,58 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Función para generar las cards de productos en un contenedor dado
-    const generarCardsProductos = (productosParaMostrar, contenedor) => {
+    const generarCardsProductos = (productosParaMostrar, contenedor, esCatalogoCompleto) => {
         if (!contenedor) return;
 
         contenedor.innerHTML = ''; // Limpiar el contenedor antes de añadir nuevos productos
 
-        const esCatalogoCompleto = (contenedor.id === 'contenedorCatalogo');
-
         if (esCatalogoCompleto) {
-            // Agrupar por categoría solo si es el catálogo completo
-            const categoriasMap = new Map();
             // Obtener todas las categorías únicas del JSON completo
             const todasLasCategorias = [...new Set(window.productos.map(p => p.categoria))].sort(); // Asegurarse de tener todas las categorías del JSON y ordenarlas
 
+            // Re-generar los enlaces de categoría en el HTML para incluir "Todos" y el orden
+            if (categoriasNav && todasLasCategorias.length > 0) {
+                 // Mantener el "Todos" activo por defecto si no hay otra categoría seleccionada
+                const currentActiveCategory = categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria;
+                categoriasNav.innerHTML = `<a href="#" data-categoria="Todos" class="filtro-categoria ${currentActiveCategory === 'Todos' || !currentActiveCategory ? 'active-category' : ''}">Todos</a>`;
+
+                todasLasCategorias.forEach(cat => {
+                    const link = document.createElement('a');
+                    link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`; // ID limpio para la sección
+                    link.dataset.categoria = cat;
+                    link.classList.add('filtro-categoria');
+                    if (cat === currentActiveCategory) {
+                        link.classList.add('active-category');
+                    }
+                    link.textContent = cat;
+                    categoriasNav.appendChild(link);
+                });
+            }
+
+            // Agrupar y renderizar por categoría
+            const categoriasMap = new Map();
             todasLasCategorias.forEach(categoria => {
                 categoriasMap.set(categoria, []);
             });
 
             productosParaMostrar.forEach(producto => {
-                if (categoriasMap.has(producto.categoria)) { // Solo añadir si la categoría existe
+                if (categoriasMap.has(producto.categoria)) {
                     categoriasMap.get(producto.categoria).push(producto);
                 }
             });
 
-            // Re-generar los enlaces de categoría en el HTML para incluir "Todos" y el orden
-            // Solo si estamos en el catalogo.html y tenemos el elemento categoriasNav
-            if (categoriasNav && todasLasCategorias.length > 0) {
-                 categoriasNav.innerHTML = `<a href="#" data-categoria="Todos" class="filtro-categoria active-category">Todos</a>`; // Poner "Todos" como activo por defecto
-                 todasLasCategorias.forEach(cat => {
-                     const link = document.createElement('a');
-                     link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`; // ID limpio para la sección
-                     link.dataset.categoria = cat;
-                     link.classList.add('filtro-categoria');
-                     link.textContent = cat;
-                     categoriasNav.appendChild(link);
-                 });
-            }
-
             for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
-                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, ''); // Limpia la categoría para usarla como ID
-                const section = document.createElement('section');
-                section.id = sectionId;
-                section.className = 'categoria-productos'; // Clase para aplicar estilos de sección de categoría
-                section.innerHTML = `<h2 class="categoria-titulo">${categoria}</h2><div class="productos-grid"></div>`; // Grid para productos dentro de la categoría
-                contenedor.appendChild(section);
+                if (productosDeCategoria.length > 0) { // Solo crear sección si hay productos
+                    const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
+                    const section = document.createElement('section');
+                    section.id = sectionId;
+                    section.className = 'categoria-productos';
+                    section.innerHTML = `<h2 class="categoria-titulo">${categoria}</h2><div class="productos-grid"></div>`;
+                    contenedor.appendChild(section);
 
-                const gridContainer = section.querySelector('.productos-grid'); // Selecciona el grid DENTRO de la sección
-                productosDeCategoria.forEach(producto => gridContainer.appendChild(crearCardProducto(producto)));
+                    const gridContainer = section.querySelector('.productos-grid');
+                    productosDeCategoria.forEach(producto => gridContainer.appendChild(crearCardProducto(producto)));
+                }
             }
         } else {
             // Si no es el catálogo completo (ej. destacados), simplemente añadirlos al contenedor
@@ -306,108 +297,98 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Función para mostrar todos los productos (para catalogo.html)
-    window.mostrarTodosLosProductos = () => { // Se expone globalmente para ser llamada desde catalogo.html
-        if (document.getElementById('contenedorCatalogo') && window.productos.length > 0) {
-            generarCardsProductos(window.productos, document.getElementById('contenedorCatalogo'));
-        }
-    };
+    // --- Carga inicial de productos desde JSON ---
+    fetch('productos.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            window.productos = data; // Asigna los productos a la variable global
 
-    // Lógica para productos destacados (Solo para index.html)
-    // Se expone globalmente para ser llamada desde index.html
-    window.cargarProductosDestacados = () => {
-        const contenedorDestacados = document.getElementById('contenedorDestacados');
-        if (contenedorDestacados && window.productos.length > 0) {
-            const productosFiltrados = window.productos.filter(producto => producto.destacado);
-            generarCardsProductos(productosFiltrados, contenedorDestacados);
-        }
-    };
+            // Lógica específica para cada página DESPUÉS de cargar los productos
+            if (contenedorCatalogo) { // Si estamos en catalogo.html
+                // Se llama a aplicarFiltros para que muestre el catálogo inicial (todos los productos)
+                // y también para que configure los listeners de los filtros.
+                aplicarFiltros();
+            }
+            if (document.getElementById('contenedorDestacados')) { // Si estamos en index.html
+                cargarProductosDestacados();
+            }
+
+            renderizarCarrito(); // Renderiza el carrito inicial
+            updateCartCount(); // Actualiza el contador del carrito al cargar la página
+        })
+        .catch(error => console.error('Error al cargar los productos:', error));
 
 
     // --- Lógica específica para la página 'catalogo.html' ---
-    const contenedorCatalogo = document.getElementById('contenedorCatalogo');
-    const buscador = document.getElementById('buscador');
-    const filtroMaterial = document.getElementById('filtroMaterial');
-    const categoriasNav = document.getElementById('categoriasNav');
-
     if (contenedorCatalogo) { // Esto asegura que solo se ejecute la lógica del catálogo en catalogo.html
 
-        // Función unificada para aplicar los filtros (buscador y material)
-        const aplicarFiltrosVisuales = () => {
+        // Función central para aplicar todos los filtros (buscador, material, categoría)
+        // y renderizar los productos.
+        const aplicarFiltros = () => {
+            let productosFiltrados = [...window.productos]; // Siempre empieza con todos los productos
+
             const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
             const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
+            const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
 
-            // Obtener todos los productos individualmente renderizados en el DOM
-            // Mostrar todas las secciones de categoría antes de aplicar los filtros individuales
-            document.querySelectorAll('.categoria-productos').forEach(section => {
-                section.style.display = 'block'; // Asegura que todas las secciones estén visibles por defecto para los atajos
-            });
+            // Filtrar por búsqueda
+            if (textoBusqueda) {
+                productosFiltrados = productosFiltrados.filter(producto =>
+                    producto.nombre.toLowerCase().includes(textoBusqueda)
+                );
+            }
 
+            // Filtrar por material
+            if (materialSeleccionado && materialSeleccionado !== '') {
+                productosFiltrados = productosFiltrados.filter(producto =>
+                    producto.material.toLowerCase() === materialSeleccionado
+                );
+            }
 
-            document.querySelectorAll('.producto').forEach(productoDiv => {
-                const nombreProducto = productoDiv.querySelector('h3').textContent.toLowerCase();
-                const materialProducto = productoDiv.dataset.material.toLowerCase();
+            // Filtrar por categoría (solo si no es "Todos")
+            if (categoriaActiva && categoriaActiva !== 'Todos') {
+                productosFiltrados = productosFiltrados.filter(producto =>
+                    producto.categoria.toLowerCase() === categoriaActiva.toLowerCase()
+                );
+            }
+            
+            // Si la búsqueda y/o el filtro de material están activos,
+            // y la categoría activa NO es "Todos", la sección de la categoría activa
+            // podría no mostrar los resultados correctos si sus productos están filtrados.
+            // La nueva lógica de `generarCardsProductos` al agrupar por categoría
+            // manejará esto automáticamente.
 
-                const coincideNombre = nombreProducto.includes(textoBusqueda);
-                const coincideMaterial = !materialSeleccionado || materialSeleccionado === '' || materialProducto === materialSeleccionado;
-
-                // Si ambos filtros coinciden, mostrar el producto, de lo contrario ocultarlo
-                if (coincideNombre && coincideMaterial) {
-                    productoDiv.style.display = 'block';
-                } else {
-                    productoDiv.style.display = 'none';
-                }
-            });
-
-            // Ocultar secciones de categoría si NO tienen productos visibles después de aplicar filtros
-            document.querySelectorAll('.categoria-productos').forEach(section => {
-                const productosVisiblesEnSeccion = section.querySelectorAll('.producto:not([style*="display: none"])');
-                if (productosVisiblesEnSeccion.length === 0) {
-                    section.style.display = 'none';
-                } else {
-                    section.style.display = 'block';
-                }
-            });
+            generarCardsProductos(productosFiltrados, contenedorCatalogo, true); // true indica que es el catálogo completo
         };
 
-
-        // Funcionalidad del buscador
+        // Event Listeners para los filtros
         if (buscador) {
-            buscador.addEventListener('input', aplicarFiltrosVisuales);
+            buscador.addEventListener('input', aplicarFiltros);
         }
-
-        // Funcionalidad del filtro por material
         if (filtroMaterial) {
-            filtroMaterial.addEventListener('change', aplicarFiltrosVisuales);
+            filtroMaterial.addEventListener('change', aplicarFiltros);
         }
-
-        // Funcionalidad de filtro por categoría (para los enlaces de navegación de categorías)
         if (categoriasNav) {
             categoriasNav.addEventListener('click', (e) => {
                 e.preventDefault(); // Evitar el comportamiento predeterminado del enlace
                 if (e.target.tagName === 'A' && e.target.classList.contains('filtro-categoria')) {
-                    const categoriaSeleccionada = e.target.dataset.categoria;
-
-                    // Remover la clase 'active-category' de todos los enlaces y añadirla al clicado
+                    // Remover la clase 'active-category' de todos y añadirla al clicado
                     categoriasNav.querySelectorAll('.filtro-categoria').forEach(link => {
                         link.classList.remove('active-category');
                     });
                     e.target.classList.add('active-category');
 
-                    // Al hacer clic en una categoría, primero re-aplicar los filtros generales
-                    // para asegurarse de que todos los productos estén en su estado inicial visible/oculto
-                    // según buscador y material, antes de hacer el scroll.
-                    aplicarFiltrosVisuales(); // <-- CLAVE: Esto mantiene la visibilidad de otras categorías/productos según los filtros de búsqueda/material.
+                    const categoriaSeleccionada = e.target.dataset.categoria;
 
-                    if (categoriaSeleccionada === 'Todos') {
-                        // Para "Todos", solo scroll al inicio de la página o al contenedor principal
-                        window.scrollTo({
-                            top: 0, // O contenedorCatalogo.offsetTop - 80;
-                            behavior: 'smooth'
-                        });
-                    } else {
-                        // Para una categoría específica, hacer scroll suave a esa sección.
-                        // La visibilidad de las otras categorías NO CAMBIA AQUÍ.
+                    aplicarFiltros(); // Vuelve a renderizar con la categoría activa
+
+                    // Scroll suave a la categoría, si no es "Todos"
+                    if (categoriaSeleccionada !== 'Todos') {
                         const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
                         const seccion = document.getElementById(sectionId);
                         if (seccion) {
@@ -416,11 +397,26 @@ document.addEventListener('DOMContentLoaded', () => {
                                 behavior: 'smooth'
                             });
                         }
+                    } else {
+                        // Para "Todos", scroll al inicio del contenedor del catálogo
+                        window.scrollTo({
+                            top: contenedorCatalogo.offsetTop - 80, // Ajusta según tu diseño
+                            behavior: 'smooth'
+                        });
                     }
                 }
             });
         }
     } // Fin if (contenedorCatalogo)
+
+    // Lógica para productos destacados (Solo para index.html)
+    const cargarProductosDestacados = () => {
+        const contenedorDestacados = document.getElementById('contenedorDestacados');
+        if (contenedorDestacados && window.productos.length > 0) {
+            const productosFiltrados = window.productos.filter(producto => producto.destacado);
+            generarCardsProductos(productosFiltrados, contenedorDestacados, false); // false indica que NO es el catálogo completo
+        }
+    };
 
     // --- Lógica del Carrusel (Solo para index.html) ---
     const galeriaSlider = document.getElementById('galeriaSlider');
@@ -482,7 +478,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (nextBtnGaleria) {
-            // Se corrigió el nombre de la variable de 'nextBtnCarrusel' a 'nextBtnGaleria'
             nextBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel++;
                 galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
