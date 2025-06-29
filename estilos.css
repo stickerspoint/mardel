@@ -287,7 +287,7 @@ section h2 {
     gap: 30px;
     padding: 0 20px;
     justify-content: center;
-    align-items: center
+    align-items: stretch;
 }
 
 /* Contenedor para cada sección de categoría en el catálogo */
