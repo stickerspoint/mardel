@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Catálogo - StickersPoint</title>
+    <title>Inicio - StickersPoint</title>
     <link rel="stylesheet" href="estilos.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
@@ -35,26 +35,35 @@
         <button id="verCarritoDesdeNotificacion">Ver carrito</button>
     </div>
 </div>
-<div class="catalogo-container">
-    <h1>Catálogo</h1>
-
-    <div class="catalogo-filtros">
-        <input type="text" id="buscador" placeholder="Buscar producto...">
-        <nav id="categoriasNav"></nav> 
-        <select id="filtroMaterial">
-            <option value="">Todos los Materiales</option>
-            <option value="vinilo dorado">Vinilo Dorado</option>
-            <option value="vinilo blanco">Vinilo Blanco</option>
-            <option value="vinilo holografico">Vinilo Holográfico</option>
-            <option value="vinilo holografico triangulitos">Vinilo Holográfico Triangulitos</option>
-            <option value="vinilo fotoluminiscente">Vinilo Fotoluminiscente</option>
-        </select>
-    </div>
-
-    <div id="contenedorCatalogo">
+<section class="bienvenida" style="background-color: #fff5e9; padding: 60px 20px;">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 60px;">
+        <div style="max-width: 500px; text-align: center;">
+            <h1 style="font-size: 30px; margin-bottom: 10px;">Bienvenidos a <span style="color:#f0a41c;">StickersPoint</span></h1>
+            <p style="font-size: 20px;">Descubrí los mejores stickers con la mejor calidad</p>
         </div>
-</div>
+        <img src="imagenescatalogo/mascota.png" alt="Mascota" style="max-height: 400px;">
+    </div>
+</section>
 
+<section class="galeria-fondo">
+    <div class="galeria-container">
+        <div id="galeriaSlider" class="galeria-slider">
+            <img src="imagenescatalogo/carrusel1.jpg" alt="Imagen 1">
+            <img src="imagenescatalogo/carrusel2.jpg" alt="Imagen 2">
+            <img src="imagenescatalogo/carrusel3.jpg" alt="Imagen 3">
+        </div>
+    </div>
+    <div class="galeria-controles">
+        <button id="prevBtnGaleria" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
+        <button id="nextBtnGaleria" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</section>
+
+<section class="productos-destacados">
+    <h2>Productos Destacados</h2>
+    <div id="contenedorDestacados" class="destacados-grid">
+        </div>
+</section>
 <div class="modal" id="carritoModal">
     <div class="modal-content carrito">
         <span class="close-modal" id="cerrarCarrito">×</span>
@@ -66,5 +75,14 @@
 </div>
 
 <script src="script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Asegúrate de que cargarProductosDestacados se llame solo si el contenedor existe
+        if (document.getElementById('contenedorDestacados')) {
+            cargarProductosDestacados();
+        }
+        actualizarContadorCarrito(); // Asegurarse de que el contador del carrito se actualice al cargar
+    });
+</script>
 </body>
 </html>

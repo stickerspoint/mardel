@@ -167,10 +167,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             carrito.forEach(item => {
                 const li = document.createElement('li');
-                li.innerHTML = `
-                    <img src="${item.imagen}" alt="${item.nombre}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
-                    ${item.nombre} x ${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}
-                    <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
+                li.innerHTML = `${item.nombre} x ${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}
+                                 <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
                 listaCarrito.appendChild(li);
                 total += item.precio * item.cantidad;
             });
@@ -202,12 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Carga los productos desde el JSON una única vez al cargar el script
     fetch('productos.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             window.productos = data; // Asigna a window.productos
 
@@ -222,16 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderizarCarrito(); // Renderiza el carrito inicial
             updateCartCount(); // Actualiza el contador del carrito al cargar la página
         })
-        .catch(error => {
-            console.error('Error al cargar los productos:', error);
-            // Mostrar un mensaje al usuario si los productos no se cargan
-            if (document.getElementById('contenedorCatalogo')) {
-                document.getElementById('contenedorCatalogo').innerHTML = '<p>Lo sentimos, no se pudieron cargar los productos en este momento. Por favor, inténtelo de nuevo más tarde.</p>';
-            }
-            if (document.getElementById('contenedorDestacados')) {
-                document.getElementById('contenedorDestacados').innerHTML = '<p>Lo sentimos, no se pudieron cargar los productos destacados en este momento.</p>';
-            }
-        });
+        .catch(error => console.error('Error al cargar los productos:', error));
 
 
     // --- Funciones para generar y mostrar productos (comunes o específicas) ---
@@ -268,49 +252,45 @@ document.addEventListener('DOMContentLoaded', () => {
         const esCatalogoCompleto = (contenedor.id === 'contenedorCatalogo');
 
         if (esCatalogoCompleto) {
-            const categoriasNav = document.getElementById('categoriasNav');
-
-            // Obtener todas las categorías únicas del JSON completo y ordenarlas
-            const todasLasCategorias = [...new Set(window.productos.map(p => p.categoria))].sort();
-
-            // Agrupar productos por categoría
+            // Agrupar por categoría solo si es el catálogo completo
             const categoriasMap = new Map();
+            // Obtener todas las categorías únicas del JSON completo
+            const todasLasCategorias = [...new Set(window.productos.map(p => p.categoria))].sort(); // Asegurarse de tener todas las categorías del JSON y ordenarlas
+
             todasLasCategorias.forEach(categoria => {
                 categoriasMap.set(categoria, []);
             });
+
             productosParaMostrar.forEach(producto => {
-                // Asegúrate de que solo se añaden productos si la categoría existe en el mapa
-                if (categoriasMap.has(producto.categoria)) {
+                if (categoriasMap.has(producto.categoria)) { // Solo añadir si la categoría existe
                     categoriasMap.get(producto.categoria).push(producto);
                 }
             });
 
-            // Regenerar los enlaces de categoría en el HTML para incluir "Todos" y el orden
-            if (categoriasNav) {
-                categoriasNav.innerHTML = `<a href="#" data-categoria="Todos" class="filtro-categoria active-category">Todos</a>`; // Poner "Todos" como activo por defecto
-                todasLasCategorias.forEach(cat => {
-                    const link = document.createElement('a');
-                    link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`; // ID limpio para la sección
-                    link.dataset.categoria = cat;
-                    link.classList.add('filtro-categoria');
-                    link.textContent = cat;
-                    categoriasNav.appendChild(link);
-                });
+            // Re-generar los enlaces de categoría en el HTML para incluir "Todos" y el orden
+            // Solo si estamos en el catalogo.html y tenemos el elemento categoriasNav
+            if (categoriasNav && todasLasCategorias.length > 0) {
+                 categoriasNav.innerHTML = `<a href="#" data-categoria="Todos" class="filtro-categoria active-category">Todos</a>`; // Poner "Todos" como activo por defecto
+                 todasLasCategorias.forEach(cat => {
+                     const link = document.createElement('a');
+                     link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`; // ID limpio para la sección
+                     link.dataset.categoria = cat;
+                     link.classList.add('filtro-categoria');
+                     link.textContent = cat;
+                     categoriasNav.appendChild(link);
+                 });
             }
 
             for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
-                // Solo renderizar la sección de categoría si tiene productos
-                if (productosDeCategoria.length > 0) {
-                    const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, ''); // Limpia la categoría para usarla como ID
-                    const section = document.createElement('section');
-                    section.id = sectionId;
-                    section.className = 'categoria-productos'; // Clase para aplicar estilos de sección de categoría
-                    section.innerHTML = `<h2 class="categoria-titulo">${categoria}</h2><div class="productos-grid"></div>`; // Grid para productos dentro de la categoría
-                    contenedor.appendChild(section);
+                const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, ''); // Limpia la categoría para usarla como ID
+                const section = document.createElement('section');
+                section.id = sectionId;
+                section.className = 'categoria-productos'; // Clase para aplicar estilos de sección de categoría
+                section.innerHTML = `<h2 class="categoria-titulo">${categoria}</h2><div class="productos-grid"></div>`; // Grid para productos dentro de la categoría
+                contenedor.appendChild(section);
 
-                    const gridContainer = section.querySelector('.productos-grid'); // Selecciona el grid DENTRO de la sección
-                    productosDeCategoria.forEach(producto => gridContainer.appendChild(crearCardProducto(producto)));
-                }
+                const gridContainer = section.querySelector('.productos-grid'); // Selecciona el grid DENTRO de la sección
+                productosDeCategoria.forEach(producto => gridContainer.appendChild(crearCardProducto(producto)));
             }
         } else {
             // Si no es el catálogo completo (ej. destacados), simplemente añadirlos al contenedor
@@ -327,15 +307,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Función para mostrar todos los productos (para catalogo.html)
-    // Se expone globalmente para ser llamada desde catalogo.html (aunque la llamada principal es en el fetch)
-    window.mostrarTodosLosProductos = () => {
+    window.mostrarTodosLosProductos = () => { // Se expone globalmente para ser llamada desde catalogo.html
         if (document.getElementById('contenedorCatalogo') && window.productos.length > 0) {
             generarCardsProductos(window.productos, document.getElementById('contenedorCatalogo'));
-            aplicarFiltrosVisuales(); // Aplicar filtros iniciales después de renderizar todo
         }
     };
 
     // Lógica para productos destacados (Solo para index.html)
+    // Se expone globalmente para ser llamada desde index.html
     window.cargarProductosDestacados = () => {
         const contenedorDestacados = document.getElementById('contenedorDestacados');
         if (contenedorDestacados && window.productos.length > 0) {
@@ -357,25 +336,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const aplicarFiltrosVisuales = () => {
             const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
             const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
-            const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
 
+            // Obtener todos los productos individualmente renderizados en el DOM
             // Mostrar todas las secciones de categoría antes de aplicar los filtros individuales
             document.querySelectorAll('.categoria-productos').forEach(section => {
-                section.style.display = 'block'; // Asegura que todas las secciones estén visibles por defecto
+                section.style.display = 'block'; // Asegura que todas las secciones estén visibles por defecto para los atajos
             });
+
 
             document.querySelectorAll('.producto').forEach(productoDiv => {
                 const nombreProducto = productoDiv.querySelector('h3').textContent.toLowerCase();
                 const materialProducto = productoDiv.dataset.material.toLowerCase();
-                const categoriaProducto = productoDiv.dataset.categoria;
 
                 const coincideNombre = nombreProducto.includes(textoBusqueda);
                 const coincideMaterial = !materialSeleccionado || materialSeleccionado === '' || materialProducto === materialSeleccionado;
-                const coincideCategoria = categoriaActiva === 'Todos' || categoriaProducto === categoriaActiva;
 
-
-                // Si todos los filtros coinciden, mostrar el producto, de lo contrario ocultarlo
-                if (coincideNombre && coincideMaterial && coincideCategoria) {
+                // Si ambos filtros coinciden, mostrar el producto, de lo contrario ocultarlo
+                if (coincideNombre && coincideMaterial) {
                     productoDiv.style.display = 'block';
                 } else {
                     productoDiv.style.display = 'none';
@@ -417,17 +394,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     e.target.classList.add('active-category');
 
-                    // Al hacer clic en una categoría, aplicar los filtros y luego hacer scroll.
-                    aplicarFiltrosVisuales(); // Esto filtrará los productos por la categoría seleccionada (y otros filtros activos)
+                    // Al hacer clic en una categoría, primero re-aplicar los filtros generales
+                    // para asegurarse de que todos los productos estén en su estado inicial visible/oculto
+                    // según buscador y material, antes de hacer el scroll.
+                    aplicarFiltrosVisuales(); // <-- CLAVE: Esto mantiene la visibilidad de otras categorías/productos según los filtros de búsqueda/material.
 
                     if (categoriaSeleccionada === 'Todos') {
-                        // Para "Todos", scroll al inicio del contenedor principal del catálogo
+                        // Para "Todos", solo scroll al inicio de la página o al contenedor principal
                         window.scrollTo({
-                            top: contenedorCatalogo.offsetTop - 80, // Ajusta si el header tiene otra altura
+                            top: 0, // O contenedorCatalogo.offsetTop - 80;
                             behavior: 'smooth'
                         });
                     } else {
                         // Para una categoría específica, hacer scroll suave a esa sección.
+                        // La visibilidad de las otras categorías NO CAMBIA AQUÍ.
                         const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
                         const seccion = document.getElementById(sectionId);
                         if (seccion) {
@@ -473,25 +453,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Calcular el ancho de un "slot" (cada imagen)
             const anchoContenedor = galeriaSlider.parentElement.offsetWidth; // Ancho del .galeria-container
-            // Asegúrate de que anchoSlot es un número válido, ajusta la división si no son 3
-            // Si el carrusel muestra X elementos, el ancho de cada slot es anchoContenedor / X
-            const visibleItems = 3; // Asumiendo que 3 imágenes son visibles a la vez
-            const anchoSlot = anchoContenedor / visibleItems; 
+            const anchoSlot = anchoContenedor / 3; // Suponiendo 3 imágenes visibles
 
             // Calcular el offset para centrar la imagen actual (indiceActualCarrusel)
-            // Esto necesita ser ajustado si no estás centrando una sola imagen, sino un grupo
-            // Para centrar el grupo, necesitas saber dónde empieza el grupo visible
-            // Si el carrusel es para "tres imágenes a la vez" y se desliza una a una:
-            const offset = -indiceActualCarrusel * anchoSlot; // Mover hacia la izquierda el número de slots
+            const offset = -(indiceActualCarrusel - 1) * anchoSlot; // Mover hacia la izquierda
 
             galeriaSlider.style.transform = `translateX(${offset}px)`;
 
             // Añadir clase 'central' a la imagen realmente central (visual)
-            // Esto puede requerir un ajuste si la idea es que la imagen del medio siempre sea "central"
-            // Por ejemplo, si siempre hay 3 imágenes visibles y la del medio es la "principal"
-            // La imagen central visualmente será imagenesCarrusel[indiceActualCarrusel + 1]
-            if (imagenesCarrusel[indiceActualCarrusel + Math.floor(visibleItems / 2)]) {
-                imagenesCarrusel[indiceActualCarrusel + Math.floor(visibleItems / 2)].classList.add('central');
+            if (imagenesCarrusel[indiceActualCarrusel]) {
+                imagenesCarrusel[indiceActualCarrusel].classList.add('central');
             }
         }
 
@@ -511,6 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (nextBtnGaleria) {
+            // Se corrigió el nombre de la variable de 'nextBtnCarrusel' a 'nextBtnGaleria'
             nextBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel++;
                 galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
