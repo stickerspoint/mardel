@@ -364,7 +364,7 @@
     },
     {
         "id": 34,
-        "nombre": " porrito kawaii",
+        "nombre": "porrito kawaii",
         "precio": 800,
         "imagen": "imagenescatalogo/porrito-kawaii.jpg",
         "stock": 6,
@@ -608,7 +608,7 @@
         "id": 56,
         "nombre": "el principito y el zorro",
         "precio": 1000,
-        "imagen": "imagenescatalogo/el-principito-y-el zorro.jpg",
+        "imagen": "imagenescatalogo/el-principito-y-el-zorro.jpg",
         "stock": 6,
         "categoria": "tv",
         "material": "vinilo fotoluminiscente",
