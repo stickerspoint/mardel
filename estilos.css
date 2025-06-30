@@ -278,7 +278,6 @@ section h2 {
     margin-bottom: 20px;
     font-size: 28px;
 }
-
 /* Estilos para las secciones de productos (destacados y categorías del catálogo) */
 .destacados-grid,
 .productos-grid { /* Añadido .productos-grid para usarlo en el catálogo */
@@ -291,8 +290,6 @@ section h2 {
     max-width: fit-content;
     margin: 0 auto;
 }
-}
-
 /* Contenedor para cada sección de categoría en el catálogo */
 .categoria-productos {
     margin-top: 40px; /* Espacio entre secciones de categoría */
