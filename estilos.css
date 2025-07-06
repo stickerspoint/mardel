@@ -93,7 +93,7 @@ body {
     line-height: 1;
 }
 
-/* Modal del Carrito */
+/* Modal del Carrito - ESTILOS MEJORADOS */
 .modal {
     display: none; /* Oculto por defecto */
     position: fixed;
@@ -103,88 +103,193 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.6); /* Fondo más oscuro para mayor contraste */
+    display: flex; /* Usar flexbox para centrar contenido */
     justify-content: center;
     align-items: center;
+    animation: fadeInBackground 0.3s ease-out; /* Animación para el fondo */
+}
+
+@keyframes fadeInBackground {
+    from { background-color: rgba(0,0,0,0); }
+    to { background-color: rgba(0,0,0,0.6); }
 }
 
 .modal-content.carrito {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 10px;
+    background-color: #fefefe; /* Color de fondo del carrito */
+    padding: 30px; /* Aumentar el padding para más espacio interno */
+    border: none; /* Eliminar el borde, la sombra lo hará destacar */
+    width: 95%; /* Un poco más ancho en móviles */
+    max-width: 550px; /* Aumentar ligeramente el ancho máximo en desktop */
+    border-radius: 12px; /* Esquinas más redondeadas */
     position: relative;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* Sombra más pronunciada y suave */
+    animation: slideInFromTop 0.4s ease-out forwards; /* Animación al aparecer */
+    opacity: 0; /* Inicialmente opaco para la animación */
+}
+
+@keyframes slideInFromTop {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .close-modal {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    color: #666; /* Un gris más suave para la 'X' */
+    font-size: 32px; /* Tamaño de la 'X' */
+    font-weight: normal; /* No tan bold */
     position: absolute;
-    top: 10px;
-    right: 20px;
+    top: 15px; /* Ajustar posición */
+    right: 20px; /* Ajustar posición */
     cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .close-modal:hover,
 .close-modal:focus {
-    color: black;
+    color: var(--color-secundario); /* Cambiar a tu color secundario al pasar el mouse */
+    transform: rotate(90deg); /* Pequeña rotación al pasar el mouse */
     text-decoration: none;
-    cursor: pointer;
+}
+
+/* Título del Carrito (si no tienes uno, puedes añadir un h2 dentro del modal-content) */
+.modal-content.carrito h2 {
+    text-align: center;
+    color: var(--color-texto);
+    margin-bottom: 25px;
+    font-size: 26px;
+    border-bottom: 1px solid #eee; /* Línea separadora */
+    padding-bottom: 15px;
 }
 
 #listaCarrito {
     list-style: none;
     padding: 0;
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 20px;
+    max-height: 350px; /* Aumentar la altura máxima para más productos */
+    overflow-y: auto; /* Scroll si hay muchos elementos */
+    margin-bottom: 25px;
+    border-radius: 8px; /* Borde redondeado para la lista */
+    background-color: #fdfdfd; /* Fondo ligeramente diferente para la lista */
+    border: 1px solid #f0f0f0; /* Borde sutil para la lista */
 }
 
 #listaCarrito li {
-    padding: 10px 0;
-    border-bottom: 1px dashed #eee;
+    padding: 15px 20px; /* Más padding para cada item */
+    border-bottom: 1px solid #eee; /* Separador entre productos */
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 15px;
 }
 
 #listaCarrito li:last-child {
-    border-bottom: none;
+    border-bottom: none; /* El último elemento no tiene borde inferior */
+}
+
+#listaCarrito li span:first-child { /* Nombre del producto */
+    font-weight: bold;
+    color: var(--color-texto);
+}
+
+#listaCarrito li span:nth-child(2) { /* Precio del producto */
+    color: var(--color-primario);
+    font-weight: bold;
 }
 
 .btn-eliminar {
     background-color: transparent;
     border: none;
-    color: #e74c3c;
+    color: #e74c3c; /* Rojo de eliminar */
     cursor: pointer;
-    font-size: 1.1em;
+    font-size: 1.3em; /* Icono más grande */
+    margin-left: 15px; /* Espacio a la izquierda del botón */
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-eliminar:hover {
+    color: #c0392b; /* Rojo más oscuro al pasar el mouse */
+    transform: scale(1.1); /* Ligeramente más grande al pasar el mouse */
+}
+
+.carrito-acciones {
+    text-align: right; /* Alinear el total y el botón a la derecha */
 }
 
 #totalCarrito {
     font-weight: bold;
-    color: var(--color-primario);
+    color: var(--color-secundario); /* Usar tu color secundario para el total */
+    font-size: 1.6em; /* Total más grande y destacado */
+    margin-top: 15px;
+    margin-bottom: 20px;
+    display: block; /* Para que ocupe su propia línea */
 }
 
 #vaciarCarrito {
-    background-color: var(--color-secundario);
+    background-color: var(--color-secundario); /* Usar tu color secundario */
     color: white;
-    padding: 10px 15px;
+    padding: 12px 25px; /* Más padding para un botón más grande */
     border: none;
-    border-radius: 5px;
+    border-radius: 8px; /* Más redondeado */
     cursor: pointer;
-    font-size: 16px;
+    font-size: 17px;
+    font-weight: bold;
     margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #vaciarCarrito:hover {
-    background-color: #d88e1a;
+    background-color: #d88e1a; /* Un tono un poco más oscuro de tu secundario */
+    transform: translateY(-2px); /* Pequeño efecto al pasar el mouse */
 }
+
+/* Estilos para cuando el carrito está vacío */
+.carrito-vacio-mensaje {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+    font-style: italic;
+}
+
+/* Media Queries para Carrito en pantallas pequeñas */
+@media (max-width: 600px) {
+    .modal-content.carrito {
+        width: 95%; /* Ocupa casi todo el ancho en móviles */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .close-modal {
+        font-size: 26px;
+        top: 10px;
+        right: 15px;
+    }
+
+    #listaCarrito li {
+        flex-direction: column; /* Apilar elementos en vertical si la pantalla es muy pequeña */
+        align-items: flex-start;
+        padding: 10px 0;
+    }
+
+    #listaCarrito li span:first-child {
+        margin-bottom: 5px;
+    }
+
+    .btn-eliminar {
+        margin-left: 0;
+        margin-top: 5px;
+        align-self: flex-end; /* Alinearlo a la derecha si está apilado */
+    }
+
+    #totalCarrito {
+        font-size: 1.4em;
+    }
+
+    #vaciarCarrito {
+        padding: 10px 20px;
+        font-size: 15px;
+        width: 100%; /* El botón ocupa todo el ancho */
+    }
+}
+
 
 /* Catálogo */
 .catalogo-container {
@@ -283,19 +388,10 @@ section h2 {
 .destacados-grid,
 .productos-grid {
     display: grid;
-    /* Cambio clave: Eliminar max-width: fit-content; */
-    /* Ajustado minmax para dar más flexibilidad */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Permite que ocupe el ancho disponible */
     gap: 30px;
     padding: 0 20px; /* Mantener padding horizontal */
     justify-content: center; /* Centrar la grilla si no llena todo el ancho */
-    /* align-items: stretch; no es necesario si las tarjetas ya tienen flex-grow o altura */
-    /* margin: 0 auto; Esto ya lo gestiona justify-content: center; para la grilla interna */
-    
-    /* REMOVIDO: max-width: fit-content; */ 
-    /* REMOVIDO: margin: 0 auto; Si quieres que la grilla ocupe todo el ancho del contenedor.
-       Si quieres que la grilla se centre y tenga un ancho máximo interno, podrías volver a poner
-       max-width aquí pero con un valor fijo como 1000px y margin: 0 auto; */
 }
 
 /* Contenedor para cada sección de categoría en el catálogo */
@@ -320,7 +416,6 @@ section h2 {
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.2s ease-in-out;
-    /* Ajustes adicionales para la tarjeta de producto */
     max-width: 100%; /* Asegura que la tarjeta no desborde su columna */
 }
 
