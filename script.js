@@ -33,9 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let imagenesCarrusel = [];
     let indiceActualCarrusel = 0;
 
-    // --- 3. Declaración de Funciones (Todas las funciones se declaran primero, incluyendo las que se llaman en la carga) ---
+    // --- 3. Declaración de Funciones ---
 
-    // Funciones de Productos y Catálogo - DECLARADAS PRIMERO
     const crearCardProducto = (producto) => {
         const productoDiv = document.createElement('div');
         productoDiv.classList.add('producto');
@@ -45,12 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
         productoDiv.dataset.material = producto.material;
         productoDiv.dataset.categoria = producto.categoria;
 
-        // Asegúrate de que esta ruta sea correcta y el archivo exista
-        const imagenSrc = producto.imagen && producto.imagen !== "imagenescatalogo/sin-imagen.jpg" ? producto.imagen : 'imagenescatalogo/sin-imagen.jpg';
-        const imagenAlt = producto.nombre;
+        // Validar y usar ruta de imagen correcta
+        // Asegúrate de que 'imagenescatalogo/' sea la ruta base correcta donde están tus imágenes.
+        // Si sin-imagen.jpg no está en la raíz, debes especificar su ruta completa.
+        const defaultImagePath = 'imagenescatalogo/sin-imagen.jpg'; 
+        const imagenSrc = producto.imagen && producto.imagen !== "" ? producto.imagen : defaultImagePath;
+        const imagenAlt = producto.nombre || 'Producto'; // Fallback para alt text
 
         productoDiv.innerHTML = `
-            <img src="${imagenSrc}" alt="${imagenAlt}">
+            <img src="${imagenSrc}" alt="${imagenAlt}" onerror="this.onerror=null;this.src='${defaultImagePath}';">
             <h3>${producto.nombre}</h3>
             <p>$${producto.precio}</p>
             ${producto.stock > 0 ? `<button class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>` : '<span class="sin-stock">FUERA DE STOCK</span>'}
@@ -58,13 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return productoDiv;
     };
 
-    const generarCardsProductos = (productosParaMostrar, contenedor, esCatalogoCompleto, mostrarPorCategoriasInicial = false) => {
+    const generarCardsProductos = (productosParaMostrar, contenedor, esCatalogoCompleto) => {
         if (!contenedor) return;
 
         contenedor.innerHTML = ''; // Limpia el contenedor
 
-        // Lógica para generar los enlaces de categorías en el nav
-        if (esCatalogoCompleto && categoriasNav) {
+        // 1. Generar los enlaces de categorías en el nav (si es el catálogo completo)
+        if (esCatalogoCompleto && categoriasNav && window.productos.length > 0) {
             const todasLasCategorias = [...new Set(window.productos.map(p => p.categoria))].sort();
             const currentActiveCategory = categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria;
             
@@ -73,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             todasLasCategorias.forEach(cat => {
                 const link = document.createElement('a');
-                link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`; // ID para scroll
+                link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`; 
                 link.dataset.categoria = cat;
                 link.classList.add('filtro-categoria');
                 if (cat === currentActiveCategory) {
@@ -84,16 +86,23 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Lógica para mostrar los productos
+        // 2. Determinar si se deben agrupar los productos por categoría
+        // Solo agrupamos si estamos en el catálogo completo, si la categoría activa es "Todos",
+        // y si no hay búsqueda o filtro de material activos.
         const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
-        const hayFiltrosActivos = (buscador && buscador.value) || (filtroMaterial && filtroMaterial.value !== '');
+        const hayBusquedaActiva = buscador && buscador.value.trim() !== '';
+        const hayFiltroMaterialActivo = filtroMaterial && filtroMaterial.value !== '';
         
-        // Determina si se deben mostrar los productos agrupados por categoría
-        const agruparPorCategorias = esCatalogoCompleto && !hayFiltrosActivos && categoriaActiva === 'Todos';
+        const agruparPorCategorias = esCatalogoCompleto && 
+                                     categoriaActiva === 'Todos' && 
+                                     !hayBusquedaActiva && 
+                                     !hayFiltroMaterialActivo;
 
         if (agruparPorCategorias) {
             const categoriasMap = new Map();
-            [...new Set(productosParaMostrar.map(p => p.categoria))].sort().forEach(categoria => {
+            // Asegurarse de que todas las categorías posibles (incluso si no tienen productos en esta vista filtrada)
+            // se consideren para los títulos, pero solo se muestren si tienen productos.
+            [...new Set(window.productos.map(p => p.categoria))].sort().forEach(categoria => {
                 categoriasMap.set(categoria, []);
             });
 
@@ -117,20 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         } else {
-            // Si no se agrupa por categorías, mostrar todos los productos en una sola grilla
+            // Si no se agrupa por categorías (ej. un filtro está activo o una categoría específica seleccionada)
+            // se muestran todos los productos filtrados en una sola grilla.
             const gridContainerMain = document.createElement('div');
             gridContainerMain.classList.add('productos-grid');
             contenedor.appendChild(gridContainerMain);
-
-            // Filtramos los productos según la categoría activa si no estamos en "Todos"
-            let productosParaGrid = productosParaMostrar;
-            if (categoriaActiva && categoriaActiva !== 'Todos' && esCatalogoCompleto) {
-                productosParaGrid = productosParaMostrar.filter(p => p.categoria.toLowerCase() === categoriaActiva.toLowerCase());
-            }
             
-            productosParaGrid.forEach(producto => gridContainerMain.appendChild(crearCardProducto(producto)));
+            productosParaMostrar.forEach(producto => gridContainerMain.appendChild(crearCardProducto(producto)));
         }
 
+        // Añadir event listeners a los botones de agregar al carrito
         contenedor.querySelectorAll('.btn-agregar').forEach(button => {
             button.addEventListener('click', (e) => {
                 const productoId = parseInt(e.currentTarget.dataset.id);
@@ -160,19 +165,25 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         }
 
-        if (materialSeleccionado && materialSeleccionado !== '') {
+        if (materialSeleccionado && materialSeleccionado !== 'todos los materiales') { // Comparar con el valor real del option
             productosFiltrados = productosFiltrados.filter(producto =>
                 producto.material.toLowerCase() === materialSeleccionado
             );
         }
+        
+        // Si una categoría específica está activa y no es "Todos", filtramos por ella.
+        // Esto se aplica antes de pasar los productos a generarCardsProductos para que esta función
+        // decida si agrupar o no el subconjunto de productos ya filtrado.
+        if (categoriaActiva && categoriaActiva !== 'Todos') {
+             productosFiltrados = productosFiltrados.filter(producto =>
+                 producto.categoria.toLowerCase() === categoriaActiva.toLowerCase()
+             );
+        }
 
-        // Ya no filtramos por categoriaActiva aquí directamente si la idea es que generarCardsProductos maneje la agrupación.
-        // aplicamosFiltros ahora solo prepara los productos base para generarCardsProductos
-        // que decidirá si agrupar o no según si hay filtros o si la categoría es "Todos".
         generarCardsProductos(productosFiltrados, contenedorCatalogo, true);
     };
 
-    // Funciones del Carrito (También declaradas antes de los listeners)
+    // Funciones del Carrito
     const updateCartCount = () => {
         if (cartCountSpan) {
             const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
@@ -217,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const agregarAlCarrito = (productoId) => {
         if (!window.productos || window.productos.length === 0) {
-            console.warn("Intentando agregar al carrito sin productos cargados.");
+            console.warn("Intentando agregar al carrito sin productos cargados. Asegúrate de que productos.json se haya cargado.");
             return;
         }
 
@@ -288,9 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Funciones del Carrusel (También declaradas antes de los listeners)
+    // Funciones del Carrusel
     function actualizarCarrusel() {
-        if (imagenesCarrusel.length === 0) return;
+        if (imagenesCarrusel.length === 0 || !galeriaSlider) return;
 
         galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
         imagenesCarrusel.forEach(img => img.classList.remove('central'));
@@ -347,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Event Listeners del Catálogo (solo si los elementos existen)
+    // Event Listeners del Catálogo
     if (contenedorCatalogo) {
         if (buscador) {
             buscador.addEventListener('input', aplicarFiltros);
@@ -365,19 +376,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.target.classList.add('active-category');
 
                     const categoriaSeleccionada = e.target.dataset.categoria;
-                    aplicarFiltros(); // Esto re-renderizará la vista
+                    aplicarFiltros(); 
 
-                    const hayFiltrosAdicionales = (buscador && buscador.value) || (filtroMaterial && filtroMaterial.value !== '');
+                    const hayBusquedaActiva = buscador && buscador.value.trim() !== '';
+                    const hayFiltroMaterialActivo = filtroMaterial && filtroMaterial.value !== '';
 
-                    if (!hayFiltrosAdicionales) { // Solo scroll si no hay otros filtros activos
-                        const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
-                        const seccion = document.getElementById(sectionId);
-                        if (seccion) {
-                            window.scrollTo({
-                                top: seccion.offsetTop - 80,
-                                behavior: 'smooth'
-                            });
-                        } else if (categoriaSeleccionada === 'Todos') {
+                    // Solo scroll si no hay otros filtros activos y si la categoría seleccionada no es 'Todos'
+                    if (!hayBusquedaActiva && !hayFiltroMaterialActivo) {
+                        if (categoriaSeleccionada !== 'Todos') {
+                             const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
+                             const seccion = document.getElementById(sectionId);
+                             if (seccion) {
+                                 window.scrollTo({
+                                     top: seccion.offsetTop - 80,
+                                     behavior: 'smooth'
+                                 });
+                             }
+                        } else { // Si es "Todos" y no hay otros filtros, ir al inicio del contenedor del catálogo
                             window.scrollTo({
                                 top: contenedorCatalogo.offsetTop - 80,
                                 behavior: 'smooth'
@@ -393,17 +408,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (galeriaSlider) {
         imagenesCarrusel = galeriaSlider.querySelectorAll('img');
 
-        // Asegúrate de que haya suficientes imágenes para clonar
         if (imagenesCarrusel.length > 0) {
             const primerElemento = imagenesCarrusel[0].cloneNode(true);
             const ultimoElemento = imagenesCarrusel[imagenesCarrusel.length - 1].cloneNode(true);
             galeriaSlider.appendChild(primerElemento);
             galeriaSlider.insertBefore(ultimoElemento, imagenesCarrusel[0]);
 
-            imagenesCarrusel = galeriaSlider.querySelectorAll('img'); // Volver a seleccionar todas las imágenes incluyendo los clones
-            indiceActualCarrusel = 1; // Ajusta el índice para el primer elemento real después del clon
+            imagenesCarrusel = galeriaSlider.querySelectorAll('img'); 
+            indiceActualCarrusel = 1; 
         } else {
-            // Si no hay imágenes en la galería, oculta los botones de navegación
             if (prevBtnGaleria) prevBtnGaleria.style.display = 'none';
             if (nextBtnGaleria) nextBtnGaleria.style.display = 'none';
         }
@@ -438,7 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Llama a actualizarCarrusel solo si hay imágenes
         if (imagenesCarrusel.length > 0) {
             setTimeout(() => {
                 actualizarCarrusel();
@@ -447,30 +459,32 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', actualizarCarrusel);
     }
 
-    // --- 5. Carga inicial de productos desde JSON (Último paso de inicialización) ---
+    // --- 5. Carga inicial de productos desde JSON ---
     fetch('productos.json')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
+                // Si la respuesta no es OK, arroja un error con el estado
+                throw new Error(`Error de red: ${response.status} - ${response.statusText}`); 
             }
             return response.json();
         })
         .then(data => {
             window.productos = data;
+            console.log("Productos cargados:", window.productos); // Para depuración
 
-            // Aseguramos que la navegación de categorías se genere y 'Todos' se active
-            // ANTES de aplicar los filtros iniciales.
+            // Solo si estamos en la página del catálogo, procesamos y mostramos los productos
             if (contenedorCatalogo) {
-                // Primero generamos los botones de categoría, asegurando que 'Todos' esté activo
-                generarCardsProductos([], categoriasNav, true); // Pasar [] o productos para que solo regenere el nav.
-                                                              // Es crucial que esta llamada se haga ANTES de aplicarFiltros
-                                                              // para que categoriaActiva se evalúe correctamente en aplicarFiltros
+                // Primero, asegurar que los botones de categoría se generen y 'Todos' se active.
+                // Llamamos a generarCardsProductos con un array vacío para que solo construya el nav de categorías
+                // a partir de `window.productos`, sin renderizar los productos aún en el contenedor.
+                generarCardsProductos([], categoriasNav, true); 
                 const todosLink = categoriasNav.querySelector('[data-categoria="Todos"]');
                 if (todosLink) {
                     todosLink.classList.add('active-category'); 
                 }
                 
-                // Luego aplicamos los filtros, lo que generará el contenido principal del catálogo
+                // Luego, aplicar los filtros, que ahora sí renderizarán los productos en contenedorCatalogo
+                // basándose en la categoría "Todos" y sin otros filtros.
                 aplicarFiltros(); 
             }
             if (document.getElementById('contenedorDestacados')) {
@@ -480,5 +494,11 @@ document.addEventListener('DOMContentLoaded', () => {
             renderizarCarrito();
             updateCartCount();
         })
-        .catch(error => console.error('Error al cargar los productos:', error));
+        .catch(error => {
+            console.error('Error al cargar los productos o inicializar:', error);
+            // Mostrar un mensaje al usuario si no se pudieron cargar los productos
+            if (contenedorCatalogo) {
+                contenedorCatalogo.innerHTML = '<p>Lo sentimos, no pudimos cargar los productos en este momento. Intenta recargar la página.</p>';
+            }
+        });
 });
