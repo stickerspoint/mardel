@@ -1,81 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stickers Shop</title>
-    <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Inicio - StickersPoint</title>
+    <link rel="stylesheet" href="estilos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">Stickers Shop</div>
-        <nav class="nav-links">
-            <a href="index.html" class="active">Inicio</a>
-            <a href="catalogo.html">Catálogo</a>
-            <a href="#">Contacto</a>
-        </nav>
-        <div class="icons">
-            <button class="icon-btn" id="cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count" id="contadorCarrito">0</span>
-            </button>
+
+<header class="header">
+    <div class="logo">StickersPoint</div>
+    <nav class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Productos</a>
+        <a href="#">Contacto</a>
+    </nav>
+    <div class="icons">
+        <button id="cartIconBtn" class="icon-btn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count"></span> 
+        </button>
+    </div>
+</header>
+
+<div id="miniCarritoNotificacion" class="mini-carrito-notificacion">
+    <div class="mini-carrito-contenido">
+        <span class="cerrar-notificacion" id="cerrarNotificacion">×</span>
+        <img id="notificacionImagen" src="" alt="Producto">
+        <p id="notificacionNombre">Producto agregado</p>
+        <p id="notificacionPrecio">1 x $0.00</p>
+        <p id="notificacionMensaje">¡Agregado al carrito!</p>
+        <p>Total (<span id="notificacionCantidadTotal">0</span> productos): $<span id="notificacionTotal">0</span></p>
+        <button id="verCarritoDesdeNotificacion">Ver carrito</button>
+    </div>
+</div>
+<section class="bienvenida" style="background-color: #fff5e9; padding: 60px 20px;">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 60px;">
+        <div style="max-width: 500px; text-align: center;">
+            <h1 style="font-size: 30px; margin-bottom: 10px;">Bienvenidos a <span style="color:#f0a41c;">StickersPoint</span></h1>
+            <p style="font-size: 20px;">Descubrí los mejores stickers con la mejor calidad</p>
         </div>
-    </header>
+        <img src="imagenescatalogo/mascota.png" alt="Mascota" style="max-height: 400px;">
+    </div>
+</section>
 
-    <main>
-        <section class="galeria-fondo">
-            <h1>¡Novedades Destacadas!</h1>
-            <div class="galeria-container">
-                <div class="galeria-slider" id="galeria-slider">
-                    </div>
-            </div>
-            <div class="galeria-controles">
-                <button id="prevBtn">&lt;</button>
-                <button id="nextBtn">&gt;</button>
-            </div>
-        </section>
-
-        <section class="destacados-productos">
-            <h2>Stickers Destacados</h2>
-            <div class="destacados-grid" id="destacados-grid">
-                </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <p>&copy; 2025 Stickers Shop. Todos los derechos reservados.</p>
-    </footer>
-
-    <div id="cartModal" class="modal">
-        <div class="modal-content carrito">
-            <span class="close-modal">&times;</span>
-            <h2>Tu Carrito de Compras</h2>
-            <ul id="listaCarrito">
-                </ul>
-            <div class="carrito-vacio-mensaje" style="display: none;">
-                Tu carrito está vacío. ¡Añade algunos stickers!
-            </div>
-            <div class="carrito-acciones">
-                <p>Total: <span id="totalCarrito">$0</span></p>
-                <button id="vaciarCarrito">Vaciar Carrito</button>
-            </div>
+<section class="galeria-fondo">
+    <div class="galeria-container">
+        <div id="galeriaSlider" class="galeria-slider">
+            <img src="imagenescatalogo/carrusel1.jpg" alt="Imagen 1">
+            <img src="imagenescatalogo/carrusel2.jpg" alt="Imagen 2">
+            <img src="imagenescatalogo/carrusel3.jpg" alt="Imagen 3">
         </div>
     </div>
+    <div class="galeria-controles">
+        <button id="prevBtnGaleria" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
+        <button id="nextBtnGaleria" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</section>
 
-    <div id="miniCartNotification" class="mini-carrito-notificacion">
-        <span class="cerrar-notificacion">&times;</span>
-        <div class="mini-carrito-contenido">
-            <img src="" alt="Producto" id="notificacionImagen">
-            <p><span id="notificacionNombre"></span></p>
-            <p>Precio: <span id="notificacionPrecio"></span></p>
-            <p id="notificacionMensaje"></p>
-            <p>Items en carrito: <span id="notificacionCantidadTotal"></span></p>
-            <p>Total carrito: <span id="notificacionTotal"></span></p>
-            <button id="verCarritoDesdeNotificacion">Ver Carrito</button>
+<section class="productos-destacados">
+    <h2>Productos Destacados</h2>
+    <div id="contenedorDestacados" class="destacados-grid">
+        </div>
+</section>
+<div class="modal" id="carritoModal">
+    <div class="modal-content carrito">
+        <span class="close-modal" id="cerrarCarrito">×</span>
+        <h2>Carrito</h2>
+        <ul id="listaCarrito"></ul>
+        <p>Total: $<span id="totalCarrito">0</span></p>
+        <button id="vaciarCarrito">Vaciar carrito</button>
+    </div>
+</div>
+<div id="miniCarritoNotificacion" class="mini-carrito-notificacion">
+    <div class="mini-carrito-contenido">
+        <span class="cerrar-notificacion" id="cerrarNotificacion">×</span>
+        <img id="notificacionImagen" src="" alt="Producto">
+        <p id="notificacionNombre">Producto agregado</p>
+        <p id="notificacionPrecio">1 x $0.00</p>
+        <p id="notificacionMensaje">¡Agregado al carrito!</p>
+        <p>Total (<span id="notificacionCantidadTotal">0</span> productos): $<span id="notificacionTotal">0</span></p>
+        <button id="verCarritoDesdeNotificacion">Ver carrito</button>
+    </div>
+</div>
+
+<div class="modal" id="carritoModal">
+    <div class="modal-content carrito">
+        <span class="close-modal" id="cerrarCarrito">×</span>
+        <h2>Carrito</h2>
+        <p id="mensajeCarritoVacio" class="carrito-vacio-mensaje" style="display: none;">El carrito está vacío.</p>
+        <ul id="listaCarrito"></ul>
+        <div class="carrito-acciones">
+            Total: $<span id="totalCarrito">0.00</span>
+            <button id="vaciarCarrito">Vaciar carrito</button>
         </div>
     </div>
-
-    <script src="script.js"></script>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
