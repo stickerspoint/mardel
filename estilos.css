@@ -95,7 +95,7 @@ body {
 
 /* Modal del Carrito - ESTILOS MEJORADOS */
 .modal {
-    display: none; /* Oculto por defecto */
+    display: none; /* Oculto por defecto - ¡Esta es la línea clave! */
     position: fixed;
     z-index: 1001;
     left: 0;
@@ -104,9 +104,8 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.6); /* Fondo más oscuro para mayor contraste */
-    display: flex; /* Usar flexbox para centrar contenido */
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Se mantiene para centrar el contenido cuando display sea flex */
+    align-items: center; /* Se mantiene para centrar el contenido cuando display sea flex */
     animation: fadeInBackground 0.3s ease-out; /* Animación para el fondo */
 }
 
