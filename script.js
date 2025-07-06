@@ -178,8 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const toggleCarritoModal = (e) => {
-        if (e && typeof e.stopPropagation === 'function') {
-            e.stopPropagation();
         }
         if (carritoModal) {
             carritoModal.style.display = carritoModal.style.display === 'flex' ? 'none' : 'flex';
