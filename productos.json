@@ -609,8 +609,8 @@
         "nombre": "el principito y el zorro",
         "precio": 1000,
         "imagen": "imagenescatalogo/el-principito-y-el-zorro.jpg",
-        "stock": 6,
-        "categoria": "tv",
+        "stock": 6
+,        "categoria": "tv",
         "material": "vinilo fotoluminiscente",
         "tamaño": "6x6",
         "destacado": false

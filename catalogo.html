@@ -1,86 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Stickers Shop</title>
-    <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Catálogo - StickersPoint</title>
+    <link rel="stylesheet" href="estilos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">Stickers Shop</div>
-        <nav class="nav-links">
-            <a href="index.html">Inicio</a>
-            <a href="catalogo.html" class="active">Catálogo</a>
-            <a href="#">Contacto</a>
-        </nav>
-        <div class="icons">
-            <button class="icon-btn" id="cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count" id="contadorCarrito">0</span>
-            </button>
-        </div>
-    </header>
 
-    <main>
-        <div class="catalogo-container">
-            <h1>Nuestro Catálogo</h1>
+<header class="header">
+    <div class="logo">StickersPoint</div>
+    <nav class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Productos</a>
+        <a href="#">Contacto</a>
+    </nav>
+    <div class="icons">
+        <button id="cartIconBtn" class="icon-btn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count"></span> 
+        </button>
+    </div>
+</header>
 
-            <div class="catalogo-filtros">
-                <nav id="filtros-categorias">
-                    <a href="#" class="active-category" data-categoria="todos">Todos</a>
-                    </nav>
-                <input type="text" id="filtro-nombre" placeholder="Buscar por nombre...">
-                <select id="filtro-material">
-                    <option value="todos">Todos los Materiales</option>
-                    </select>
-                <select id="filtro-precio">
-                    <option value="todos">Ordenar por Precio</option>
-                    <option value="menor-mayor">Menor a Mayor</option>
-                    <option value="mayor-menor">Mayor a Menor</option>
-                </select>
-                <button id="limpiarFiltros">Limpiar Filtros</button>
-            </div>
+<div id="miniCarritoNotificacion" class="mini-carrito-notificacion">
+    <div class="mini-carrito-contenido">
+        <span class="cerrar-notificacion" id="cerrarNotificacion">×</span>
+        <img id="notificacionImagen" src="" alt="Producto">
+        <p id="notificacionNombre">Producto agregado</p>
+        <p id="notificacionPrecio">1 x $0.00</p>
+        <p id="notificacionMensaje">¡Agregado al carrito!</p>
+        <p>Total (<span id="notificacionCantidadTotal">0</span> productos): $<span id="notificacionTotal">0</span></p>
+        <button id="verCarritoDesdeNotificacion">Ver carrito</button>
+    </div>
+</div>
 
-            <div id="productos-por-categoria">
-                </div>
-        </div>
-    </main>
+<div class="catalogo-container">
+    <h1>Catálogo</h1>
 
-    <footer class="footer">
-        <p>&copy; 2025 Stickers Shop. Todos los derechos reservados.</p>
-    </footer>
-
-    <div id="cartModal" class="modal">
-        <div class="modal-content carrito">
-            <span class="close-modal">&times;</span>
-            <h2>Tu Carrito de Compras</h2>
-            <ul id="listaCarrito">
-                </ul>
-            <div class="carrito-vacio-mensaje" style="display: none;">
-                Tu carrito está vacío. ¡Añade algunos stickers!
-            </div>
-            <div class="carrito-acciones">
-                <p>Total: <span id="totalCarrito">$0</span></p>
-                <button id="vaciarCarrito">Vaciar Carrito</button>
-            </div>
-        </div>
+    <div class="catalogo-filtros">
+        <input type="text" id="buscador" placeholder="Buscar producto...">
+        <nav id="categoriasNav"></nav> 
+        <select id="filtroMaterial">
+            <option value="">Todos los Materiales</option>
+            <option value="vinilo dorado">Vinilo Dorado</option>
+            <option value="vinilo blanco">Vinilo Blanco</option>
+            <option value="vinilo holografico">Vinilo Holográfico</option>
+            <option value="vinilo holografico triangulitos">Vinilo Holográfico Triangulitos</option>
+            <option value="vinilo fotoluminiscente">Vinilo Fotoluminisente</option>
+        </select>
     </div>
 
-    <div id="miniCartNotification" class="mini-carrito-notificacion">
-        <span class="cerrar-notificacion">&times;</span>
-        <div class="mini-carrito-contenido">
-            <img src="" alt="Producto" id="notificacionImagen">
-            <p><span id="notificacionNombre"></span></p>
-            <p>Precio: <span id="notificacionPrecio"></span></p>
-            <p id="notificacionMensaje"></p>
-            <p>Items en carrito: <span id="notificacionCantidadTotal"></span></p>
-            <p>Total carrito: <span id="notificacionTotal"></span></p>
-            <button id="verCarritoDesdeNotificacion">Ver Carrito</button>
+    <div id="contenedorCatalogo">
+    </div>
+</div>
+
+<div class="modal" id="carritoModal">
+    <div class="modal-content carrito">
+        <span class="close-modal" id="cerrarCarrito">×</span>
+        <h2>Carrito</h2>
+        
+        <p id="mensajeCarritoVacio" class="carrito-vacio-mensaje" style="display: none;">El carrito está vacío.</p>
+        
+        <ul id="listaCarrito">
+            </ul>
+        <div class="carrito-acciones">
+            Total: $<span id="totalCarrito">0.00</span>
+            <button id="vaciarCarrito">Vaciar carrito</button>
         </div>
     </div>
-
-    <script src="script.js"></script>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
