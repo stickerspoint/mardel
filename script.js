@@ -58,11 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return productoDiv;
     };
 
-    const generarCardsProductos = (productosParaMostrar, contenedor, esCatalogoCompleto) => {
+    const generarCardsProductos = (productosParaMostrar, contenedor, esCatalogoCompleto, mostrarPorCategoriasInicial = false) => {
         if (!contenedor) return;
 
         contenedor.innerHTML = ''; // Limpia el contenedor
 
+        // Lógica para generar los enlaces de categorías en el nav
         if (esCatalogoCompleto && categoriasNav) {
             const todasLasCategorias = [...new Set(window.productos.map(p => p.categoria))].sort();
             const currentActiveCategory = categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria;
@@ -83,48 +84,51 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        if (esCatalogoCompleto) {
-            const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
-            const mostrarPorCategorias = (categoriaActiva === 'Todos' && (!buscador || !buscador.value) && (!filtroMaterial || filtroMaterial.value === ''));
+        // Lógica para mostrar los productos
+        const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
+        const hayFiltrosActivos = (buscador && buscador.value) || (filtroMaterial && filtroMaterial.value !== '');
+        
+        // Determina si se deben mostrar los productos agrupados por categoría
+        const agruparPorCategorias = esCatalogoCompleto && !hayFiltrosActivos && categoriaActiva === 'Todos';
 
-            if (mostrarPorCategorias) {
-                const categoriasMap = new Map();
-                [...new Set(productosParaMostrar.map(p => p.categoria))].sort().forEach(categoria => {
-                    categoriasMap.set(categoria, []);
-                });
+        if (agruparPorCategorias) {
+            const categoriasMap = new Map();
+            [...new Set(productosParaMostrar.map(p => p.categoria))].sort().forEach(categoria => {
+                categoriasMap.set(categoria, []);
+            });
 
-                productosParaMostrar.forEach(producto => {
-                    if (categoriasMap.has(producto.categoria)) {
-                        categoriasMap.get(producto.categoria).push(producto);
-                    }
-                });
-
-                for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
-                    if (productosDeCategoria.length > 0) {
-                        const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
-                        const section = document.createElement('section');
-                        section.id = sectionId;
-                        section.className = 'categoria-productos';
-                        section.innerHTML = `<h2 class="categoria-titulo">${categoria}</h2><div class="productos-grid"></div>`;
-                        contenedor.appendChild(section);
-
-                        const gridContainer = section.querySelector('.productos-grid');
-                        productosDeCategoria.forEach(producto => gridContainer.appendChild(crearCardProducto(producto)));
-                    }
+            productosParaMostrar.forEach(producto => {
+                if (categoriasMap.has(producto.categoria)) {
+                    categoriasMap.get(producto.categoria).push(producto);
                 }
-            } else {
-                const gridContainerMain = document.createElement('div');
-                gridContainerMain.classList.add('productos-grid');
-                contenedor.appendChild(gridContainerMain);
+            });
 
-                productosParaMostrar.forEach(producto => gridContainerMain.appendChild(crearCardProducto(producto)));
+            for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
+                if (productosDeCategoria.length > 0) {
+                    const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
+                    const section = document.createElement('section');
+                    section.id = sectionId;
+                    section.className = 'categoria-productos';
+                    section.innerHTML = `<h2 class="categoria-titulo">${categoria}</h2><div class="productos-grid"></div>`;
+                    contenedor.appendChild(section);
+
+                    const gridContainer = section.querySelector('.productos-grid');
+                    productosDeCategoria.forEach(producto => gridContainer.appendChild(crearCardProducto(producto)));
+                }
             }
-
         } else {
-            if (contenedor && !contenedor.classList.contains('productos-grid')) {
-                contenedor.classList.add('productos-grid');
+            // Si no se agrupa por categorías, mostrar todos los productos en una sola grilla
+            const gridContainerMain = document.createElement('div');
+            gridContainerMain.classList.add('productos-grid');
+            contenedor.appendChild(gridContainerMain);
+
+            // Filtramos los productos según la categoría activa si no estamos en "Todos"
+            let productosParaGrid = productosParaMostrar;
+            if (categoriaActiva && categoriaActiva !== 'Todos' && esCatalogoCompleto) {
+                productosParaGrid = productosParaMostrar.filter(p => p.categoria.toLowerCase() === categoriaActiva.toLowerCase());
             }
-            productosParaMostrar.forEach(producto => contenedor.appendChild(crearCardProducto(producto)));
+            
+            productosParaGrid.forEach(producto => gridContainerMain.appendChild(crearCardProducto(producto)));
         }
 
         contenedor.querySelectorAll('.btn-agregar').forEach(button => {
@@ -162,12 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         }
 
-        if (categoriaActiva && categoriaActiva !== 'Todos') {
-            productosFiltrados = productosFiltrados.filter(producto =>
-                producto.categoria.toLowerCase() === categoriaActiva.toLowerCase()
-            );
-        }
-
+        // Ya no filtramos por categoriaActiva aquí directamente si la idea es que generarCardsProductos maneje la agrupación.
+        // aplicamosFiltros ahora solo prepara los productos base para generarCardsProductos
+        // que decidirá si agrupar o no según si hay filtros o si la categoría es "Todos".
         generarCardsProductos(productosFiltrados, contenedorCatalogo, true);
     };
 
@@ -272,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
             carrito.forEach(item => {
                 const li = document.createElement('li');
                 li.innerHTML = `${item.nombre} x ${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}
-                                                <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
+                                                 <button class="btn-eliminar" data-id="${item.id}"><i class="fas fa-trash"></i></button>`;
                 listaCarrito.appendChild(li);
                 total += item.precio * item.cantidad;
             });
@@ -364,24 +365,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.target.classList.add('active-category');
 
                     const categoriaSeleccionada = e.target.dataset.categoria;
-                    aplicarFiltros();
+                    aplicarFiltros(); // Esto re-renderizará la vista
 
-                    const mostrarPorCategorias = (categoriaSeleccionada === 'Todos' && (!buscador || !buscador.value) && (!filtroMaterial || filtroMaterial.value === ''));
-                    
-                    if (!mostrarPorCategorias && categoriaSeleccionada !== 'Todos') {
-                         const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
-                         const seccion = document.getElementById(sectionId);
-                         if (seccion) {
-                             window.scrollTo({
-                                 top: seccion.offsetTop - 80,
-                                 behavior: 'smooth'
-                             });
-                         }
-                    } else if (categoriaSeleccionada === 'Todos') {
-                        window.scrollTo({
-                            top: contenedorCatalogo.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
+                    const hayFiltrosAdicionales = (buscador && buscador.value) || (filtroMaterial && filtroMaterial.value !== '');
+
+                    if (!hayFiltrosAdicionales) { // Solo scroll si no hay otros filtros activos
+                        const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
+                        const seccion = document.getElementById(sectionId);
+                        if (seccion) {
+                            window.scrollTo({
+                                top: seccion.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        } else if (categoriaSeleccionada === 'Todos') {
+                            window.scrollTo({
+                                top: contenedorCatalogo.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        }
                     }
                 }
             });
@@ -392,13 +393,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (galeriaSlider) {
         imagenesCarrusel = galeriaSlider.querySelectorAll('img');
 
-        const primerElemento = imagenesCarrusel[0].cloneNode(true);
-        const ultimoElemento = imagenesCarrusel[imagenesCarrusel.length - 1].cloneNode(true);
-        galeriaSlider.appendChild(primerElemento);
-        galeriaSlider.insertBefore(ultimoElemento, imagenesCarrusel[0]);
+        // Asegúrate de que haya suficientes imágenes para clonar
+        if (imagenesCarrusel.length > 0) {
+            const primerElemento = imagenesCarrusel[0].cloneNode(true);
+            const ultimoElemento = imagenesCarrusel[imagenesCarrusel.length - 1].cloneNode(true);
+            galeriaSlider.appendChild(primerElemento);
+            galeriaSlider.insertBefore(ultimoElemento, imagenesCarrusel[0]);
 
-        imagenesCarrusel = galeriaSlider.querySelectorAll('img');
-        indiceActualCarrusel = 1;
+            imagenesCarrusel = galeriaSlider.querySelectorAll('img'); // Volver a seleccionar todas las imágenes incluyendo los clones
+            indiceActualCarrusel = 1; // Ajusta el índice para el primer elemento real después del clon
+        } else {
+            // Si no hay imágenes en la galería, oculta los botones de navegación
+            if (prevBtnGaleria) prevBtnGaleria.style.display = 'none';
+            if (nextBtnGaleria) nextBtnGaleria.style.display = 'none';
+        }
 
         if (prevBtnGaleria) {
             prevBtnGaleria.addEventListener('click', () => {
@@ -430,10 +438,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        setTimeout(() => {
-            actualizarCarrusel();
-        }, 100);
-
+        // Llama a actualizarCarrusel solo si hay imágenes
+        if (imagenesCarrusel.length > 0) {
+            setTimeout(() => {
+                actualizarCarrusel();
+            }, 100);
+        }
         window.addEventListener('resize', actualizarCarrusel);
     }
 
@@ -448,16 +458,20 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             window.productos = data;
 
-            // Esta es la parte crítica: Asegurarse de que las categorías se generen y los filtros se apliquen
-            // después de que window.productos esté lleno y todas las funciones estén definidas.
+            // Aseguramos que la navegación de categorías se genere y 'Todos' se active
+            // ANTES de aplicar los filtros iniciales.
             if (contenedorCatalogo) {
-                if (categoriasNav) {
-                    const todosLink = categoriasNav.querySelector('[data-categoria="Todos"]');
-                    if (todosLink) {
-                        todosLink.classList.add('active-category'); // Asegura que "Todos" esté activo al inicio
-                    }
+                // Primero generamos los botones de categoría, asegurando que 'Todos' esté activo
+                generarCardsProductos([], categoriasNav, true); // Pasar [] o productos para que solo regenere el nav.
+                                                              // Es crucial que esta llamada se haga ANTES de aplicarFiltros
+                                                              // para que categoriaActiva se evalúe correctamente en aplicarFiltros
+                const todosLink = categoriasNav.querySelector('[data-categoria="Todos"]');
+                if (todosLink) {
+                    todosLink.classList.add('active-category'); 
                 }
-                aplicarFiltros(); // Esto cargará los productos iniciales en el catálogo
+                
+                // Luego aplicamos los filtros, lo que generará el contenido principal del catálogo
+                aplicarFiltros(); 
             }
             if (document.getElementById('contenedorDestacados')) {
                 cargarProductosDestacados();
