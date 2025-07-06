@@ -33,9 +33,145 @@ document.addEventListener('DOMContentLoaded', () => {
     let imagenesCarrusel = [];
     let indiceActualCarrusel = 0;
 
-    // --- 3. Declaración de Funciones (Todas las funciones se declaran primero) ---
+    // --- 3. Declaración de Funciones (Todas las funciones se declaran primero, incluyendo las que se llaman en la carga) ---
 
-    // Funciones del Carrito
+    // Funciones de Productos y Catálogo - DECLARADAS PRIMERO
+    const crearCardProducto = (producto) => {
+        const productoDiv = document.createElement('div');
+        productoDiv.classList.add('producto');
+        if (producto.stock === 0) {
+            productoDiv.classList.add('fuera-stock');
+        }
+        productoDiv.dataset.material = producto.material;
+        productoDiv.dataset.categoria = producto.categoria;
+
+        // Asegúrate de que esta ruta sea correcta y el archivo exista
+        const imagenSrc = producto.imagen && producto.imagen !== "imagenescatalogo/sin-imagen.jpg" ? producto.imagen : 'imagenescatalogo/sin-imagen.jpg';
+        const imagenAlt = producto.nombre;
+
+        productoDiv.innerHTML = `
+            <img src="${imagenSrc}" alt="${imagenAlt}">
+            <h3>${producto.nombre}</h3>
+            <p>$${producto.precio}</p>
+            ${producto.stock > 0 ? `<button class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>` : '<span class="sin-stock">FUERA DE STOCK</span>'}
+        `;
+        return productoDiv;
+    };
+
+    const generarCardsProductos = (productosParaMostrar, contenedor, esCatalogoCompleto) => {
+        if (!contenedor) return;
+
+        contenedor.innerHTML = ''; // Limpia el contenedor
+
+        if (esCatalogoCompleto && categoriasNav) {
+            const todasLasCategorias = [...new Set(window.productos.map(p => p.categoria))].sort();
+            const currentActiveCategory = categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria;
+            
+            // Limpia los enlaces actuales antes de regenerarlos si ya existen
+            categoriasNav.innerHTML = `<a href="#" data-categoria="Todos" class="filtro-categoria ${currentActiveCategory === 'Todos' || !currentActiveCategory ? 'active-category' : ''}">Todos</a>`;
+
+            todasLasCategorias.forEach(cat => {
+                const link = document.createElement('a');
+                link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`; // ID para scroll
+                link.dataset.categoria = cat;
+                link.classList.add('filtro-categoria');
+                if (cat === currentActiveCategory) {
+                    link.classList.add('active-category');
+                }
+                link.textContent = cat;
+                categoriasNav.appendChild(link);
+            });
+        }
+
+        if (esCatalogoCompleto) {
+            const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
+            const mostrarPorCategorias = (categoriaActiva === 'Todos' && (!buscador || !buscador.value) && (!filtroMaterial || filtroMaterial.value === ''));
+
+            if (mostrarPorCategorias) {
+                const categoriasMap = new Map();
+                [...new Set(productosParaMostrar.map(p => p.categoria))].sort().forEach(categoria => {
+                    categoriasMap.set(categoria, []);
+                });
+
+                productosParaMostrar.forEach(producto => {
+                    if (categoriasMap.has(producto.categoria)) {
+                        categoriasMap.get(producto.categoria).push(producto);
+                    }
+                });
+
+                for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
+                    if (productosDeCategoria.length > 0) {
+                        const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
+                        const section = document.createElement('section');
+                        section.id = sectionId;
+                        section.className = 'categoria-productos';
+                        section.innerHTML = `<h2 class="categoria-titulo">${categoria}</h2><div class="productos-grid"></div>`;
+                        contenedor.appendChild(section);
+
+                        const gridContainer = section.querySelector('.productos-grid');
+                        productosDeCategoria.forEach(producto => gridContainer.appendChild(crearCardProducto(producto)));
+                    }
+                }
+            } else {
+                const gridContainerMain = document.createElement('div');
+                gridContainerMain.classList.add('productos-grid');
+                contenedor.appendChild(gridContainerMain);
+
+                productosParaMostrar.forEach(producto => gridContainerMain.appendChild(crearCardProducto(producto)));
+            }
+
+        } else {
+            if (contenedor && !contenedor.classList.contains('productos-grid')) {
+                contenedor.classList.add('productos-grid');
+            }
+            productosParaMostrar.forEach(producto => contenedor.appendChild(crearCardProducto(producto)));
+        }
+
+        contenedor.querySelectorAll('.btn-agregar').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const productoId = parseInt(e.currentTarget.dataset.id);
+                agregarAlCarrito(productoId);
+            });
+        });
+    };
+
+    const cargarProductosDestacados = () => {
+        const contenedorDestacados = document.getElementById('contenedorDestacados');
+        if (contenedorDestacados && window.productos.length > 0) {
+            const productosFiltrados = window.productos.filter(producto => producto.destacado);
+            generarCardsProductos(productosFiltrados, contenedorDestacados, false);
+        }
+    };
+
+    const aplicarFiltros = () => {
+        let productosFiltrados = [...window.productos];
+
+        const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
+        const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
+        const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
+
+        if (textoBusqueda) {
+            productosFiltrados = productosFiltrados.filter(producto =>
+                producto.nombre.toLowerCase().includes(textoBusqueda)
+            );
+        }
+
+        if (materialSeleccionado && materialSeleccionado !== '') {
+            productosFiltrados = productosFiltrados.filter(producto =>
+                producto.material.toLowerCase() === materialSeleccionado
+            );
+        }
+
+        if (categoriaActiva && categoriaActiva !== 'Todos') {
+            productosFiltrados = productosFiltrados.filter(producto =>
+                producto.categoria.toLowerCase() === categoriaActiva.toLowerCase()
+            );
+        }
+
+        generarCardsProductos(productosFiltrados, contenedorCatalogo, true);
+    };
+
+    // Funciones del Carrito (También declaradas antes de los listeners)
     const updateCartCount = () => {
         if (cartCountSpan) {
             const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0);
@@ -151,162 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Funciones de Productos y Catálogo
-    const crearCardProducto = (producto) => {
-        const productoDiv = document.createElement('div');
-        productoDiv.classList.add('producto');
-        if (producto.stock === 0) {
-            productoDiv.classList.add('fuera-stock');
-        }
-        productoDiv.dataset.material = producto.material;
-        productoDiv.dataset.categoria = producto.categoria;
-
-        const imagenSrc = producto.imagen && producto.imagen !== "imagenescatalogo/sin-imagen.jpg" ? producto.imagen : 'imagenescatalogo/sin-imagen.jpg';
-        const imagenAlt = producto.nombre;
-
-        productoDiv.innerHTML = `
-            <img src="${imagenSrc}" alt="${imagenAlt}">
-            <h3>${producto.nombre}</h3>
-            <p>$${producto.precio}</p>
-            ${producto.stock > 0 ? `<button class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>` : '<span class="sin-stock">FUERA DE STOCK</span>'}
-        `;
-        return productoDiv;
-    };
-
-    // START - FUNCION generarCardsProductos ACTUALIZADA
-    const generarCardsProductos = (productosParaMostrar, contenedor, esCatalogoCompleto) => {
-        if (!contenedor) return;
-
-        contenedor.innerHTML = ''; // Limpia el contenedor
-
-        // Asegurarse de que categoriasNav se genere o actualice solo si estamos en el catálogo completo
-        if (esCatalogoCompleto && categoriasNav) {
-            const todasLasCategorias = [...new Set(window.productos.map(p => p.categoria))].sort();
-            const currentActiveCategory = categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria;
-            
-            // Limpia los enlaces actuales antes de regenerarlos si ya existen
-            categoriasNav.innerHTML = `<a href="#" data-categoria="Todos" class="filtro-categoria ${currentActiveCategory === 'Todos' || !currentActiveCategory ? 'active-category' : ''}">Todos</a>`;
-
-            todasLasCategorias.forEach(cat => {
-                const link = document.createElement('a');
-                link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`;
-                link.dataset.categoria = cat;
-                link.classList.add('filtro-categoria');
-                if (cat === currentActiveCategory) {
-                    link.classList.add('active-category');
-                }
-                link.textContent = cat;
-                categoriasNav.appendChild(link);
-            });
-        }
-
-
-        if (esCatalogoCompleto) {
-            // En esta rama, vamos a agrupar por categorías si hay productos filtrados
-            // Si no hay categorías, o si la categoría activa es 'Todos', mostramos en una sola grilla.
-            const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
-
-            // Determinar si debemos agrupar por categorías o mostrar todo en una sola grilla principal
-            // Mostramos por categorías si no hay búsqueda, ni filtro de material, y la categoría activa es 'Todos'
-            const mostrarPorCategorias = (categoriaActiva === 'Todos' && (!buscador || !buscador.value) && (!filtroMaterial || filtroMaterial.value === ''));
-
-            if (mostrarPorCategorias) {
-                const categoriasMap = new Map();
-                // Asegurarse de solo mapear las categorías de los productos que realmente se van a mostrar
-                [...new Set(productosParaMostrar.map(p => p.categoria))].sort().forEach(categoria => {
-                    categoriasMap.set(categoria, []);
-                });
-
-                productosParaMostrar.forEach(producto => {
-                    if (categoriasMap.has(producto.categoria)) {
-                        categoriasMap.get(producto.categoria).push(producto);
-                    }
-                });
-
-                for (const [categoria, productosDeCategoria] of categoriasMap.entries()) {
-                    if (productosDeCategoria.length > 0) {
-                        const sectionId = categoria.replace(/[^a-zA-Z0-9]/g, '');
-                        const section = document.createElement('section');
-                        section.id = sectionId;
-                        section.className = 'categoria-productos';
-                        // Creamos el contenedor de la grilla dentro de la sección
-                        section.innerHTML = `<h2 class="categoria-titulo">${categoria}</h2><div class="productos-grid"></div>`;
-                        contenedor.appendChild(section);
-
-                        const gridContainer = section.querySelector('.productos-grid');
-                        productosDeCategoria.forEach(producto => gridContainer.appendChild(crearCardProducto(producto)));
-                    }
-                }
-            } else {
-                // Si hay un filtro de búsqueda, material o una categoría específica seleccionada,
-                // todos los productos filtrados se muestran en una única grilla directamente en contenedorCatalogo.
-                const gridContainerMain = document.createElement('div');
-                gridContainerMain.classList.add('productos-grid'); // Aplica la clase de grilla al contenedor principal
-                contenedor.appendChild(gridContainerMain);
-
-                productosParaMostrar.forEach(producto => gridContainerMain.appendChild(crearCardProducto(producto)));
-            }
-
-        } else {
-            // Esta es la rama para productos destacados (esCatalogoCompleto es false)
-            // El contenedorDestacados ya debería ser una grilla o su padre lo es.
-            // Aseguramos que los productos se añaden al contenedor provisto (contenedorDestacados)
-            // También aseguramos que contenedorDestacados tenga la clase 'productos-grid'
-            if (!contenedor.classList.contains('productos-grid')) {
-                contenedor.classList.add('productos-grid');
-            }
-            productosParaMostrar.forEach(producto => contenedor.appendChild(crearCardProducto(producto)));
-        }
-
-        // El resto de tu código de event listeners para los botones "Agregar al carrito"
-        // No necesita cambios aquí, ya que se aplica a todos los botones que se generen.
-        contenedor.querySelectorAll('.btn-agregar').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const productoId = parseInt(e.currentTarget.dataset.id);
-                agregarAlCarrito(productoId);
-            });
-        });
-    };
-    // END - FUNCION generarCardsProductos ACTUALIZADA
-
-    const cargarProductosDestacados = () => {
-        const contenedorDestacados = document.getElementById('contenedorDestacados');
-        if (contenedorDestacados && window.productos.length > 0) {
-            const productosFiltrados = window.productos.filter(producto => producto.destacado);
-            generarCardsProductos(productosFiltrados, contenedorDestacados, false);
-        }
-    };
-
-    // Función para aplicar filtros en la página de catálogo
-    const aplicarFiltros = () => {
-        let productosFiltrados = [...window.productos];
-
-        const textoBusqueda = buscador ? buscador.value.toLowerCase() : '';
-        const materialSeleccionado = filtroMaterial ? filtroMaterial.value.toLowerCase() : '';
-        const categoriaActiva = categoriasNav ? categoriasNav.querySelector('.filtro-categoria.active-category')?.dataset.categoria : 'Todos';
-
-        if (textoBusqueda) {
-            productosFiltrados = productosFiltrados.filter(producto =>
-                producto.nombre.toLowerCase().includes(textoBusqueda)
-            );
-        }
-
-        if (materialSeleccionado && materialSeleccionado !== '') {
-            productosFiltrados = productosFiltrados.filter(producto =>
-                producto.material.toLowerCase() === materialSeleccionado
-            );
-        }
-
-        if (categoriaActiva && categoriaActiva !== 'Todos') {
-            productosFiltrados = productosFiltrados.filter(producto =>
-                producto.categoria.toLowerCase() === categoriaActiva.toLowerCase()
-            );
-        }
-
-        generarCardsProductos(productosFiltrados, contenedorCatalogo, true);
-    };
-
-    // Funciones del Carrusel
+    // Funciones del Carrusel (También declaradas antes de los listeners)
     function actualizarCarrusel() {
         if (imagenesCarrusel.length === 0) return;
 
@@ -385,16 +366,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const categoriaSeleccionada = e.target.dataset.categoria;
                     aplicarFiltros();
 
-                    if (categoriaSeleccionada !== 'Todos') {
-                        const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
-                        const seccion = document.getElementById(sectionId);
-                        if (seccion) {
-                            window.scrollTo({
-                                top: seccion.offsetTop - 80,
-                                behavior: 'smooth'
-                            });
-                        }
-                    } else {
+                    const mostrarPorCategorias = (categoriaSeleccionada === 'Todos' && (!buscador || !buscador.value) && (!filtroMaterial || filtroMaterial.value === ''));
+                    
+                    if (!mostrarPorCategorias && categoriaSeleccionada !== 'Todos') {
+                         const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
+                         const seccion = document.getElementById(sectionId);
+                         if (seccion) {
+                             window.scrollTo({
+                                 top: seccion.offsetTop - 80,
+                                 behavior: 'smooth'
+                             });
+                         }
+                    } else if (categoriaSeleccionada === 'Todos') {
                         window.scrollTo({
                             top: contenedorCatalogo.offsetTop - 80,
                             behavior: 'smooth'
@@ -465,8 +448,16 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             window.productos = data;
 
+            // Esta es la parte crítica: Asegurarse de que las categorías se generen y los filtros se apliquen
+            // después de que window.productos esté lleno y todas las funciones estén definidas.
             if (contenedorCatalogo) {
-                aplicarFiltros(); // Ahora sí, aplicarFiltros ya está definida
+                if (categoriasNav) {
+                    const todosLink = categoriasNav.querySelector('[data-categoria="Todos"]');
+                    if (todosLink) {
+                        todosLink.classList.add('active-category'); // Asegura que "Todos" esté activo al inicio
+                    }
+                }
+                aplicarFiltros(); // Esto cargará los productos iniciales en el catálogo
             }
             if (document.getElementById('contenedorDestacados')) {
                 cargarProductosDestacados();
