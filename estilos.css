@@ -195,20 +195,85 @@ body {
     font-weight: bold;
 }
 
-.btn-eliminar {
-    background-color: transparent;
-    border: none;
-    color: #e74c3c; /* Rojo de eliminar */
-    cursor: pointer;
-    font-size: 1.3em; /* Icono más grande */
-    margin-left: 15px; /* Espacio a la izquierda del botón */
-    transition: color 0.2s ease, transform 0.2s ease;
+/* Estilos para los controles de cantidad en el carrito */
+.carrito-item-info {
+    flex-grow: 1; /* Permite que la info ocupe espacio */
 }
 
-.btn-eliminar:hover {
-    color: #c0392b; /* Rojo más oscuro al pasar el mouse */
-    transform: scale(1.1); /* Ligeramente más grande al pasar el mouse */
+.carrito-item-info span {
+    display: block; /* Para que nombre y precio estén en líneas separadas */
 }
+
+.carrito-item-info .carrito-item-precio {
+    font-size: 0.9em;
+    color: #666; /* Un color un poco más suave para el precio individual */
+}
+
+.carrito-item-controles {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espacio entre los botones y el input */
+}
+
+.carrito-item-controles button {
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    border-radius: 4px; /* Ligeramente redondeado */
+    width: 28px; /* Ancho fijo para los botones */
+    height: 28px; /* Altura fija para los botones */
+    font-size: 1.1em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.carrito-item-controles button:hover {
+    background-color: var(--color-secundario);
+}
+
+.carrito-item-controles .cantidad-input {
+    width: 40px; /* Ancho fijo para el input de cantidad */
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 3px 0;
+    font-size: 0.9em;
+    background-color: #fdfdfd;
+    -moz-appearance: textfield; /* Para ocultar flechas en Firefox */
+}
+
+/* Ocultar flechas de incremento/decremento en Chrome/Safari/Edge */
+.cantidad-input::-webkit-outer-spin-button,
+.cantidad-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Ajuste para el botón de eliminar para que quede a la derecha */
+.carrito-item-controles .btn-eliminar {
+    background-color: transparent; /* Asegurarse de que no tenga fondo */
+    color: #e74c3c; /* Rojo de eliminar */
+    font-size: 1.4em; /* Un poco más grande para destacar */
+    width: auto; /* Permite que el icono defina el ancho */
+    height: auto;
+    border-radius: 0; /* Sin borde redondeado */
+    margin-left: 10px; /* Separación de los controles de cantidad */
+}
+
+.carrito-item-controles .btn-eliminar:hover {
+    color: #c0392b;
+    transform: scale(1.1);
+    background-color: transparent;
+}
+
+/* Si usas Font Awesome para el ícono de basura */
+.btn-eliminar i {
+    font-size: 1em; /* Ajusta el tamaño del ícono si es necesario */
+}
+
 
 .carrito-acciones {
     text-align: right; /* Alinear el total y el botón a la derecha */
@@ -273,10 +338,15 @@ body {
         margin-bottom: 5px;
     }
 
-    .btn-eliminar {
+    .carrito-item-controles {
+        width: 100%; /* Ocupar todo el ancho disponible */
+        justify-content: space-between; /* Espaciar los controles */
+        margin-top: 10px;
+    }
+
+    .carrito-item-controles .btn-eliminar {
         margin-left: 0;
-        margin-top: 5px;
-        align-self: flex-end; /* Alinearlo a la derecha si está apilado */
+        /* align-self: flex-end; /* Ya no es necesario si justify-content es space-between */
     }
 
     #totalCarrito {
