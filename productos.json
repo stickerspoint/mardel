@@ -200,7 +200,7 @@
     {
         "id": 19,
         "nombre": "flores BYN",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/flores-BYN.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -211,7 +211,7 @@
     {
         "id": 20,
         "nombre": "rip curl",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/rip-curl.jpg",
         "stock": 6,
         "categoria": "marcas",
@@ -222,7 +222,7 @@
     {
         "id": 21,
         "nombre": "margarita alegre",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/margarita-alegre.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -233,7 +233,7 @@
     {
         "id": 22,
         "nombre": "camping ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/camping.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -244,7 +244,7 @@
     {
         "id": 23,
         "nombre": "the little things ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/the-little-things.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -255,7 +255,7 @@
     {
         "id": 24,
         "nombre": "artic monkeys ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/artic-monkeys.jpg",
         "stock": 6,
         "categoria": "Musica",
@@ -266,7 +266,7 @@
     {
         "id": 25,
         "nombre": "salchicha en atardecer ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/salchicha-en-atardecer.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -277,7 +277,7 @@
     {
         "id": 26,
         "nombre": "fogata universo",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/fogata-universo.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -288,7 +288,7 @@
     {
         "id": 27,
         "nombre": "atardecer con paisaje ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/atardecer-con-paisaje.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -299,7 +299,7 @@
     {
         "id": 28,
         "nombre": "olas y sol",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/olas-y-sol.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -310,7 +310,7 @@
     {
         "id": 29,
         "nombre": "astronauta y el universo",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/astronauta-y-el-universo.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -321,7 +321,7 @@
     {
         "id": 30,
         "nombre": "bandera argentina ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/bandera-argentina.jpg",
         "stock": 6,
         "categoria": "Argentina",
@@ -332,7 +332,7 @@
     {
         "id": 31,
         "nombre": "michel jackson ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/michel-jackson.jpg",
         "stock": 6,
         "categoria": "Musica",
@@ -343,7 +343,7 @@
     {
         "id": 32,
         "nombre": "corazon del mar",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/corazon-del-mar.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -354,7 +354,7 @@
     {
         "id": 33,
         "nombre": "honguitos y flores",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/honguitos-y-flores.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -365,7 +365,7 @@
     {
         "id": 34,
         "nombre": "porrito kawaii",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/porrito-kawaii.jpg",
         "stock": 6,
         "categoria": "Variedad",
@@ -376,7 +376,7 @@
     {
         "id": 35,
         "nombre": "auroras boreales ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/auroras-boreales.jpg",
         "stock": 4,
         "categoria": "Naturaleza/aventura",
@@ -387,7 +387,7 @@
     {
         "id": 36,
         "nombre": "lisa loca",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "tv",
@@ -398,7 +398,7 @@
     {
         "id": 37,
         "nombre": "flor de loto ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -409,7 +409,7 @@
     {
         "id": 38,
         "nombre": "fuego brillante ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Variedad",
@@ -420,7 +420,7 @@
     {
         "id": 39,
         "nombre": "maradona ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Argentina",
@@ -431,7 +431,7 @@
     {
         "id": 40,
         "nombre": "made in argentina",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Argentina",
@@ -442,7 +442,7 @@
     {
         "id": 41,
         "nombre": "sol argentina ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Argentina",
@@ -453,7 +453,7 @@
     {
         "id": 42,
         "nombre": "alien kawaii",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Variedad",
@@ -464,7 +464,7 @@
     {
         "id": 43,
         "nombre": "rick y morty",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "tv",
@@ -475,7 +475,7 @@
     {
         "id": 44,
         "nombre": "dólar morty",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "tv",
@@ -486,7 +486,7 @@
     {
         "id": 45,
         "nombre": "carta astrologica coraje ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "tv",
@@ -497,7 +497,7 @@
     {
         "id": 46,
         "nombre": "ventana de avion ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -508,7 +508,7 @@
     {
         "id": 47,
         "nombre": "la noche y el mar ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -519,7 +519,7 @@
     {
         "id": 48,
         "nombre": "ovni kawaii",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Variedad",
@@ -530,7 +530,7 @@
     {
         "id": 49,
         "nombre": "existential crisis",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Variedad",
@@ -541,7 +541,7 @@
     {
         "id": 50,
         "nombre": "carpa con paisaje dentro ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -552,7 +552,7 @@
     {
         "id": 51,
         "nombre": "rick y morty porrito",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 1,
         "categoria": "Variedad",
@@ -563,7 +563,7 @@
     {
         "id": 52,
         "nombre": "chica psicodelica",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 2,
         "categoria": "Variedad",
@@ -574,7 +574,7 @@
     {
         "id": 53,
         "nombre": "gato psicodelico ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 2,
         "categoria": "Variedad",
@@ -585,7 +585,7 @@
     {
         "id": 54,
         "nombre": "esqueleto y mariposa",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 2,
         "categoria": "Variedad",
@@ -596,7 +596,7 @@
     {
         "id": 55,
         "nombre": "ariana grande positions ",
-        "precio": 800,
+        "precio": 600,
         "imagen": "imagenescatalogo/sin-imagen.jpg",
         "stock": 3,
         "categoria": "Variedad",
@@ -609,8 +609,8 @@
         "nombre": "el principito y el zorro",
         "precio": 1000,
         "imagen": "imagenescatalogo/el-principito-y-el-zorro.jpg",
-        "stock": 6,
-        "categoria": "tv",
+        "stock": 6
+,        "categoria": "tv",
         "material": "vinilo fotoluminiscente",
         "tamaño": "6x6",
         "destacado": false
@@ -794,7 +794,7 @@
     {
         "id": 73,
         "nombre": "mariposa de olas",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/mariposa-de-olas.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -805,7 +805,7 @@
     {
         "id": 74,
         "nombre": "mar de noche ",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/mar-de-noche.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -816,7 +816,7 @@
     {
         "id": 75,
         "nombre": "gato con tercer ojo ",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/gato-con-tercer-ojo.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -827,7 +827,7 @@
     {
         "id": 76,
         "nombre": "sol rapunzel",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/sol-rapunzel.jpg",
         "stock": 6,
         "categoria": "tv",
@@ -838,7 +838,7 @@
     {
         "id": 77,
         "nombre": "alien en ovni",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/alien-en-ovni.jpg",
         "stock": 6,
         "categoria": "Variedad",
@@ -849,7 +849,7 @@
     {
         "id": 78,
         "nombre": "leopardo con corazones",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/leopardo-con-corazones.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -860,7 +860,7 @@
     {
         "id": 79,
         "nombre": "mano con ojo",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/mano-con-ojo.jpg",
         "stock": 6,
         "categoria": "Variedad",
@@ -871,7 +871,7 @@
     {
         "id": 80,
         "nombre": "gatitos jin y jan",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/gatitos-jin-y-jan.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -882,7 +882,7 @@
     {
         "id": 81,
         "nombre": "fogata",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/fogata.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -893,7 +893,7 @@
     {
         "id": 82,
         "nombre": "homero buda",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/homero-buda.jpg",
         "stock": 6,
         "categoria": "tv",
@@ -904,7 +904,7 @@
     {
         "id": 83,
         "nombre": "adventure",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/adventure.jpg",
         "stock": 6,
         "categoria": "Naturaleza/aventura",
@@ -915,7 +915,7 @@
     {
         "id": 84,
         "nombre": "ojo de olas",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/ojo-de-olas.jpg",
         "stock": 6,
         "categoria": "Variedad",
@@ -926,7 +926,7 @@
     {
         "id": 85,
         "nombre": "fernet",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/fernet.jpg",
         "stock": 6,
         "categoria": "Argentina",
@@ -937,7 +937,7 @@
     {
         "id": 86,
         "nombre": "sodastereo",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/sodastereo.jpg",
         "stock": 6,
         "categoria": "Musica",
@@ -948,7 +948,7 @@
     {
         "id": 87,
         "nombre": "logo harry potter",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/logo-harry-potter.jpg",
         "stock": 10,
         "categoria": "tv",
@@ -959,7 +959,7 @@
     {
         "id": 88,
         "nombre": "ojo psicodelico",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/ojo-psicodelico.jpg",
         "stock": 3,
         "categoria": "Variedad",
@@ -970,7 +970,7 @@
     {
         "id": 89,
         "nombre": "hot wheels",
-        "precio": 1000,
+        "precio": 600,
         "imagen": "imagenescatalogo/hot-wheels.jpg",
         "stock": 8,
         "categoria": "marcas",
