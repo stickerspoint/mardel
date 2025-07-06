@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM Cargado y script.js iniciado."); // AÑADIDO: Confirmar que el script se ejecuta
+
     // --- 1. Referencias a elementos del DOM ---
     const shoppingCartBtn = document.getElementById('cartIconBtn');
     const cartCountSpan = document.querySelector('.cart-count');
@@ -27,6 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const galeriaSlider = document.getElementById('galeriaSlider');
     const prevBtnGaleria = document.getElementById('prevBtnGaleria');
     const nextBtnGaleria = document.getElementById('nextBtnGaleria');
+
+    // AÑADIDO: Verificar que las referencias clave no son null
+    console.log("Referencia a shoppingCartBtn:", shoppingCartBtn);
+    console.log("Referencia a carritoModal:", carritoModal);
+    console.log("Referencia a cerrarCarrito:", cerrarCarrito);
 
     // --- 2. Variables Globales ---
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
@@ -87,9 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const hayFiltroMaterialActivo = filtroMaterial && filtroMaterial.value !== '';
         
         const agruparPorCategorias = esCatalogoCompleto && 
-                                    categoriaActiva === 'Todos' && 
-                                    !hayBusquedaActiva && 
-                                    !hayFiltroMaterialActivo;
+                                     categoriaActiva === 'Todos' && 
+                                     !hayBusquedaActiva && 
+                                     !hayFiltroMaterialActivo;
 
         if (agruparPorCategorias) {
             const categoriasMap = new Map();
@@ -179,16 +186,24 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const toggleCarritoModal = (e) => {
-        // Estas son las líneas que se deben comentar o eliminar:
-        // if (e && typeof e.stopPropagation === 'function') {
-        //     e.stopPropagation();
-        // }
+        console.log("toggleCarritoModal fue llamado."); // AÑADIDO
+        if (e && typeof e.stopPropagation === 'function') {
+            // e.stopPropagation(); // Mantener comentado para probar
+            console.log("e.stopPropagation() fue llamado (pero está comentado)."); // AÑADIDO
+        }
+        
         if (carritoModal) {
-            carritoModal.style.display = carritoModal.style.display === 'flex' ? 'none' : 'flex';
+            const currentDisplay = carritoModal.style.display; // AÑADIDO
+            const newDisplay = currentDisplay === 'flex' ? 'none' : 'flex'; // AÑADIDO
+            carritoModal.style.display = newDisplay;
+            console.log(`Display del carritoModal cambiado de '${currentDisplay}' a '${newDisplay}'.`); // AÑADIDO
             renderizarCarrito(); // Asegurarse de que se renderiza cada vez que se abre
+        } else {
+            console.warn("toggleCarritoModal: carritoModal no fue encontrado."); // AÑADIDO
         }
         if (miniCarritoNotificacion && carritoModal && carritoModal.style.display === 'flex') {
             miniCarritoNotificacion.style.display = 'none';
+            console.log("miniCarritoNotificacion ocultado."); // AÑADIDO
         }
     };
 
@@ -206,14 +221,19 @@ document.addEventListener('DOMContentLoaded', () => {
             notificacionTotal.textContent = totalMontoCarrito.toFixed(2);
 
             miniCarritoNotificacion.style.display = 'block';
+            console.log("miniCarritoNotificacion mostrado."); // AÑADIDO
 
             setTimeout(() => {
                 miniCarritoNotificacion.style.display = 'none';
+                console.log("miniCarritoNotificacion ocultado por timeout."); // AÑADIDO
             }, 3000);
+        } else {
+            console.warn("mostrarNotificacionCarrito: miniCarritoNotificacion no fue encontrado."); // AÑADIDO
         }
     };
 
     const agregarAlCarrito = (productoId) => {
+        console.log(`Intentando agregar producto con ID: ${productoId} al carrito.`); // AÑADIDO
         if (!window.productos || window.productos.length === 0) {
             console.warn("Intentando agregar al carrito sin productos cargados. Asegúrate de que productos.json se haya cargado.");
             return;
@@ -228,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (productoEnCatalogo.stock <= 0) {
             alert(`¡${productoEnCatalogo.nombre} está fuera de stock!`);
+            console.log(`${productoEnCatalogo.nombre} fuera de stock.`); // AÑADIDO
             return;
         }
 
@@ -238,29 +259,36 @@ document.addEventListener('DOMContentLoaded', () => {
             if (productoExistente.cantidad < productoEnCatalogo.stock) {
                 productoExistente.cantidad++;
                 cantidadAgregada = productoExistente.cantidad; // Actualizar la cantidad para la notificación
+                console.log(`Cantidad de ${productoEnCatalogo.nombre} en carrito incrementada a ${productoExistente.cantidad}.`); // AÑADIDO
             } else {
                 alert(`¡No hay más stock de ${productoEnCatalogo.nombre}!`);
+                console.log(`No hay más stock de ${productoEnCatalogo.nombre}.`); // AÑADIDO
                 return;
             }
         } else {
             carrito.push({ ...productoEnCatalogo, cantidad: 1 });
+            console.log(`Producto ${productoEnCatalogo.nombre} agregado al carrito por primera vez.`); // AÑADIDO
         }
 
         localStorage.setItem('carrito', JSON.stringify(carrito));
+        console.log("Carrito guardado en localStorage:", carrito); // AÑADIDO
         renderizarCarrito();
         updateCartCount();
         mostrarNotificacionCarrito(productoEnCatalogo, cantidadAgregada);
     };
 
     const eliminarDelCarrito = (productoId) => {
+        console.log(`Intentando eliminar producto con ID: ${productoId} del carrito.`); // AÑADIDO
         carrito = carrito.filter(item => item.id !== productoId);
         localStorage.setItem('carrito', JSON.stringify(carrito));
         renderizarCarrito();
         updateCartCount();
+        console.log("Producto eliminado. Carrito actual:", carrito); // AÑADIDO
     };
 
     // NUEVA FUNCIÓN: Cambia la cantidad de un producto en el carrito
     const cambiarCantidad = (productoId, nuevaCantidad) => {
+        console.log(`Cambiando cantidad para ID ${productoId} a ${nuevaCantidad}.`); // AÑADIDO
         const productoEnCarrito = carrito.find(item => item.id === productoId);
         const productoEnCatalogo = window.productos.find(prod => prod.id === productoId);
 
@@ -273,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isNaN(nuevaCantidad) || nuevaCantidad <= 0) {
             // Si la cantidad es 0 o inválida, se elimina el producto del carrito
             eliminarDelCarrito(productoId);
+            console.log(`Cantidad inválida o cero para ID ${productoId}, eliminando del carrito.`); // AÑADIDO
             return;
         }
 
@@ -280,8 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nuevaCantidad > productoEnCatalogo.stock) {
             alert(`No hay suficiente stock de ${productoEnCatalogo.nombre}. Solo quedan ${productoEnCatalogo.stock} unidades.`);
             productoEnCarrito.cantidad = productoEnCatalogo.stock; // Ajustar a la cantidad máxima disponible
+            console.log(`Stock limitado para ${productoEnCatalogo.nombre}. Cantidad ajustada a ${productoEnCatalogo.stock}.`); // AÑADIDO
         } else {
             productoEnCarrito.cantidad = nuevaCantidad;
+            console.log(`Cantidad de ${productoEnCatalogo.nombre} actualizada a ${nuevaCantidad}.`); // AÑADIDO
         }
 
         localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -319,8 +350,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ACTUALIZADA: Renderiza todo el carrito
     const renderizarCarrito = () => {
+        console.log("renderizarCarrito fue llamado. Carrito actual:", carrito); // AÑADIDO
         if (!listaCarrito || !totalCarrito || !mensajeCarritoVacio) {
-            console.error("Elementos del carrito no encontrados en el DOM.");
+            console.error("Elementos del carrito no encontrados en el DOM para renderizar.");
             return;
         }
 
@@ -330,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (carrito.length === 0) {
             mensajeCarritoVacio.style.display = 'block'; // Mostrar mensaje de carrito vacío
             listaCarrito.style.display = 'none'; // Ocultar la lista si está vacía
+            console.log("Carrito vacío: Mostrando mensaje de vacío."); // AÑADIDO
         } else {
             mensajeCarritoVacio.style.display = 'none'; // Ocultar mensaje de carrito vacío
             listaCarrito.style.display = 'block'; // Mostrar la lista si hay ítems
@@ -337,6 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 listaCarrito.innerHTML += crearItemCarritoHTML(item);
                 total += item.precio * item.cantidad;
             });
+            console.log("Carrito con items: Mostrando items."); // AÑADIDO
         }
         totalCarrito.textContent = total.toFixed(2);
 
@@ -351,6 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.onclick = (e) => { // Usamos onclick para sobrescribir el evento anterior
                 const productoId = parseInt(e.currentTarget.dataset.id);
                 eliminarDelCarrito(productoId);
+                console.log(`Evento 'eliminar' disparado para ID: ${productoId}.`); // AÑADIDO
             };
         });
 
@@ -361,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const itemEnCarrito = carrito.find(item => item.id === productoId);
                 if (itemEnCarrito) {
                     cambiarCantidad(productoId, itemEnCarrito.cantidad + 1);
+                    console.log(`Evento 'sumar cantidad' disparado para ID: ${productoId}.`); // AÑADIDO
                 }
             };
         });
@@ -372,6 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const itemEnCarrito = carrito.find(item => item.id === productoId);
                 if (itemEnCarrito) {
                     cambiarCantidad(productoId, itemEnCarrito.cantidad - 1);
+                    console.log(`Evento 'restar cantidad' disparado para ID: ${productoId}.`); // AÑADIDO
                 }
             };
         });
@@ -410,36 +447,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event Listeners del Carrito
     if (shoppingCartBtn) {
-        shoppingCartBtn.addEventListener('click', toggleCarritoModal);
+        shoppingCartBtn.addEventListener('click', (e) => { // AÑADIDO: Pasa el evento e
+            console.log("Clic en shoppingCartBtn (icono del carrito)."); // AÑADIDO
+            toggleCarritoModal(e); // AÑADIDO: Pasa el evento e
+        });
+    } else {
+        console.warn("shoppingCartBtn (cartIconBtn) no encontrado."); // AÑADIDO
     }
+
     if (cerrarCarrito) {
-        cerrarCarrito.addEventListener('click', toggleCarritoModal);
+        cerrarCarrito.addEventListener('click', (e) => { // AÑADIDO: Pasa el evento e
+            console.log("Clic en cerrarCarrito (botón 'X')."); // AÑADIDO
+            toggleCarritoModal(e); // AÑADIDO: Pasa el evento e
+        });
+    } else {
+        console.warn("cerrarCarrito no encontrado."); // AÑADIDO
     }
+
     if (carritoModal) {
         carritoModal.addEventListener('click', (e) => {
+            console.log("Clic en carritoModal (fondo del modal). Target del clic:", e.target); // AÑADIDO
             // Asegúrate de que el clic es directamente en el fondo oscuro del modal, no en su contenido
             if (e.target === carritoModal) {
-                toggleCarritoModal();
+                console.log("Clic detectado en el fondo directo de carritoModal."); // AÑADIDO
+                toggleCarritoModal(e); // AÑADIDO: Pasa el evento e
+            } else {
+                console.log("Clic dentro del contenido del modal, no se cierra."); // AÑADIDO
             }
         });
+    } else {
+        console.warn("carritoModal no encontrado al adjuntar listener de clic."); // AÑADIDO
     }
+
     if (cerrarNotificacionBtn) {
         cerrarNotificacionBtn.addEventListener('click', () => {
+            console.log("Clic en cerrarNotificacionBtn."); // AÑADIDO
             if (miniCarritoNotificacion) {
                 miniCarritoNotificacion.style.display = 'none';
             }
         });
     }
+
     if (verCarritoDesdeNotificacionBtn) {
-        verCarritoDesdeNotificacionBtn.addEventListener('click', () => {
+        verCarritoDesdeNotificacionBtn.addEventListener('click', (e) => { // AÑADIDO: Pasa el evento e
+            console.log("Clic en verCarritoDesdeNotificacionBtn."); // AÑADIDO
             if (miniCarritoNotificacion) {
                 miniCarritoNotificacion.style.display = 'none';
             }
-            toggleCarritoModal();
+            toggleCarritoModal(e); // AÑADIDO: Pasa el evento e
         });
     }
+
     if (vaciarCarritoBtn) {
         vaciarCarritoBtn.addEventListener('click', () => {
+            console.log("Clic en vaciarCarritoBtn."); // AÑADIDO
             carrito = [];
             localStorage.setItem('carrito', JSON.stringify(carrito));
             renderizarCarrito();
