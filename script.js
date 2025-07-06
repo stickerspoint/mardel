@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (agruparPorCategorias) {
             const categoriasMap = new Map();
+            // Asegurarse de que todas las categorías existentes en window.productos se incluyan
             [...new Set(window.productos.map(p => p.categoria))].sort().forEach(categoria => {
                 categoriasMap.set(categoria, []);
             });
@@ -178,7 +179,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const toggleCarritoModal = (e) => {
-        }
+        // Estas son las líneas que se deben comentar o eliminar:
+        // if (e && typeof e.stopPropagation === 'function') {
+        //     e.stopPropagation();
+        // }
         if (carritoModal) {
             carritoModal.style.display = carritoModal.style.display === 'flex' ? 'none' : 'flex';
             renderizarCarrito(); // Asegurarse de que se renderiza cada vez que se abre
@@ -375,11 +379,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Opcional: Si quieres que el input de cantidad sea editable, descomenta y ajusta esta parte.
         // Pero dado que los botones +/- son más comunes para móviles, lo dejo como readonly por defecto.
         // document.querySelectorAll('.cantidad-input').forEach(input => {
-        //     input.onchange = (e) => {
-        //         const productoId = parseInt(e.currentTarget.dataset.id);
-        //         const nuevaCantidad = parseInt(e.currentTarget.value);
-        //         cambiarCantidad(productoId, nuevaCantidad);
-        //     };
+        //      input.onchange = (e) => {
+        //          const productoId = parseInt(e.currentTarget.dataset.id);
+        //          const nuevaCantidad = parseInt(e.currentTarget.value);
+        //          cambiarCantidad(productoId, nuevaCantidad);
+        //      };
         // });
     };
 
@@ -413,6 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (carritoModal) {
         carritoModal.addEventListener('click', (e) => {
+            // Asegúrate de que el clic es directamente en el fondo oscuro del modal, no en su contenido
             if (e.target === carritoModal) {
                 toggleCarritoModal();
             }
