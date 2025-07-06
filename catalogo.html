@@ -35,6 +35,7 @@
         <button id="verCarritoDesdeNotificacion">Ver carrito</button>
     </div>
 </div>
+
 <div class="catalogo-container">
     <h1>Catálogo</h1>
 
@@ -47,7 +48,7 @@
             <option value="vinilo blanco">Vinilo Blanco</option>
             <option value="vinilo holografico">Vinilo Holográfico</option>
             <option value="vinilo holografico triangulitos">Vinilo Holográfico Triangulitos</option>
-            <option value="vinilo fotoluminiscente">Vinilo Fotoluminiscente</option>
+            <option value="vinilo fotoluminiscente">Vinilo Fotoluminisente</option>
         </select>
     </div>
 
@@ -59,9 +60,15 @@
     <div class="modal-content carrito">
         <span class="close-modal" id="cerrarCarrito">×</span>
         <h2>Carrito</h2>
-        <ul id="listaCarrito"></ul>
-        <p>Total: $<span id="totalCarrito">0</span></p>
-        <button id="vaciarCarrito">Vaciar carrito</button>
+        
+        <p id="mensajeCarritoVacio" class="carrito-vacio-mensaje" style="display: none;">El carrito está vacío.</p>
+        
+        <ul id="listaCarrito">
+            </ul>
+        <div class="carrito-acciones">
+            Total: $<span id="totalCarrito">0.00</span>
+            <button id="vaciarCarrito">Vaciar carrito</button>
+        </div>
     </div>
 </div>
 <script src="script.js"></script>
