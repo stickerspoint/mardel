@@ -26,7 +26,7 @@ body {
 .header {
     background-color: #ffffff;
     padding: 10px 20px;
-    display: flex; /* CAMBIADO: Antes era 'none', ahora es 'flex' para que sea visible */
+    display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -81,23 +81,23 @@ body {
 /* Estilos para el contador de items en el carrito */
 .cart-count {
     font-size: 0.8em;
-    vertical-align: super; /* Para que el número quede un poco más arriba */
-    background-color: var(--color-secundario); /* Color de fondo del número */
+    vertical-align: super;
+    background-color: var(--color-secundario);
     color: white;
-    border-radius: 50%; /* Para que sea un círculo */
+    border-radius: 50%;
     padding: 2px 6px;
-    margin-left: 5px; /* Espacio entre el icono y el número */
-    min-width: 20px; /* Asegura un tamaño mínimo para el círculo */
+    margin-left: 5px;
+    min-width: 20px;
     text-align: center;
-    display: inline-block; /* Para que el padding y min-width funcionen */
-    line-height: 1; /* Centra el texto verticalmente */
+    display: inline-block;
+    line-height: 1;
 }
 
 /* Modal del Carrito */
 .modal {
-    display: none; /* Oculto por defecto - ¡CORRECCIÓN CLAVE AQUÍ! */
+    display: none; /* Oculto por defecto */
     position: fixed;
-    z-index: 1001; /* Más alto que el header */
+    z-index: 1001;
     left: 0;
     top: 0;
     width: 100%;
@@ -264,7 +264,7 @@ body {
 .catalogo-filtros nav a.active-category {
     background-color: var(--color-secundario);
     font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Opcional: para resaltar más */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -278,23 +278,31 @@ section h2 {
     margin-bottom: 20px;
     font-size: 28px;
 }
+
 /* Estilos para las secciones de productos (destacados y categorías del catálogo) */
 .destacados-grid,
-.productos-grid { /* Añadido .productos-grid para usarlo en el catálogo */
+.productos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
+    /* Cambio clave: Eliminar max-width: fit-content; */
+    /* Ajustado minmax para dar más flexibilidad */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Permite que ocupe el ancho disponible */
     gap: 30px;
-    padding: 0 20px;
-    justify-content: center;
-    align-items: stretch;
-    max-width: fit-content;
-    margin: 0 auto;
+    padding: 0 20px; /* Mantener padding horizontal */
+    justify-content: center; /* Centrar la grilla si no llena todo el ancho */
+    /* align-items: stretch; no es necesario si las tarjetas ya tienen flex-grow o altura */
+    /* margin: 0 auto; Esto ya lo gestiona justify-content: center; para la grilla interna */
+    
+    /* REMOVIDO: max-width: fit-content; */ 
+    /* REMOVIDO: margin: 0 auto; Si quieres que la grilla ocupe todo el ancho del contenedor.
+       Si quieres que la grilla se centre y tenga un ancho máximo interno, podrías volver a poner
+       max-width aquí pero con un valor fijo como 1000px y margin: 0 auto; */
 }
+
 /* Contenedor para cada sección de categoría en el catálogo */
 .categoria-productos {
-    margin-top: 40px; /* Espacio entre secciones de categoría */
-    padding-top: 20px; /* Para que el scroll a la categoría no quede pegado al título */
-    border-top: 1px solid #eee; /* Opcional: un separador visual entre categorías */
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
 }
 .categoria-productos:first-of-type {
     margin-top: 0;
@@ -312,6 +320,8 @@ section h2 {
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.2s ease-in-out;
+    /* Ajustes adicionales para la tarjeta de producto */
+    max-width: 100%; /* Asegura que la tarjeta no desborde su columna */
 }
 
 .producto:hover {
@@ -320,8 +330,8 @@ section h2 {
 
 .producto img {
     max-width: 100%;
-    height: 180px;
-    object-fit: contain;
+    height: 180px; /* Mantiene la altura fija, ajusta object-fit si es necesario */
+    object-fit: contain; /* Ajusta la imagen sin recortar */
     margin-bottom: 15px;
     border-radius: 5px;
 }
@@ -330,7 +340,7 @@ section h2 {
     font-size: 18px;
     color: var(--color-texto);
     margin-bottom: 10px;
-    flex-grow: 1;
+    flex-grow: 1; /* Permite que el título ocupe espacio para alinear el resto */
 }
 
 .producto p {
@@ -349,6 +359,7 @@ section h2 {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
+    width: 100%; /* El botón ocupa todo el ancho de la tarjeta */
 }
 
 .producto .btn-agregar:hover {
@@ -392,7 +403,6 @@ section h2 {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative;
-    /* padding-bottom: 20px; */ /* Eliminado padding-bottom duplicado con margin en galeria-slider */
 }
 
 .galeria-slider {
@@ -401,14 +411,14 @@ section h2 {
     padding: 10px 0;
     justify-content: flex-start;
     align-items: center;
-    margin: 0 -10px; /* Contrarresta los márgenes laterales de las imágenes */
+    margin: 0 -10px;
 }
 
 .galeria-slider img {
     flex-shrink: 0;
-    width: calc(100% / 3); /* Ajustado para que el ancho total de las 3 img sea 100% */
-    padding: 0 10px; /* Padding para el espacio entre imágenes */
-    box-sizing: border-box; /* Incluir padding en el ancho */
+    width: calc(100% / 3);
+    padding: 0 10px;
+    box-sizing: border-box;
     border-radius: 8px;
     object-fit: cover;
     height: 250px;
@@ -445,20 +455,20 @@ section h2 {
 
 /* Estilos para el mini-carrito de notificación */
 .mini-carrito-notificacion {
-    display: none; /* Oculto por defecto */
+    display: none;
     position: fixed;
-    top: 80px; /* Un poco debajo del header */
+    top: 80px;
     right: 20px;
-    z-index: 1002; /* Más alto que el carrito principal */
+    z-index: 1002;
     background-color: #fefefe;
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    width: 280px; /* Ancho fijo para la notificación */
+    width: 280px;
     font-size: 14px;
     line-height: 1.5;
-    animation: fadeIn 0.3s ease-out; /* Animación de entrada */
+    animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
@@ -469,7 +479,7 @@ section h2 {
 .mini-carrito-notificacion .mini-carrito-contenido {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centrar contenido */
+    align-items: center;
     text-align: center;
 }
 
@@ -487,7 +497,7 @@ section h2 {
 }
 
 .mini-carrito-notificacion img {
-    width: 60px; /* Tamaño de la imagen del producto */
+    width: 60px;
     height: 60px;
     object-fit: contain;
     margin-bottom: 10px;
@@ -511,7 +521,7 @@ section h2 {
 }
 
 .mini-carrito-notificacion #notificacionMensaje {
-    color: green; /* Color para el mensaje de agregado */
+    color: green;
     margin-top: 5px;
     margin-bottom: 15px;
     font-style: italic;
