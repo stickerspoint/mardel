@@ -330,65 +330,6 @@ body {
     font-size: 1.1em;
 }
 
-/* Media Queries para Carrito en pantallas pequeñas */
-@media (max-width: 600px) {
-    .modal-content.carrito {
-        width: 95%; /* Ocupa casi todo el ancho en móviles */
-        padding: 20px;
-        border-radius: 8px;
-    }
-
-    .close-modal {
-        font-size: 26px;
-        top: 10px;
-        right: 15px;
-    }
-
-    #listaCarrito li.carrito-item {
-        flex-direction: column; /* Apilar elementos en vertical si la pantalla es muy pequeña */
-        align-items: flex-start;
-        padding: 10px 0;
-    }
-
-    .carrito-item-info {
-        width: 100%; /* Ocupar todo el ancho para la info */
-        margin-bottom: 10px; /* Espacio antes de los controles */
-    }
-
-    .carrito-item-controles {
-        width: 100%; /* Ocupar todo el ancho para los controles */
-        justify-content: space-between; /* Espaciar los controles horizontalmente */
-        margin-top: 5px; /* Pequeño margen superior */
-    }
-    
-    .cantidad-input {
-        flex-grow: 1; /* Permitir que el input de cantidad se expanda */
-        max-width: 60px; /* Limitar el ancho del input en móviles */
-    }
-
-    .btn-eliminar {
-        margin-left: 0; /* Eliminar margen extra si está apilado */
-        align-self: flex-end; /* Alinearlo a la derecha si está apilado */
-    }
-
-    .carrito-acciones {
-        flex-direction: column; /* Apilar total y botón en pantallas pequeñas */
-        align-items: flex-end; /* Alinear a la derecha los elementos apilados */
-    }
-
-    #totalCarrito {
-        font-size: 1.4em;
-        margin-bottom: 15px; /* Espacio entre total y botón */
-    }
-
-    #vaciarCarrito {
-        padding: 10px 20px;
-        font-size: 15px;
-        width: 100%; /* El botón ocupa todo el ancho */
-    }
-}
-
-
 /* Catálogo */
 .catalogo-container {
     max-width: 1200px;
@@ -741,4 +682,99 @@ section h2 {
 
 .mini-carrito-notificacion #verCarritoDesdeNotificacion:hover {
     background-color: #d88e1a;
+}
+
+/* Estilos para el botón de Scroll-to-Top (flecha hacia arriba) */
+#scrollToTopBtn {
+    display: none; /* Oculto por defecto, se muestra con JS */
+    position: fixed; /* Para que se quede fijo en la ventana */
+    bottom: 20px; /* Distancia desde la parte inferior */
+    right: 20px; /* Distancia desde la derecha */
+    z-index: 999; /* Asegura que esté por encima de otros elementos */
+    border: none;
+    outline: none;
+    background-color: var(--color-primario); /* Color de fondo usando tu variable */
+    color: white; /* Color de la flecha */
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1.5em; /* Tamaño de la flecha */
+    opacity: 0.7; /* Transparencia inicial */
+    transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.2s ease; /* Añadida transición para el transform */
+}
+
+#scrollToTopBtn:hover {
+    opacity: 1; /* Opacidad completa al pasar el ratón */
+    background-color: var(--color-secundario); /* Cambio de color al pasar el ratón usando tu variable */
+    transform: translateY(-3px); /* Pequeño efecto de "levantamiento" al pasar el mouse */
+}
+
+/* Clase que se añade con JavaScript para mostrar el botón */
+#scrollToTopBtn.show {
+    display: block; /* Muestra el botón cuando la clase 'show' es activa */
+}
+
+/* Estilo para la flecha usando carácter Unicode */
+#scrollToTopBtn::after {
+    content: "\2191"; /* Carácter Unicode para una flecha hacia arriba */
+    font-size: 1em; /* Asegura que la flecha no sea demasiado grande */
+    vertical-align: middle; /* Ayuda a centrar la flecha verticalmente dentro del botón */
+}
+
+/* Media Queries para Carrito en pantallas pequeñas */
+@media (max-width: 600px) {
+    .modal-content.carrito {
+        width: 95%; /* Ocupa casi todo el ancho en móviles */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .close-modal {
+        font-size: 26px;
+        top: 10px;
+        right: 15px;
+    }
+
+    #listaCarrito li.carrito-item {
+        flex-direction: column; /* Apilar elementos en vertical si la pantalla es muy pequeña */
+        align-items: flex-start;
+        padding: 10px 0;
+    }
+
+    .carrito-item-info {
+        width: 100%; /* Ocupar todo el ancho para la info */
+        margin-bottom: 10px; /* Espacio antes de los controles */
+    }
+
+    .carrito-item-controles {
+        width: 100%; /* Ocupar todo el ancho para los controles */
+        justify-content: space-between; /* Espaciar los controles horizontalmente */
+        margin-top: 5px; /* Pequeño margen superior */
+    }
+    
+    .cantidad-input {
+        flex-grow: 1; /* Permitir que el input de cantidad se expanda */
+        max-width: 60px; /* Limitar el ancho del input en móviles */
+    }
+
+    .btn-eliminar {
+        margin-left: 0; /* Eliminar margen extra si está apilado */
+        align-self: flex-end; /* Alinearlo a la derecha si está apilado */
+    }
+
+    .carrito-acciones {
+        flex-direction: column; /* Apilar total y botón en pantallas pequeñas */
+        align-items: flex-end; /* Alinear a la derecha los elementos apilados */
+    }
+
+    #totalCarrito {
+        font-size: 1.4em;
+        margin-bottom: 15px; /* Espacio entre total y botón */
+    }
+
+    #vaciarCarrito {
+        padding: 10px 20px;
+        font-size: 15px;
+        width: 100%; /* El botón ocupa todo el ancho */
+    }
 }
