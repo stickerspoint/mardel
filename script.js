@@ -403,6 +403,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         totalCarrito.textContent = total.toFixed(2);
 
+        // Actualizar estado del botón "Iniciar Compra"
+        const btnIniciarCompra = document.getElementById('btnIniciarCompra');
+        if (btnIniciarCompra) {
+            btnIniciarCompra.disabled = carrito.length === 0;
+            if (carrito.length === 0) {
+                console.log("Botón 'Iniciar Compra' deshabilitado (carrito vacío).");
+            } else {
+                console.log("Botón 'Iniciar Compra' habilitado (carrito con ítems).");
+            }
+        }
+
+        // Asegurarse de que las secciones de envío se muestran/ocultan según lo definido en HTML
+        const opcionesEnvioDomicilio = document.getElementById('opcionesEnvioDomicilio');
+        const opcionesRetirarPor = document.getElementById('opcionesRetirarPor');
+        if (opcionesEnvioDomicilio) {
+            opcionesEnvioDomicilio.style.display = 'block'; // Siempre visible según el nuevo HTML
+        }
+        if (opcionesRetirarPor) {
+            opcionesRetirarPor.style.display = 'none'; // Siempre oculta según el nuevo HTML
+        }
         // Adjuntar eventos a los botones de eliminar y cantidad DESPUÉS de que se hayan agregado al DOM
         adjuntarEventosCarrito();
     };
@@ -535,6 +555,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Event listener para el botón INICIAR COMPRA
+    const btnIniciarCompra = document.getElementById('btnIniciarCompra');
+    if (btnIniciarCompra) {
+        btnIniciarCompra.addEventListener('click', () => {
+            if (carrito.length > 0) {
+                // Aquí podrías redirigir a una página de checkout o mostrar un mensaje
+                alert('¡Iniciando compra! Serás contactado para coordinar el envío.');
+                console.log('Compra iniciada. Carrito:', carrito);
+                // Opcional: vaciar el carrito después de "iniciar compra"
+                // carrito = [];
+                // localStorage.setItem('carrito', JSON.stringify(carrito));
+                // renderizarCarrito();
+                // updateCartCount();
+            } else {
+                alert('Tu carrito está vacío. Agrega productos antes de iniciar la compra.');
+            }
+        });
+    }
+
     // Event Listeners del Catálogo (solo se adjuntan si los elementos existen en el DOM de la página actual)
     if (contenedorCatalogo) {
         if (buscador) {
@@ -566,17 +605,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             const sectionId = categoriaSeleccionada.replace(/[^a-zA-Z0-9]/g, '');
                             const seccion = document.getElementById(sectionId);
                             if (seccion) {
-                                window.scrollTo({
-                                    top: seccion.offsetTop - 80, // Ajuste para el header fijo
-                                    behavior: 'smooth'
-                                });
+                                seccion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                console.log(`Desplazándose a la sección: ${sectionId}`);
                             }
                         } else {
-                            // Si se selecciona "Todos", desplázate al inicio del contenedor del catálogo
-                            window.scrollTo({
-                                top: contenedorCatalogo.offsetTop - 80, // Ajuste para el header fijo
-                                behavior: 'smooth'
-                            });
+                            // Si se selecciona "Todos", desplazarse al principio del contenedorCatalogo
+                            if (contenedorCatalogo) {
+                                contenedorCatalogo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                console.log('Desplazándose al inicio del catálogo (Todos).');
+                            }
                         }
                     }
                 }
@@ -584,80 +621,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Lógica del Carrusel (Solo para index.html, por eso la verificación de galeriaSlider)
+    // Event Listeners del Carrusel (solo si los elementos existen)
     if (galeriaSlider) {
-        imagenesCarrusel = Array.from(galeriaSlider.querySelectorAll('img')); // Convertir a Array para métodos de array
-
-        if (imagenesCarrusel.length > 0) {
-            // Clonar la primera y última imagen para el efecto de carrusel infinito
-            const primerElemento = imagenesCarrusel[0].cloneNode(true);
-            const ultimoElemento = imagenesCarrusel[imagenesCarrusel.length - 1].cloneNode(true);
-            
-            galeriaSlider.appendChild(primerElemento);
-            galeriaSlider.insertBefore(ultimoElemento, imagenesCarrusel[0]);
-
-            // Re-obtener todas las imágenes incluyendo los clones
-            imagenesCarrusel = Array.from(galeriaSlider.querySelectorAll('img'));
-            indiceActualCarrusel = 1; // Comenzar en el primer elemento original (el clon está en la posición 0)
-
-            // Ajustar el transform inicial sin transición para mostrar la imagen correcta
-            galeriaSlider.style.transition = 'none';
-            const anchoContenedor = galeriaSlider.parentElement.offsetWidth;
-            const anchoSlot = anchoContenedor / 3;
-            galeriaSlider.style.transform = `translateX(-${anchoSlot}px)`;
-            
-            // Establecer la imagen central inicial después de un breve retardo para la renderización
-            setTimeout(() => {
-                if (imagenesCarrusel[indiceActualCarrusel]) {
-                    imagenesCarrusel[indiceActualCarrusel].classList.add('central');
-                }
-                galeriaSlider.style.transition = 'transform 0.5s ease-in-out'; // Restablecer la transición
-            }, 50); // Pequeño retraso
-        } else {
-            // Si no hay imágenes, ocultar los botones de navegación
-            if (prevBtnGaleria) prevBtnGaleria.style.display = 'none';
-            if (nextBtnGaleria) nextBtnGaleria.style.display = 'none';
+        // Cargar imágenes del carrusel si no están ya en el HTML
+        if (galeriaSlider.children.length === 0) {
+            // Ejemplo de carga de imágenes (ajusta esto si tus imágenes se cargan de otra forma)
+            const imagenes = [
+                'imagenescarrusel/carrusel-1.jpg',
+                'imagenescarrusel/carrusel-2.jpg',
+                'imagenescarrusel/carrusel-3.jpg',
+                'imagenescarrusel/carrusel-4.jpg',
+                'imagenescarrusel/carrusel-5.jpg',
+                'imagenescarrusel/carrusel-6.jpg',
+                'imagenescarrusel/carrusel-7.jpg',
+                'imagenescarrusel/carrusel-8.jpg',
+                'imagenescarrusel/carrusel-9.jpg',
+                'imagenescarrusel/carrusel-10.jpg'
+            ];
+            imagenes.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Imagen del Carrusel';
+                img.classList.add('galeria-img');
+                galeriaSlider.appendChild(img);
+            });
         }
-
+        imagenesCarrusel = Array.from(galeriaSlider.children);
+        indiceActualCarrusel = 1; // Para que la segunda imagen (índice 1) empiece centrada
+        actualizarCarrusel();
+    
         if (prevBtnGaleria) {
             prevBtnGaleria.addEventListener('click', () => {
-                indiceActualCarrusel--;
-                galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
+                indiceActualCarrusel = (indiceActualCarrusel === 0) ? imagenesCarrusel.length - 1 : indiceActualCarrusel - 1;
                 actualizarCarrusel();
-                if (indiceActualCarrusel < 1) {
-                    setTimeout(() => {
-                        galeriaSlider.style.transition = 'none';
-                        indiceActualCarrusel = imagenesCarrusel.length - 2; // Va al penúltimo (último original)
-                        actualizarCarrusel();
-                    }, 500); // Duración de la transición
-                }
             });
         }
-
+    
         if (nextBtnGaleria) {
             nextBtnGaleria.addEventListener('click', () => {
-                indiceActualCarrusel++;
-                galeriaSlider.style.transition = 'transform 0.5s ease-in-out';
+                indiceActualCarrusel = (indiceActualCarrusel === imagenesCarrusel.length - 1) ? 0 : indiceActualCarrusel + 1;
                 actualizarCarrusel();
-                if (indiceActualCarrusel >= imagenesCarrusel.length - 1) {
-                    setTimeout(() => {
-                        galeriaSlider.style.transition = 'none';
-                        indiceActualCarrusel = 1; // Va al segundo (primer original)
-                        actualizarCarrusel();
-                    }, 500); // Duración de la transición
-                }
             });
         }
-
-        // Llamar a actualizarCarrusel al cargar para asegurar la posición inicial y clase 'central'
-        // Ya se maneja un pequeño retraso dentro de la inicialización para asegurar el posicionamiento
-        // y se agrega el listener de resize.
-        window.addEventListener('resize', actualizarCarrusel);
+    } else {
+        console.warn("Galeria Slider no encontrado. Los eventos de carrusel no se adjuntarán.");
     }
 
-    // NUEVA FUNCIONALIDAD: Scroll-to-top button
+
+    // Event Listener para Scroll-to-Top
     if (scrollToTopBtn) {
-        // Mostrar u ocultar el botón según el scroll
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) { // Muestra el botón después de 300px de scroll
                 scrollToTopBtn.classList.add('show');
@@ -666,56 +678,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Al hacer clic en el botón, desplázate suavemente al principio de la página
         scrollToTopBtn.addEventListener('click', () => {
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
+            console.log("Clic en 'Scroll to Top'.");
         });
+    } else {
+        console.warn("scrollToTopBtn no encontrado.");
     }
 
-    // --- 5. Carga inicial de productos desde JSON ---
-    fetch('productos.json')
-        .then(response => {
+
+    // --- 5. Carga Inicial de Datos y Renderizado ---
+
+    // Función para cargar productos desde un JSON
+    const cargarProductosJSON = async () => {
+        try {
+            const response = await fetch('productos.json');
             if (!response.ok) {
-                // Manejo de errores de red (ej. archivo no encontrado 404)
-                throw new Error(`Error de red: ${response.status} - ${response.statusText}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json();
-        })
-        .then(data => {
-            window.productos = data; // Almacena los productos globalmente
-            console.log("Productos cargados:", window.productos);
+            window.productos = await response.json();
+            console.log("Productos cargados desde productos.json:", window.productos);
 
-            // Cargar productos en el catálogo si el elemento contenedor existe
+            // Una vez que los productos estén cargados, renderiza los destacados y el catálogo si existen
+            cargarProductosDestacados(); // Para index.html
+            if (contenedorCatalogo) { // Para catalogo.html
+                aplicarFiltros(); // Renderiza el catálogo completo o con filtros iniciales
+            }
+            renderizarCarrito(); // Asegura que el carrito se renderiza con stock real
+            updateCartCount(); // Actualiza el contador del carrito
+        } catch (error) {
+            console.error('Error al cargar los productos:', error);
+            // Podrías mostrar un mensaje al usuario aquí si la carga falla
             if (contenedorCatalogo) {
-                // Primero generar las categorías para que los enlaces existan
-                generarCardsProductos([], contenedorCatalogo, true);
-                const todosLink = categoriasNav.querySelector('[data-categoria="Todos"]');
-                if (todosLink) {
-                    todosLink.classList.add('active-category'); // Asegurar que "Todos" está activo por defecto
-                }
-                // Luego aplicar filtros para mostrar todos los productos por categoría
-                aplicarFiltros();
+                contenedorCatalogo.innerHTML = '<p class="error-message">Error al cargar los productos. Por favor, inténtalo de nuevo más tarde.</p>';
             }
-            
-            // Cargar productos destacados si el elemento contenedor existe (para index.html)
-            if (document.getElementById('contenedorDestacados')) {
-                cargarProductosDestacados();
-            }
+        }
+    };
 
-            renderizarCarrito(); // ¡IMPORTANTE! Llamar al cargar los productos y el carrito para mostrarlo
-            updateCartCount(); // Actualizar el contador del carrito
-        })
-        .catch(error => {
-            console.error('Error al cargar los productos o inicializar:', error);
-            // Mostrar un mensaje al usuario si los productos no se pueden cargar
-            if (contenedorCatalogo) {
-                contenedorCatalogo.innerHTML = '<p>Lo sentimos, no pudimos cargar los productos en este momento. Intenta recargar la página.</p>';
-            }
-            if (document.getElementById('contenedorDestacados')) {
-                 document.getElementById('contenedorDestacados').innerHTML = '<p>Lo sentimos, no pudimos cargar los productos destacados.</p>';
-            }
-        });
-});
+    // Cargar productos al inicio
+    cargarProductosJSON();
+
+    // Renderizar carrito y actualizar contador al inicio, por si ya hay items en localStorage
+    renderizarCarrito();
+    updateCartCount();
+
+}); // Fin de DOMContentLoaded

@@ -75,25 +75,20 @@
         
         <div class="carrito-seccion-envio">
             <h3>Medios de Envío</h3>
-            <div class="cp-input-container">
-                <input type="text" id="inputCodigoPostal" placeholder="Tu código postal" class="input-cp">
-                <button id="btnCalcularEnvio" class="btn-calcular-envio">CALCULAR</button>
-            </div>
-            <p class="no-se-mi-cp">¿No sé mi código postal? <a href="https://www.correoargentino.com.ar/formularios/cpa" target="_blank">Buscar aquí</a></p>
-
-            <div id="opcionesEnvioDomicilio" class="opciones-envio-grupo" style="display: none;">
+            <div id="opcionesEnvioDomicilio" class="opciones-envio-grupo">
                 <h4>ENVÍO A DOMICILIO</h4>
-                </div>
+                <p>Envíos dentro de Mar del Plata: Te contactaremos para coordinar la entrega y el costo del envío.</p>
+            </div>
 
             <div id="opcionesRetirarPor" class="opciones-envio-grupo" style="display: none;">
                 <h4>RETIRAR POR</h4>
-                </div>
+            </div>
 
             <div class="opcion-envio-item nuestro-local">
                 <label>
-                    <input type="radio" name="opcionEnvio" value="nuestroLocal" data-costo="0" data-nombre="Retiro en Local StickersPoint">
+                    <input type="radio" name="opcionEnvio" value="nuestroLocal" data-costo="0" data-nombre="Retiro en Punto de retiro">
                     <div>
-                        <p>Nuestro Punto De Retiro</p>
+                        <p>Punto de retiro</p>
                         <p>Mar del Plata - Dirección (aguardar mensaje para retirar)</p>
                     </div>
                     <span class="costo-envio">Gratis</span>
