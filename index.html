@@ -75,26 +75,31 @@
         
         <div class="carrito-seccion-envio">
             <h3>Medios de Envío</h3>
-            <div id="opcionesEnvioDomicilio" class="opciones-envio-grupo">
-                <h4>ENVÍO A DOMICILIO</h4>
-                <p>Envíos dentro de Mar del Plata: Te contactaremos para coordinar la entrega y el costo del envío.</p>
-            </div>
-
-            <div id="opcionesRetirarPor" class="opciones-envio-grupo" style="display: none;">
-                <h4>RETIRAR POR</h4>
-            </div>
-
-            <div class="opcion-envio-item nuestro-local">
+            
+            <div class="opcion-envio-item">
                 <label>
-                    <input type="radio" name="opcionEnvio" value="nuestroLocal" data-costo="0" data-nombre="Retiro en Punto de retiro">
+                    <input type="radio" name="opcionEnvio" value="envioMarDelPlata" data-costo="0" data-nombre="Envío a Domicilio en Mar del Plata" checked> 
                     <div>
-                        <p>Punto de retiro</p>
-                        <p>Mar del Plata - Dirección (aguardar mensaje para retirar)</p>
+                        <p class="titulo-opcion">Envío a Domicilio en Mar del Plata</p>
+                        <p class="descripcion-opcion">Te contactaremos para coordinar la entrega y el costo del envío.</p>
+                    </div>
+                    <span class="costo-envio">A coordinar</span>
+                </label>
+            </div>
+
+            <div class="opcion-envio-item">
+                <label>
+                    <input type="radio" name="opcionEnvio" value="retirarLocal" data-costo="0" data-nombre="Retiro en Nuestro Local">
+                    <div>
+                        <p class="titulo-opcion">Retirar en Nuestro Local StickersPoint</p>
+                        <p class="descripcion-opcion">Mar del Plata - Dirección (aguardar mensaje para retirar)</p>
                     </div>
                     <span class="costo-envio">Gratis</span>
                 </label>
             </div>
-        </div>
+
+            </div>
+
         <div class="carrito-acciones">
             Total: $<span id="totalCarrito">0.00</span>
             <button id="vaciarCarrito">Vaciar carrito</button>

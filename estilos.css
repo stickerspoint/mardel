@@ -131,7 +131,7 @@ body {
     animation: slideInFromTop 0.4s ease-out forwards; /* Animación al aparecer */
     opacity: 0; /* Inicialmente opaco para la animación */
     max-height: 80vh; /* Limita la altura del carrito para que sea scrollable */
-    overflow-y: auto; /* Habilita el scroll si el contenido es demasiado largo */
+    overflow-y: auto; /* Habilita el scroll if the content is too long */
     padding-bottom: 30px; /* Espacio extra al final para que el botón no se pegue */
 }
 
@@ -354,14 +354,15 @@ body {
     text-align: center; /* Centrar el título "Medios de Envío" */
 }
 
-.cp-input-container {
-    display: flex; /* Para que el input y el botón estén en línea */
-    gap: 10px; /* Espacio entre el input y el botón */
+/* Estos estilos no son necesarios con la nueva estructura de radio buttons directa */
+/* .cp-input-container {
+    display: flex;
+    gap: 10px;
     margin-bottom: 10px;
 }
 
 .input-cp {
-    flex-grow: 1; /* El input tomará el espacio disponible */
+    flex-grow: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -370,7 +371,7 @@ body {
 
 .btn-calcular-envio {
     padding: 10px 15px;
-    background-color: #f0a41c; /* Color naranja de StickersPoint */
+    background-color: #f0a41c;
     color: white;
     border: none;
     border-radius: 5px;
@@ -381,7 +382,7 @@ body {
 }
 
 .btn-calcular-envio:hover {
-    background-color: #d18d0f; /* Un naranja más oscuro al pasar el ratón */
+    background-color: #d18d0f;
 }
 
 .no-se-mi-cp {
@@ -391,18 +392,19 @@ body {
 }
 
 .no-se-mi-cp a {
-    color: #f0a41c; /* Color de enlace */
+    color: #f0a41c;
     text-decoration: none;
 }
 
 .no-se-mi-cp a:hover {
     text-decoration: underline;
-}
+} */
 
-/* Estilos para los grupos de opciones de envío (Envío a Domicilio, Retirar Por) */
-.opciones-envio-grupo {
+
+/* ELIMINADO: Este bloque ya no es necesario con la nueva estructura de HTML */
+/* .opciones-envio-grupo {
     margin-bottom: 20px;
-    border: 1px solid #eee; /* Borde ligero para agrupar */
+    border: 1px solid #eee;
     border-radius: 8px;
     padding: 15px;
     background-color: #f9f9f9;
@@ -416,35 +418,36 @@ body {
     text-transform: uppercase;
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
-}
+} */
 
 /* Estilos para cada opción de envío/retiro (radio buttons) */
+/* Este bloque ha sido mejorado significativamente */
 .opcion-envio-item {
     display: flex;
-    align-items: flex-start; /* Alinea el contenido arriba si hay mucho texto */
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
+    align-items: flex-start; /* Alinea el radio y el texto superior */
+    margin-bottom: 15px; /* Espacio entre las opciones */
+    padding: 15px; /* Padding interno del recuadro de la opción */
+    border: 1px solid #ddd; /* Borde general de la opción */
+    border-radius: 10px; /* Esquinas más redondeadas */
+    background-color: #fff; /* Fondo blanco */
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
 
 .opcion-envio-item:last-child {
-    margin-bottom: 0; /* Sin margen inferior en el último ítem de un grupo */
+    margin-bottom: 0; /* Sin margen inferior para el último ítem */
 }
 
 .opcion-envio-item:hover {
-    background-color: #f5f5f5;
-    border-color: #f0a41c; /* Borde naranja al pasar el ratón */
+    background-color: #fcfcfc; /* Ligero cambio de fondo al pasar el mouse */
+    border-color: var(--color-primario); /* Borde primario al pasar el mouse */
 }
 
 .opcion-envio-item label {
     display: flex;
     width: 100%;
     cursor: pointer;
-    align-items: center; /* Alinea verticalmente el radio con el texto */
+    align-items: flex-start; /* Alinea verticalmente el radio con el texto al inicio */
 }
 
 .opcion-envio-item input[type="radio"] {
@@ -459,6 +462,7 @@ body {
     outline: none;
     cursor: pointer;
     position: relative;
+    top: 2px; /* Pequeño ajuste para la alineación vertical */
 }
 
 .opcion-envio-item input[type="radio"]::before {
@@ -476,11 +480,24 @@ body {
 }
 
 .opcion-envio-item input[type="radio"]:checked {
-    border-color: #f0a41c; /* Borde naranja cuando está seleccionado */
+    border-color: var(--color-secundario); /* Borde naranja cuando está seleccionado */
 }
 
 .opcion-envio-item input[type="radio"]:checked::before {
-    background-color: #f0a41c; /* Círculo interior naranja cuando está seleccionado */
+    background-color: var(--color-secundario); /* Círculo interior naranja cuando está seleccionado */
+}
+
+/* Estilo para cuando la opción está seleccionada - Aplica al contenedor padre */
+.opcion-envio-item input[type="radio"]:checked + div + .costo-envio + label {
+    /* Esto es complejo, la idea es que el .opcion-envio-item reciba un estilo cuando su radio está checked */
+    /* Lo ideal es usar JavaScript para añadir una clase como 'selected' al .opcion-envio-item */
+    /* Pero si solo CSS, necesitamos un selector más inteligente */
+}
+/* Mejoramos el selector para el estado "checked" del contenedor */
+.opcion-envio-item:has(input[type="radio"]:checked) {
+    border-color: var(--color-secundario); /* Borde naranja más oscuro */
+    background-color: #fef8f0; /* Fondo ligeramente anaranjado */
+    box-shadow: 0 0 8px rgba(240, 164, 28, 0.2); /* Sombra suave */
 }
 
 
@@ -488,22 +505,27 @@ body {
     flex-grow: 1; /* El texto de la opción toma el espacio restante */
 }
 
-.opcion-envio-item p {
-    margin: 0;
-    font-size: 0.95em;
-    color: #333;
+/* Nuevas clases para controlar el estilo del texto dentro de cada opción */
+.opcion-envio-item .titulo-opcion {
+    font-weight: bold;
+    color: var(--color-texto);
+    margin-bottom: 5px; /* Espacio entre título y descripción */
+    font-size: 1em;
 }
 
-.opcion-envio-item p:first-child {
-    font-weight: bold;
-    margin-bottom: 5px;
+.opcion-envio-item .descripcion-opcion {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.4;
 }
 
 .opcion-envio-item .costo-envio {
     font-weight: bold;
-    color: #f0a41c; /* Color del precio */
-    margin-left: 15px;
+    color: var(--color-primario); /* Color del precio por defecto */
+    margin-left: 20px; /* Más espacio a la izquierda del costo */
     flex-shrink: 0; /* Evita que el precio se encoja */
+    text-align: right; /* Asegura que el costo se alinee a la derecha */
+    white-space: nowrap; /* Evita que el texto del costo se divida */
 }
 
 /* Estilo específico para "Gratis" */
@@ -989,5 +1011,27 @@ section h2 {
         padding: 10px 20px;
         font-size: 15px;
         width: 100%; /* El botón ocupa todo el ancho */
+    }
+
+    /* Media query specific styles for .opcion-envio-item if needed */
+    .opcion-envio-item {
+        flex-direction: column; /* Apila contenido en móvil */
+        align-items: flex-start;
+    }
+
+    .opcion-envio-item label {
+        flex-direction: column; /* Apila el radio y el texto dentro del label */
+        align-items: flex-start;
+    }
+
+    .opcion-envio-item input[type="radio"] {
+        margin-bottom: 10px; /* Espacio entre el radio y el texto en móvil */
+        margin-right: 0;
+    }
+
+    .opcion-envio-item .costo-envio {
+        align-self: flex-end; /* Alinea el costo a la derecha */
+        margin-left: 0;
+        margin-top: 10px; /* Espacio superior para el costo */
     }
 }
