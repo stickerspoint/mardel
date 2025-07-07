@@ -1,3 +1,8 @@
+/*
+ * Análisis del Código CSS
+ * Este análisis detalla la estructura, las buenas prácticas y las áreas de mejora de tu CSS.
+ */
+
 /* Estilos Generales */
 html {
     box-sizing: border-box; /* Añadido: Para incluir padding y border en el ancho/alto */

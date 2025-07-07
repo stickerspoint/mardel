@@ -30,10 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevBtnGaleria = document.getElementById('prevBtnGaleria');
     const nextBtnGaleria = document.getElementById('nextBtnGaleria');
 
+    // NUEVO: Referencia al botón de scroll-to-top
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+
     // AÑADIDO: Verificar que las referencias clave no son null
     console.log("Referencia a shoppingCartBtn:", shoppingCartBtn);
     console.log("Referencia a carritoModal:", carritoModal);
     console.log("Referencia a cerrarCarrito:", cerrarCarrito);
+    console.log("Referencia a scrollToTopBtn:", scrollToTopBtn); // NUEVO
 
     // --- 2. Variables Globales ---
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
@@ -78,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             todasLasCategorias.forEach(cat => {
                 const link = document.createElement('a');
-                link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`; 
+                link.href = `#${cat.replace(/[^a-zA-Z0-9]/g, '')}`;  
                 link.dataset.categoria = cat;
                 link.classList.add('filtro-categoria');
                 if (cat === currentActiveCategory) {
@@ -101,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (agruparPorCategorias) {
             const categoriasMap = new Map();
             // Asegurarse de que todas las categorías existentes en window.productos se incluyan
+            // Ordenar las categorías para que se muestren consistentemente
             [...new Set(window.productos.map(p => p.categoria))].sort().forEach(categoria => {
                 categoriasMap.set(categoria, []);
             });
@@ -416,11 +422,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Opcional: Si quieres que el input de cantidad sea editable, descomenta y ajusta esta parte.
         // Pero dado que los botones +/- son más comunes para móviles, lo dejo como readonly por defecto.
         // document.querySelectorAll('.cantidad-input').forEach(input => {
-        //      input.onchange = (e) => {
-        //          const productoId = parseInt(e.currentTarget.dataset.id);
-        //          const nuevaCantidad = parseInt(e.currentTarget.value);
-        //          cambiarCantidad(productoId, nuevaCantidad);
-        //      };
+        //     input.onchange = (e) => {
+        //         const productoId = parseInt(e.currentTarget.dataset.id);
+        //         const nuevaCantidad = parseInt(e.currentTarget.value);
+        //         cambiarCantidad(productoId, nuevaCantidad);
+        //     };
         // });
     };
 
@@ -607,6 +613,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         }
         window.addEventListener('resize', actualizarCarrusel);
+    }
+
+    // NUEVA FUNCIONALIDAD: Scroll-to-top button
+    if (scrollToTopBtn) {
+        // Mostrar u ocultar el botón según el scroll
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) { // Muestra el botón después de 300px de scroll
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
+
+        // Al hacer clic en el botón, desplázate suavemente al principio de la página
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     }
 
     // --- 5. Carga inicial de productos desde JSON ---
