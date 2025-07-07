@@ -694,13 +694,18 @@ section h2 {
     border: none;
     outline: none;
     background-color: var(--color-primario); /* Color de fondo usando tu variable */
-    color: white; /* Color de la flecha */
+    color: white; /* Color del icono de la flecha (Font Awesome) */
     cursor: pointer;
     padding: 10px 15px;
     border-radius: 5px;
-    font-size: 1.5em; /* Tamaño de la flecha */
+    font-size: 1.5em; /* Tamaño base del botón y, por ende, del icono */
     opacity: 0.7; /* Transparencia inicial */
     transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.2s ease; /* Añadida transición para el transform */
+    
+    /* ¡IMPORTANTE PARA CENTRAR EL ICONO DE FONT AWESOME! */
+    display: flex; /* Cambiado de 'block' a 'flex' */
+    align-items: center; /* Centra verticalmente el contenido (el icono) */
+    justify-content: center; /* Centra horizontalmente el contenido (el icono) */
 }
 
 #scrollToTopBtn:hover {
@@ -711,15 +716,17 @@ section h2 {
 
 /* Clase que se añade con JavaScript para mostrar el botón */
 #scrollToTopBtn.show {
-    display: block; /* Muestra el botón cuando la clase 'show' es activa */
+    display: flex; /* Muestra el botón cuando la clase 'show' es activa (coherente con el estilo normal) */
 }
 
-/* Estilo para la flecha usando carácter Unicode */
+/* --- ELIMINADO: Este bloque ya no es necesario porque usas Font Awesome en el HTML. --- */
+/*
 #scrollToTopBtn::after {
-    content: "\2191"; /* Carácter Unicode para una flecha hacia arriba */
-    font-size: 1em; /* Asegura que la flecha no sea demasiado grande */
-    vertical-align: middle; /* Ayuda a centrar la flecha verticalmente dentro del botón */
+    content: "\2191";
+    font-size: 1em;
+    vertical-align: middle;
 }
+*/
 
 /* Media Queries para Carrito en pantallas pequeñas */
 @media (max-width: 600px) {
