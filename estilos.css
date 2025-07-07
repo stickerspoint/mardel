@@ -130,6 +130,9 @@ body {
     box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* Sombra más pronunciada y suave */
     animation: slideInFromTop 0.4s ease-out forwards; /* Animación al aparecer */
     opacity: 0; /* Inicialmente opaco para la animación */
+    max-height: 80vh; /* Limita la altura del carrito para que sea scrollable */
+    overflow-y: auto; /* Habilita el scroll si el contenido es demasiado largo */
+    padding-bottom: 30px; /* Espacio extra al final para que el botón no se pegue */
 }
 
 @keyframes slideInFromTop {
@@ -288,19 +291,23 @@ body {
 /* --- FIN ESTILOS AGREGADOS/MODIFICADOS PARA LOS ITEMS DEL CARRITO --- */
 
 
+/* Asegurar que el subtotal y el total tengan espacio */
 .carrito-acciones {
-    display: flex; /* Usar flexbox para alinear total y botón */
-    justify-content: space-between; /* Espaciar entre ellos */
-    align-items: center;
+    margin-top: 20px;
     padding-top: 15px;
-    border-top: 1px solid #eee; /* Línea separadora para acciones */
+    border-top: 1px solid #eee;
+    font-size: 1.1em;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+/* MOVIMOS ESTOS ESTILOS FUERA DE LA MEDIA QUERY para que apliquen siempre */
 #totalCarrito {
     font-weight: bold;
     color: var(--color-secundario); /* Usar tu color secundario para el total */
     font-size: 1.6em; /* Total más grande y destacado */
-    /* Eliminados los margin-top/bottom y display: block que ya no son necesarios con flex */
 }
 
 #vaciarCarrito {
@@ -328,6 +335,205 @@ body {
     color: #777;
     font-style: italic;
     font-size: 1.1em;
+}
+
+/* ==================================== */
+/* Estilos para la sección de Envío en el Carrito Modal (GLOBAL) */
+/* ==================================== */
+
+.carrito-seccion-envio {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.carrito-seccion-envio h3 {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center; /* Centrar el título "Medios de Envío" */
+}
+
+.cp-input-container {
+    display: flex; /* Para que el input y el botón estén en línea */
+    gap: 10px; /* Espacio entre el input y el botón */
+    margin-bottom: 10px;
+}
+
+.input-cp {
+    flex-grow: 1; /* El input tomará el espacio disponible */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.btn-calcular-envio {
+    padding: 10px 15px;
+    background-color: #f0a41c; /* Color naranja de StickersPoint */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-calcular-envio:hover {
+    background-color: #d18d0f; /* Un naranja más oscuro al pasar el ratón */
+}
+
+.no-se-mi-cp {
+    font-size: 0.9em;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.no-se-mi-cp a {
+    color: #f0a41c; /* Color de enlace */
+    text-decoration: none;
+}
+
+.no-se-mi-cp a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para los grupos de opciones de envío (Envío a Domicilio, Retirar Por) */
+.opciones-envio-grupo {
+    margin-bottom: 20px;
+    border: 1px solid #eee; /* Borde ligero para agrupar */
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.opciones-envio-grupo h4 {
+    font-size: 1em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #555;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+/* Estilos para cada opción de envío/retiro (radio buttons) */
+.opcion-envio-item {
+    display: flex;
+    align-items: flex-start; /* Alinea el contenido arriba si hay mucho texto */
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.opcion-envio-item:last-child {
+    margin-bottom: 0; /* Sin margen inferior en el último ítem de un grupo */
+}
+
+.opcion-envio-item:hover {
+    background-color: #f5f5f5;
+    border-color: #f0a41c; /* Borde naranja al pasar el ratón */
+}
+
+.opcion-envio-item label {
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+    align-items: center; /* Alinea verticalmente el radio con el texto */
+}
+
+.opcion-envio-item input[type="radio"] {
+    margin-right: 15px;
+    flex-shrink: 0; /* Evita que el radio button se encoja */
+    width: 20px; /* Tamaño del radio button */
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    appearance: none; /* Oculta la apariencia por defecto */
+    -webkit-appearance: none; /* Para compatibilidad con Safari */
+    outline: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.opcion-envio-item input[type="radio"]::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: background-color 0.2s ease;
+}
+
+.opcion-envio-item input[type="radio"]:checked {
+    border-color: #f0a41c; /* Borde naranja cuando está seleccionado */
+}
+
+.opcion-envio-item input[type="radio"]:checked::before {
+    background-color: #f0a41c; /* Círculo interior naranja cuando está seleccionado */
+}
+
+
+.opcion-envio-item > label > div {
+    flex-grow: 1; /* El texto de la opción toma el espacio restante */
+}
+
+.opcion-envio-item p {
+    margin: 0;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.opcion-envio-item p:first-child {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.opcion-envio-item .costo-envio {
+    font-weight: bold;
+    color: #f0a41c; /* Color del precio */
+    margin-left: 15px;
+    flex-shrink: 0; /* Evita que el precio se encoja */
+}
+
+/* Estilo específico para "Gratis" */
+.opcion-envio-item .costo-envio.gratis {
+    color: #28a745; /* Verde para "Gratis" */
+}
+
+/* Estilos para el botón INICIAR COMPRA */
+.btn-iniciar-compra {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #f0a41c; /* Color principal de StickersPoint */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 25px; /* Espacio superior para separarlo del total/vaciar */
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.btn-iniciar-compra:hover:not(:disabled) {
+    background-color: #d18d0f; /* Un naranja más oscuro al pasar el ratón */
+}
+
+.btn-iniciar-compra:disabled {
+    background-color: #cccccc; /* Gris cuando está deshabilitado */
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 /* Catálogo */
@@ -784,338 +990,4 @@ section h2 {
         font-size: 15px;
         width: 100%; /* El botón ocupa todo el ancho */
     }
-    /* ==================================== */
-/* Estilos para la sección de Envío en el Carrito Modal */
-/* ==================================== */
-
-.carrito-seccion-envio {
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-    margin-top: 20px;
-}
-
-.carrito-seccion-envio h3 {
-    font-size: 1.2em;
-    margin-bottom: 15px;
-    color: #333;
-    text-align: center; /* Centrar el título "Medios de Envío" */
-}
-
-.cp-input-container {
-    display: flex; /* Para que el input y el botón estén en línea */
-    gap: 10px; /* Espacio entre el input y el botón */
-    margin-bottom: 10px;
-}
-
-.input-cp {
-    flex-grow: 1; /* El input tomará el espacio disponible */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
-}
-
-.btn-calcular-envio {
-    padding: 10px 15px;
-    background-color: #f0a41c; /* Color naranja de StickersPoint */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.btn-calcular-envio:hover {
-    background-color: #d18d0f; /* Un naranja más oscuro al pasar el ratón */
-}
-
-.no-se-mi-cp {
-    font-size: 0.9em;
-    text-align: right;
-    margin-bottom: 20px;
-}
-
-.no-se-mi-cp a {
-    color: #f0a41c; /* Color de enlace */
-    text-decoration: none;
-}
-
-.no-se-mi-cp a:hover {
-    text-decoration: underline;
-}
-
-/* Estilos para los grupos de opciones de envío (Envío a Domicilio, Retirar Por) */
-.opciones-envio-grupo {
-    margin-bottom: 20px;
-    border: 1px solid #eee; /* Borde ligero para agrupar */
-    border-radius: 8px;
-    padding: 15px;
-    background-color: #f9f9f9;
-}
-
-.opciones-envio-grupo h4 {
-    font-size: 1em;
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #555;
-    text-transform: uppercase;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-}
-
-/* Estilos para cada opción de envío/retiro (radio buttons) */
-.opcion-envio-item {
-    display: flex;
-    align-items: flex-start; /* Alinea el contenido arriba si hay mucho texto */
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-.opcion-envio-item:last-child {
-    margin-bottom: 0; /* Sin margen inferior en el último ítem de un grupo */
-}
-
-.opcion-envio-item:hover {
-    background-color: #f5f5f5;
-    border-color: #f0a41c; /* Borde naranja al pasar el ratón */
-}
-
-.opcion-envio-item label {
-    display: flex;
-    width: 100%;
-    cursor: pointer;
-    align-items: center; /* Alinea verticalmente el radio con el texto */
-}
-
-.opcion-envio-item input[type="radio"] {
-    margin-right: 15px;
-    flex-shrink: 0; /* Evita que el radio button se encoja */
-    width: 20px; /* Tamaño del radio button */
-    height: 20px;
-    border: 2px solid #ccc;
-    border-radius: 50%;
-    appearance: none; /* Oculta la apariencia por defecto */
-    -webkit-appearance: none; /* Para compatibilidad con Safari */
-    outline: none;
-    cursor: pointer;
-    position: relative;
-}
-
-.opcion-envio-item input[type="radio"]::before {
-    content: '';
-    display: block;
-    width: 10px;
-    height: 10px;
-    background-color: transparent;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: background-color 0.2s ease;
-}
-
-.opcion-envio-item input[type="radio"]:checked {
-    border-color: #f0a41c; /* Borde naranja cuando está seleccionado */
-}
-
-.opcion-envio-item input[type="radio"]:checked::before {
-    background-color: #f0a41c; /* Círculo interior naranja cuando está seleccionado */
-}
-
-
-.opcion-envio-item > label > div {
-    flex-grow: 1; /* El texto de la opción toma el espacio restante */
-}
-
-.opcion-envio-item p {
-    margin: 0;
-    font-size: 0.95em;
-    color: #333;
-}
-
-.opcion-envio-item p:first-child {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.opcion-envio-item .costo-envio {
-    font-weight: bold;
-    color: #f0a41c; /* Color del precio */
-    margin-left: 15px;
-    flex-shrink: 0; /* Evita que el precio se encoja */
-}
-
-/* Estilo específico para "Gratis" */
-.opcion-envio-item .costo-envio.gratis {
-    color: #28a745; /* Verde para "Gratis" */
-}
-
-/* Estilos para el botón INICIAR COMPRA */
-.btn-iniciar-compra {
-    width: 100%;
-    padding: 15px 20px;
-    background-color: #f0a41c; /* Color principal de StickersPoint */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 25px; /* Espacio superior para separarlo del total/vaciar */
-    transition: background-color 0.3s ease, opacity 0.3s ease;
-}
-
-.btn-iniciar-compra:hover:not(:disabled) {
-    background-color: #d18d0f; /* Un naranja más oscuro al pasar el ratón */
-}
-
-.btn-iniciar-compra:disabled {
-    background-color: #cccccc; /* Gris cuando está deshabilitado */
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-/* Mejoras generales para el carrito modal */
-.modal-content.carrito {
-    max-height: 80vh; /* Limita la altura del carrito para que sea scrollable */
-    overflow-y: auto; /* Habilita el scroll si el contenido es demasiado largo */
-    padding-bottom: 30px; /* Espacio extra al final para que el botón no se pegue */
-}
-
-/* Asegurar que el subtotal y el total tengan espacio */
-.carrito-acciones {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-    font-size: 1.1em;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.carrito-acciones button {
-    padding: 8px 15px;
-    background-color: #e0e0e0;
-    color: #333;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-}
-
-.carrito-acciones button:hover {
-    background-color: #d5d5d5;
-}
-
-/* Estilo para los ítems del carrito */
-#listaCarrito li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-#listaCarrito li:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-#listaCarrito img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-right: 15px;
-}
-
-#listaCarrito .item-info {
-    flex-grow: 1;
-}
-
-#listaCarrito .item-nombre {
-    font-weight: bold;
-    font-size: 1em;
-    color: #333;
-}
-
-#listaCarrito .item-precio {
-    font-size: 0.9em;
-    color: #666;
-}
-
-#listaCarrito .item-cantidad-control {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin: 0 15px;
-}
-
-#listaCarrito .item-cantidad-control button {
-    background-color: #f0a41c;
-    color: white;
-    border: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1.1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.2s ease;
-}
-
-#listaCarrito .item-cantidad-control button:hover {
-    background-color: #d18d0f;
-}
-
-#listaCarrito .item-cantidad {
-    font-weight: bold;
-    width: 20px;
-    text-align: center;
-}
-
-#listaCarrito .item-subtotal {
-    font-weight: bold;
-    color: #333;
-    margin-left: 15px;
-}
-
-#listaCarrito .item-eliminar {
-    background: none;
-    border: none;
-    color: #ff4d4d;
-    cursor: pointer;
-    font-size: 1.2em;
-    margin-left: 10px;
-    transition: color 0.2s ease;
-}
-
-#listaCarrito .item-eliminar:hover {
-    color: #cc0000;
-}
-
-
-/* Asegurar que el input de cantidad dentro del carrito no tenga el botón */
-#listaCarrito .item-cantidad-control input[type="number"] {
-    -moz-appearance: textfield; /* Firefox */
-}
-#listaCarrito .item-cantidad-control input::-webkit-outer-spin-button,
-#listaCarrito .item-cantidad-control input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
 }
