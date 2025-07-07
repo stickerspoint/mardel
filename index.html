@@ -72,10 +72,39 @@
         <h2>Carrito</h2>
         <p id="mensajeCarritoVacio" class="carrito-vacio-mensaje" style="display: none;">El carrito está vacío.</p>
         <ul id="listaCarrito"></ul>
+        
+        <div class="carrito-seccion-envio">
+            <h3>Medios de Envío</h3>
+            <div class="cp-input-container">
+                <input type="text" id="inputCodigoPostal" placeholder="Tu código postal" class="input-cp">
+                <button id="btnCalcularEnvio" class="btn-calcular-envio">CALCULAR</button>
+            </div>
+            <p class="no-se-mi-cp">¿No sé mi código postal? <a href="#" target="_blank">Buscar aquí</a></p>
+
+            <div id="opcionesEnvioDomicilio" class="opciones-envio-grupo" style="display: none;">
+                <h4>ENVÍO A DOMICILIO</h4>
+                </div>
+
+            <div id="opcionesRetirarPor" class="opciones-envio-grupo" style="display: none;">
+                <h4>RETIRAR POR</h4>
+                </div>
+
+            <div class="opcion-envio-item nuestro-local">
+                <label>
+                    <input type="radio" name="opcionEnvio" value="nuestroLocal" data-costo="0" data-nombre="Retiro en Local StickersPoint">
+                    <div>
+                        <p>Nuestro Local StickersPoint</p>
+                        <p>Mar del Plata - Dirección (aguardar mensaje para retirar)</p>
+                    </div>
+                    <span class="costo-envio">Gratis</span>
+                </label>
+            </div>
+        </div>
         <div class="carrito-acciones">
             Total: $<span id="totalCarrito">0.00</span>
             <button id="vaciarCarrito">Vaciar carrito</button>
         </div>
+        <button id="btnIniciarCompra" class="btn-iniciar-compra" disabled>INICIAR COMPRA</button>
     </div>
 </div>
 
