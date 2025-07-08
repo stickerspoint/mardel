@@ -172,8 +172,7 @@
             <a href="#">Contacto</a>
         </nav>
         <div class="icons">
-            <!-- No se necesita el botón del carrito aquí si no se va a interactuar con él en el checkout -->
-        </div>
+            </div>
     </header>
 
     <div class="checkout-container">
@@ -182,15 +181,12 @@
         <div class="resumen-pedido">
             <h2>Resumen de tu Pedido</h2>
             <ul id="resumenListaCarrito">
-                <!-- Los ítems del carrito se cargarán aquí -->
-            </ul>
+                </ul>
             <div class="resumen-total">
                 Total del Pedido: $<span id="resumenTotal">0.00</span>
             </div>
-            <!-- El mensaje de envío ahora se actualizará dinámicamente -->
             <div id="resumenMetodoEnvio" class="mensaje-envio-checkout">
-                <!-- El texto del método de envío se actualizará aquí -->
-            </div>
+                </div>
         </div>
 
         <form id="checkoutForm">
@@ -208,7 +204,6 @@
                 <input type="tel" id="telefono" required>
             </div>
             
-            <!-- Sección de Medios de Envío integrada directamente en el formulario -->
             <div class="checkout-seccion-envio">
                 <h3>Selecciona tu Método de Envío</h3>
                 
@@ -242,9 +237,7 @@
                     Puedes retirar tu pedido en nuestro local en Mar del Plata. Te enviaremos la dirección exacta y los horarios de retiro una vez que tu pedido esté listo.
                 </div>
 
-            </div> <!-- Cierre de checkout-seccion-envio -->
-
-            <div class="form-group" id="direccionEnvioGroup" style="display: none;">
+            </div> <div class="form-group" id="direccionEnvioGroup" style="display: none;">
                 <label for="direccion">Dirección de Envío:</label>
                 <input type="text" id="direccion" placeholder="Calle, número, piso, depto.">
             </div>
@@ -255,14 +248,13 @@
             
             <h2>Método de Pago</h2>
             <p>Aquí irían las opciones de pago (ej. Mercado Pago, Tarjeta, etc.)</p>
-            <!-- Puedes añadir más campos de formulario aquí para el pago -->
-
             <button type="submit" class="btn-finalizar-compra">CONFIRMAR COMPRA</button>
         </form>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            console.log("Checkout script: DOMContentLoaded.");
             const checkoutData = JSON.parse(localStorage.getItem('checkoutData'));
             const resumenListaCarrito = document.getElementById('resumenListaCarrito');
             const resumenTotal = document.getElementById('resumenTotal');
@@ -281,6 +273,7 @@
 
             // Función para actualizar la UI según la opción de envío seleccionada
             const handleEnvioOptionsCheckout = () => {
+                console.log("handleEnvioOptionsCheckout ejecutado.");
                 if (radioEnvioDomicilioCheckout.checked) {
                     resumenMetodoEnvio.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
                     divEnvioDomicilioCheckoutInfo.style.display = 'block';
@@ -288,6 +281,7 @@
                     direccionEnvioGroup.style.display = 'block';
                     inputDireccion.setAttribute('required', 'required');
                     metodoEnvioActual = 'domicilio';
+                    console.log("Envío a Domicilio seleccionado en Checkout.");
                 } else if (radioRetirarPuntoCheckout.checked) {
                     resumenMetodoEnvio.textContent = `Retiro en Nuestro Local. Serás contactado para coordinar.`;
                     divEnvioDomicilioCheckoutInfo.style.display = 'none';
@@ -296,10 +290,22 @@
                     inputDireccion.removeAttribute('required');
                     inputDireccion.value = ''; // Limpiar el campo si se cambia a retiro
                     metodoEnvioActual = 'retiro';
+                    console.log("Retiro en Punto seleccionado en Checkout.");
+                } else {
+                    // Esto debería ocurrir si ninguno está marcado inicialmente, o si hay un error
+                    resumenMetodoEnvio.textContent = `Selecciona un método de envío.`;
+                    divEnvioDomicilioCheckoutInfo.style.display = 'none';
+                    divRetirarPuntoCheckoutInfo.style.display = 'none';
+                    direccionEnvioGroup.style.display = 'none';
+                    inputDireccion.removeAttribute('required');
+                    inputDireccion.value = '';
+                    metodoEnvioActual = '';
+                    console.log("Ningún método de envío seleccionado en Checkout.");
                 }
             };
 
             if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
+                console.log("Checkout data found:", checkoutData);
                 let total = 0;
                 resumenListaCarrito.innerHTML = ''; // Limpiar lista
                 checkoutData.carrito.forEach(item => {
@@ -316,24 +322,40 @@
                 // Marcar el radio button correcto al cargar la página
                 if (checkoutData.metodoEnvio === 'domicilio') {
                     radioEnvioDomicilioCheckout.checked = true;
+                    console.log("Marcando radio: Envío a Domicilio.");
                 } else if (checkoutData.metodoEnvio === 'retiro') {
                     radioRetirarPuntoCheckout.checked = true;
+                    console.log("Marcando radio: Retiro en Punto.");
                 }
                 handleEnvioOptionsCheckout(); // Llamar para inicializar la UI
 
             } else {
+                console.warn("No checkout data found. Redirecting to catalogo.html.");
                 // Si no hay datos en el carrito, redirigir al catálogo o mostrar un mensaje
                 alert('No hay productos en el carrito para finalizar la compra. Redirigiendo al catálogo.');
                 window.location.href = 'catalogo.html'; 
             }
 
             // Event Listeners para los radio buttons de envío en Checkout
-            radioEnvioDomicilioCheckout.addEventListener('change', handleEnvioOptionsCheckout);
-            radioRetirarPuntoCheckout.addEventListener('change', handleEnvioOptionsCheckout);
+            if (radioEnvioDomicilioCheckout) {
+                radioEnvioDomicilioCheckout.addEventListener('change', handleEnvioOptionsCheckout);
+                console.log("Event listener añadido a radioEnvioDomicilioCheckout.");
+            } else {
+                console.warn("radioEnvioDomicilioCheckout no encontrado.");
+            }
+            
+            if (radioRetirarPuntoCheckout) {
+                radioRetirarPuntoCheckout.addEventListener('change', handleEnvioOptionsCheckout);
+                console.log("Event listener añadido a radioRetirarPuntoCheckout.");
+            } else {
+                console.warn("radioRetirarPuntoCheckout no encontrado.");
+            }
+            
 
             // Manejar el envío del formulario de checkout
             checkoutForm.addEventListener('submit', (e) => {
                 e.preventDefault();
+                console.log("Formulario de checkout enviado.");
                 
                 // Validar la dirección si el envío es a domicilio
                 if (metodoEnvioActual === 'domicilio' && inputDireccion.value.trim() === '') {
@@ -358,7 +380,6 @@
                 alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
                 localStorage.removeItem('carrito'); // Vaciar el carrito después de la compra
                 localStorage.removeItem('checkoutData'); // Limpiar los datos de checkout
-                localStorage.removeItem('abrirCarritoModal'); // Limpiar el indicador (si lo usábamos para volver)
                 window.location.href = 'index.html'; // Redirigir a la página de inicio
             });
         });
