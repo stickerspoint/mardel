@@ -274,6 +274,120 @@
         .btn-confirmar-cambio-envio:hover {
             background-color: #e0950b;
         }
+
+        /* Estilos para la barra de progreso */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px auto;
+            max-width: 600px;
+            position: relative;
+            padding: 0 20px; /* Padding para los extremos */
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            height: 2px;
+            width: calc(100% - 40px); /* Ancho de la línea, ajustado por el padding */
+            background-color: #ccc;
+            top: 50%;
+            left: 20px; /* Posición de la línea */
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2; /* Para que esté por encima de la línea */
+            position: relative;
+            flex: 1; /* Distribuye el espacio equitativamente */
+            text-align: center;
+        }
+
+        .progress-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ccc;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9em;
+            color: #888;
+            transition: color 0.3s ease;
+        }
+
+        /* Estilos para pasos completados */
+        .progress-step.completed .progress-icon {
+            background-color: #28a745; /* Verde para completado */
+        }
+        .progress-step.completed .progress-text {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .progress-step.completed .progress-icon i {
+            display: block; /* Asegura que el ícono sea visible */
+        }
+        .progress-step.completed .progress-icon .fa-check {
+            display: block; /* Muestra el checkmark */
+        }
+        .progress-step.completed .progress-icon .fa-shopping-cart,
+        .progress-step.completed .progress-icon .fa-truck,
+        .progress-step.completed .progress-icon .fa-credit-card {
+            display: none; /* Oculta los íconos originales cuando está completado */
+        }
+
+
+        /* Estilos para el paso activo (actual) */
+        .progress-step.active .progress-icon {
+            background-color: #f0a41c; /* Naranja para activo */
+            color: white;
+            box-shadow: 0 0 0 3px rgba(240, 164, 28, 0.3); /* Anillo alrededor del activo */
+        }
+        .progress-step.active .progress-text {
+            color: #f0a41c;
+            font-weight: bold;
+        }
+
+        /* Asegurar que los íconos originales se muestren en pasos no completados */
+        .progress-step:not(.completed) .progress-icon .fa-check {
+            display: none;
+        }
+        .progress-step:not(.completed) .progress-icon .fa-shopping-cart,
+        .progress-step:not(.completed) .progress-icon .fa-truck,
+        .progress-step:not(.completed) .progress-icon .fa-credit-card {
+            display: block;
+        }
+
+        /* Estilos para el resumen de datos del cliente */
+        .resumen-datos-cliente {
+            background-color: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .resumen-datos-cliente p {
+            margin: 8px 0;
+            color: #555;
+            font-size: 0.95em;
+        }
+        .resumen-datos-cliente p strong {
+            color: #333;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -285,8 +399,7 @@
             <a href="#">Contacto</a>
         </nav>
         <div class="icons">
-            <!-- No se necesita el botón del carrito aquí si no se va a interactuar con él en el checkout -->
-        </div>
+            </div>
     </header>
 
     <div class="checkout-container">
@@ -295,7 +408,6 @@
         <div class="resumen-pedido">
             <h2>Resumen de tu Pedido</h2>
             
-            <!-- Contenedor desplegable para el resumen de la compra -->
             <div id="resumenPedidoToggle" class="resumen-pedido-toggle">
                 <span>Ver detalles de mi compra</span>
                 <span id="resumenToggleTotal">$0.00</span>
@@ -304,8 +416,7 @@
 
             <div id="resumenPedidoDetails" class="resumen-pedido-details">
                 <ul id="resumenListaCarrito">
-                    <!-- Los ítems del carrito se cargarán aquí -->
-                </ul>
+                    </ul>
                 <div class="subtotal-line">
                     <span>Subtotal</span>
                     <span id="resumenSubtotal">$0.00</span>
@@ -320,12 +431,34 @@
                 </div>
             </div>
 
-            <!-- El mensaje de envío ahora se actualizará dinámicamente -->
             <div id="resumenMetodoEnvio" class="mensaje-envio-checkout">
                 <span id="textoMetodoEnvioResumen"></span>
                 <button id="btnEditarMetodoEnvio" class="btn-editar-metodo-envio" title="Cambiar método de envío">
-                    <i class="fas fa-chevron-down"></i> <!-- Flecha hacia abajo -->
-                </button>
+                    <i class="fas fa-chevron-down"></i> </button>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div id="stepCarrito" class="progress-step completed">
+                <div class="progress-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <i class="fas fa-check"></i>
+                </div>
+                <span class="progress-text">Carrito</span>
+            </div>
+            <div id="stepEntrega" class="progress-step active">
+                <div class="progress-icon">
+                    <i class="fas fa-truck"></i>
+                    <i class="fas fa-check"></i>
+                </div>
+                <span class="progress-text">Entrega</span>
+            </div>
+            <div id="stepPago" class="progress-step">
+                <div class="progress-icon">
+                    <i class="fas fa-credit-card"></i>
+                    <i class="fas fa-check"></i>
+                </div>
+                <span class="progress-text">Pago</span>
             </div>
         </div>
 
@@ -355,13 +488,20 @@
             
             <h2>Método de Pago</h2>
             <p>Aquí irían las opciones de pago (ej. Mercado Pago, Tarjeta, etc.)</p>
-            <!-- Puedes añadir más campos de formulario aquí para el pago -->
-
             <button type="submit" class="btn-finalizar-compra">CONFIRMAR COMPRA</button>
         </form>
+
+        <div class="resumen-datos-cliente" style="display: none;">
+            <h3>Tus Datos Ingresados:</h3>
+            <p><strong>Nombre:</strong> <span id="resumenNombre"></span></p>
+            <p><strong>Email:</strong> <span id="resumenEmail"></span></p>
+            <p><strong>Teléfono:</strong> <span id="resumenTelefono"></span></p>
+            <p id="resumenDireccionCliente"><strong>Dirección de Envío:</strong> <span id="textoResumenDireccion"></span></p>
+            <p><strong>Notas:</strong> <span id="resumenNotas"></span></p>
+        </div>
+
     </div>
 
-    <!-- Modal para Editar Método de Envío -->
     <div id="modalEditarEnvio" class="modal-editar-envio">
         <div class="modal-content-editar-envio">
             <span class="close-modal-editar-envio">&times;</span>
@@ -415,13 +555,17 @@
             const resumenCostoEnvio = document.getElementById('resumenCostoEnvio');
             const resumenTotal = document.getElementById('resumenTotal'); // Este es el total final
 
-            // Referencias existentes
+            // Referencias existentes del formulario y método de envío
             const resumenMetodoEnvio = document.getElementById('resumenMetodoEnvio');
             const textoMetodoEnvioResumen = document.getElementById('textoMetodoEnvioResumen');
             const btnEditarMetodoEnvio = document.getElementById('btnEditarMetodoEnvio');
             const direccionEnvioGroup = document.getElementById('direccionEnvioGroup');
             const checkoutForm = document.getElementById('checkoutForm');
+            const inputNombre = document.getElementById('nombre');
+            const inputEmail = document.getElementById('email');
+            const inputTelefono = document.getElementById('telefono');
             const inputDireccion = document.getElementById('direccion');
+            const inputNotas = document.getElementById('notas');
 
             // Referencias del modal de edición de envío
             const modalEditarEnvio = document.getElementById('modalEditarEnvio');
@@ -432,17 +576,56 @@
             const divRetirarPuntoModalInfo = document.getElementById('divRetirarPuntoModalInfo');
             const btnConfirmarCambioEnvio = document.getElementById('btnConfirmarCambioEnvio');
 
+            // Referencias de la barra de progreso
+            const stepCarrito = document.getElementById('stepCarrito');
+            const stepEntrega = document.getElementById('stepEntrega');
+            const stepPago = document.getElementById('stepPago');
+
+            // Nuevas referencias para el resumen de datos del cliente
+            const resumenDatosClienteDiv = document.querySelector('.resumen-datos-cliente');
+            const resumenNombre = document.getElementById('resumenNombre');
+            const resumenEmail = document.getElementById('resumenEmail');
+            const resumenTelefono = document.getElementById('resumenTelefono');
+            const resumenDireccionCliente = document.getElementById('resumenDireccionCliente'); // El <p> contenedor
+            const textoResumenDireccion = document.getElementById('textoResumenDireccion'); // El <span> para la dirección
+            const resumenNotas = document.getElementById('resumenNotas');
+
+
             let metodoEnvioSeleccionadoActual = checkoutData ? checkoutData.metodoEnvio : ''; 
-            let costoEnvioActual = 0; // Se inicializa a 0, se actualizará según el método
+            let costoEnvioActual = 0; 
+
+            // Función para actualizar la barra de progreso
+            const actualizarBarraProgreso = (currentStep) => {
+                // Resetear todas las clases
+                stepCarrito.classList.remove('active', 'completed');
+                stepEntrega.classList.remove('active', 'completed');
+                stepPago.classList.remove('active', 'completed');
+
+                // Marcar los pasos según el progreso
+                if (currentStep === 'entrega' || currentStep === 'pago') {
+                    stepCarrito.classList.add('completed');
+                }
+                if (currentStep === 'entrega') {
+                    stepEntrega.classList.add('active');
+                } else if (currentStep === 'pago') {
+                    stepEntrega.classList.add('completed');
+                    stepPago.classList.add('active');
+                }
+            };
 
             // Función para actualizar la UI principal y el modal según el método de envío actual
             const actualizarUIMetodoEnvio = () => {
                 console.log("Actualizando UI para método de envío:", metodoEnvioSeleccionadoActual);
                 if (metodoEnvioSeleccionadoActual === 'domicilio') {
                     textoMetodoEnvioResumen.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
-                    costoEnvioActual = 'A coordinar'; // O un valor numérico si se calcula
+                    costoEnvioActual = 'A coordinar'; 
                     direccionEnvioGroup.style.display = 'block';
                     inputDireccion.setAttribute('required', 'required');
+                    
+                    // Mostrar dirección en el resumen del cliente
+                    resumenDireccionCliente.style.display = 'block';
+                    textoResumenDireccion.textContent = inputDireccion.value.trim() !== '' ? inputDireccion.value : 'Esperando dirección...';
+                    
                     // Marcar en el modal si está abierto
                     if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'block';
@@ -453,6 +636,11 @@
                     direccionEnvioGroup.style.display = 'none';
                     inputDireccion.removeAttribute('required');
                     inputDireccion.value = ''; 
+                    
+                    // Ocultar dirección en el resumen del cliente
+                    resumenDireccionCliente.style.display = 'none';
+                    textoResumenDireccion.textContent = ''; // Limpiar por si acaso
+                    
                     // Marcar en el modal si está abierto
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
@@ -463,6 +651,10 @@
                     direccionEnvioGroup.style.display = 'none';
                     inputDireccion.removeAttribute('required');
                     inputDireccion.value = '';
+                    
+                    resumenDireccionCliente.style.display = 'none';
+                    textoResumenDireccion.textContent = '';
+                    
                     // Desmarcar en el modal
                     if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = false;
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = false;
@@ -492,7 +684,38 @@
                 resumenToggleTotal.textContent = `$${totalFinal.toFixed(2)}`; // Actualizar el total del botón desplegable
             };
 
-            // Inicializar el resumen del carrito
+            // Función para actualizar el resumen de datos del cliente
+            const actualizarResumenDatosCliente = () => {
+                resumenNombre.textContent = inputNombre.value;
+                resumenEmail.textContent = inputEmail.value;
+                resumenTelefono.textContent = inputTelefono.value;
+                resumenNotas.textContent = inputNotas.value !== '' ? inputNotas.value : 'Ninguna';
+
+                // La dirección se maneja en actualizarUIMetodoEnvio para consistencia con el método de envío
+                if (metodoEnvioSeleccionadoActual === 'domicilio') {
+                    resumenDireccionCliente.style.display = 'block';
+                    textoResumenDireccion.textContent = inputDireccion.value.trim() !== '' ? inputDireccion.value : 'Esperando dirección...';
+                } else {
+                    resumenDireccionCliente.style.display = 'none';
+                }
+
+                // Mostrar el div de resumen si hay al menos un campo relevante lleno (excepto la dirección que ya se valida)
+                if (inputNombre.value || inputEmail.value || inputTelefono.value || inputNotas.value || metodoEnvioSeleccionadoActual === 'domicilio' && inputDireccion.value) {
+                    resumenDatosClienteDiv.style.display = 'block';
+                } else {
+                    resumenDatosClienteDiv.style.display = 'none';
+                }
+            };
+
+            // Event Listeners para los campos del formulario para actualizar el resumen dinámicamente
+            inputNombre.addEventListener('input', actualizarResumenDatosCliente);
+            inputEmail.addEventListener('input', actualizarResumenDatosCliente);
+            inputTelefono.addEventListener('input', actualizarResumenDatosCliente);
+            inputDireccion.addEventListener('input', actualizarResumenDatosCliente);
+            inputNotas.addEventListener('input', actualizarResumenDatosCliente);
+
+
+            // Inicializar el resumen del carrito y otros componentes
             if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
                 console.log("Checkout data found:", checkoutData);
                 resumenListaCarrito.innerHTML = '';
@@ -507,7 +730,10 @@
                 
                 // Inicializar el método de envío y actualizar la UI
                 actualizarUIMetodoEnvio();
-                actualizarTotalesResumen(); // Asegurar que los totales se calculen al inicio
+                actualizarTotalesResumen(); 
+                actualizarBarraProgreso('entrega'); 
+                actualizarResumenDatosCliente(); // Actualizar el resumen de datos del cliente al inicio
+                
 
             } else {
                 console.warn("No checkout data found. Redirecting to catalogo.html.");
@@ -519,7 +745,7 @@
             if (resumenPedidoToggle) {
                 resumenPedidoToggle.addEventListener('click', () => {
                     resumenPedidoDetails.style.display = resumenPedidoDetails.style.display === 'block' ? 'none' : 'block';
-                    resumenPedidoToggle.classList.toggle('expanded'); // Para rotar la flecha
+                    resumenPedidoToggle.classList.toggle('expanded'); 
                 });
             }
 
@@ -527,8 +753,7 @@
             if (btnEditarMetodoEnvio) {
                 btnEditarMetodoEnvio.addEventListener('click', () => {
                     console.log("Abriendo modal de edición de envío.");
-                    modalEditarEnvio.style.display = 'flex'; // Mostrar el modal
-                    // Asegurarse de que los radios y la info del modal reflejen la selección actual
+                    modalEditarEnvio.style.display = 'flex'; 
                     actualizarUIMetodoEnvio(); 
                 });
             }
@@ -536,7 +761,7 @@
             if (closeModalEditarEnvio) {
                 closeModalEditarEnvio.addEventListener('click', () => {
                     console.log("Cerrando modal de edición de envío.");
-                    modalEditarEnvio.style.display = 'none'; // Ocultar el modal
+                    modalEditarEnvio.style.display = 'none'; 
                 });
             }
 
@@ -585,7 +810,8 @@
                         ...checkoutData,
                         metodoEnvio: metodoEnvioSeleccionadoActual
                     }));
-                    actualizarUIMetodoEnvio(); // Actualizar la UI principal
+                    actualizarUIMetodoEnvio(); // Actualizar la UI principal (incluye la visibilidad de la dirección)
+                    actualizarResumenDatosCliente(); // Asegurarse de que el resumen de datos se actualice
                     modalEditarEnvio.style.display = 'none'; // Cerrar el modal
                 });
             }
@@ -602,11 +828,11 @@
                     return;
                 }
 
-                const nombre = document.getElementById('nombre').value;
-                const email = document.getElementById('email').value;
-                const telefono = document.getElementById('telefono').value;
+                const nombre = inputNombre.value;
+                const email = inputEmail.value;
+                const telefono = inputTelefono.value;
                 const direccion = metodoEnvioSeleccionadoActual === 'domicilio' ? inputDireccion.value : 'N/A';
-                const notas = document.getElementById('notas').value;
+                const notas = inputNotas.value;
 
                 console.log('Datos del Pedido Final:', {
                     carrito: checkoutData.carrito,
