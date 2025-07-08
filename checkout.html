@@ -370,8 +370,9 @@
             display: block;
         }
 
-        /* Estilos para el resumen de datos del cliente */
+        /* Estilos para el resumen de datos del cliente (OCULTO POR DEFECTO) */
         .resumen-datos-cliente {
+            display: none; /* Oculto por defecto */
             background-color: #fdfdfd;
             border: 1px solid #eee;
             border-radius: 8px;
@@ -512,7 +513,8 @@
             <button type="submit" class="btn-finalizar-compra">CONFIRMAR COMPRA</button>
         </form>
 
-        <div class="resumen-datos-cliente" style="display: none;">
+        <!-- Este div se elimina o se mueve a una página de resumen post-confirmación -->
+        <!-- <div class="resumen-datos-cliente" style="display: none;">
             <h3>Tus Datos Ingresados:</h3>
             <p><strong>Nombre:</strong> <span id="resumenNombre"></span></p>
             <p><strong>Email:</strong> <span id="resumenEmail"></span></p>
@@ -526,7 +528,7 @@
                 <p><strong>Email:</strong> <span id="resumenEmailOtraPersona"></span></p>
                 <p><strong>Teléfono:</strong> <span id="resumenTelefonoOtraPersona"></span></p>
             </div>
-        </div>
+        </div> -->
 
     </div>
 
@@ -609,14 +611,14 @@
             const stepEntrega = document.getElementById('stepEntrega');
             const stepPago = document.getElementById('stepPago');
 
-            // Referencias para el resumen de datos del cliente
-            const resumenDatosClienteDiv = document.querySelector('.resumen-datos-cliente');
-            const resumenNombre = document.getElementById('resumenNombre');
-            const resumenEmail = document.getElementById('resumenEmail');
-            const resumenTelefono = document.getElementById('resumenTelefono');
-            const resumenDireccionCliente = document.getElementById('resumenDireccionCliente'); 
-            const textoResumenDireccion = document.getElementById('textoResumenDireccion'); 
-            const resumenNotas = document.getElementById('resumenNotas');
+            // Referencias para el resumen de datos del cliente (eliminadas del HTML, pero las mantenemos aquí por si se usan en otro lado)
+            // const resumenDatosClienteDiv = document.querySelector('.resumen-datos-cliente');
+            // const resumenNombre = document.getElementById('resumenNombre');
+            // const resumenEmail = document.getElementById('resumenEmail');
+            // const resumenTelefono = document.getElementById('resumenTelefono');
+            // const resumenDireccionCliente = document.getElementById('resumenDireccionCliente'); 
+            // const textoResumenDireccion = document.getElementById('textoResumenDireccion'); 
+            // const resumenNotas = document.getElementById('resumenNotas');
 
             // NUEVAS REFERENCIAS para los datos de otra persona
             const otraPersonaCheckbox = document.getElementById('otraPersonaCheckbox');
@@ -624,10 +626,10 @@
             const inputNombreOtraPersona = document.getElementById('nombreOtraPersona');
             const inputEmailOtraPersona = document.getElementById('emailOtraPersona');
             const inputTelefonoOtraPersona = document.getElementById('telefonoOtraPersona');
-            const resumenOtraPersonaDiv = document.getElementById('resumenOtraPersonaDiv');
-            const resumenNombreOtraPersona = document.getElementById('resumenNombreOtraPersona');
-            const resumenEmailOtraPersona = document.getElementById('resumenEmailOtraPersona');
-            const resumenTelefonoOtraPersona = document.getElementById('resumenTelefonoOtraPersona');
+            // const resumenOtraPersonaDiv = document.getElementById('resumenOtraPersonaDiv'); // Eliminado del HTML
+            // const resumenNombreOtraPersona = document.getElementById('resumenNombreOtraPersona'); // Eliminado del HTML
+            // const resumenEmailOtraPersona = document.getElementById('resumenEmailOtraPersona'); // Eliminado del HTML
+            // const resumenTelefonoOtraPersona = document.getElementById('resumenTelefonoOtraPersona'); // Eliminado del HTML
 
 
             let metodoEnvioSeleccionadoActual = checkoutData ? checkoutData.metodoEnvio : ''; 
@@ -659,8 +661,8 @@
                     direccionEnvioGroup.style.display = 'block';
                     inputDireccion.setAttribute('required', 'required');
                     
-                    resumenDireccionCliente.style.display = 'block';
-                    textoResumenDireccion.textContent = inputDireccion.value.trim() !== '' ? inputDireccion.value : 'Esperando dirección...';
+                    // resumenDireccionCliente.style.display = 'block'; // Ya no es necesario aquí
+                    // textoResumenDireccion.textContent = inputDireccion.value.trim() !== '' ? inputDireccion.value : 'Esperando dirección...';
                     
                     if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'block';
@@ -672,8 +674,8 @@
                     inputDireccion.removeAttribute('required');
                     inputDireccion.value = ''; 
                     
-                    resumenDireccionCliente.style.display = 'none';
-                    textoResumenDireccion.textContent = ''; 
+                    // resumenDireccionCliente.style.display = 'none'; // Ya no es necesario aquí
+                    // textoResumenDireccion.textContent = ''; 
                     
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
@@ -685,8 +687,8 @@
                     inputDireccion.removeAttribute('required');
                     inputDireccion.value = '';
                     
-                    resumenDireccionCliente.style.display = 'none';
-                    textoResumenDireccion.textContent = '';
+                    // resumenDireccionCliente.style.display = 'none'; // Ya no es necesario aquí
+                    // textoResumenDireccion.textContent = '';
                     
                     if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = false;
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = false;
@@ -714,54 +716,35 @@
                 resumenToggleTotal.textContent = `$${totalFinal.toFixed(2)}`; 
             };
 
-            // Función para actualizar el resumen de datos del cliente
+            // Función para actualizar el resumen de datos del cliente (AHORA SOLO PARA CONSOLE.LOG O FUTURO RESUMEN FINAL)
             const actualizarResumenDatosCliente = () => {
-                resumenNombre.textContent = inputNombre.value;
-                resumenEmail.textContent = inputEmail.value;
-                resumenTelefono.textContent = inputTelefono.value;
-                resumenNotas.textContent = inputNotas.value !== '' ? inputNotas.value : 'Ninguna';
+                // Estos datos ya no se muestran en el HTML actual, pero se pueden usar para el console.log final
+                const nombre = inputNombre.value;
+                const email = inputEmail.value;
+                const telefono = inputTelefono.value;
+                const direccion = metodoEnvioSeleccionadoActual === 'domicilio' ? inputDireccion.value : 'N/A';
+                const notas = inputNotas.value;
 
-                if (metodoEnvioSeleccionadoActual === 'domicilio') {
-                    resumenDireccionCliente.style.display = 'block';
-                    textoResumenDireccion.textContent = inputDireccion.value.trim() !== '' ? inputDireccion.value : 'Esperando dirección...';
-                } else {
-                    resumenDireccionCliente.style.display = 'none';
-                }
+                const datosOtraPersona = otraPersonaCheckbox.checked ? {
+                    nombre: inputNombreOtraPersona.value,
+                    email: inputEmailOtraPersona.value,
+                    telefono: inputTelefonoOtraPersona.value
+                } : 'N/A';
 
-                // Actualizar datos de la otra persona si el checkbox está marcado
-                if (otraPersonaCheckbox && otraPersonaCheckbox.checked) {
-                    resumenOtraPersonaDiv.style.display = 'block';
-                    resumenNombreOtraPersona.textContent = inputNombreOtraPersona.value;
-                    resumenEmailOtraPersona.textContent = inputEmailOtraPersona.value;
-                    resumenTelefonoOtraPersona.textContent = inputTelefonoOtraPersona.value;
-                } else {
-                    resumenOtraPersonaDiv.style.display = 'none';
-                    resumenNombreOtraPersona.textContent = '';
-                    resumenEmailOtraPersona.textContent = '';
-                    resumenTelefonoOtraPersona.textContent = '';
-                }
-
-                // Mostrar el div de resumen si hay al menos un campo relevante lleno
-                if (inputNombre.value || inputEmail.value || inputTelefono.value || inputNotas.value || 
-                    (metodoEnvioSeleccionadoActual === 'domicilio' && inputDireccion.value) ||
-                    (otraPersonaCheckbox && otraPersonaCheckbox.checked && (inputNombreOtraPersona.value || inputEmailOtraPersona.value || inputTelefonoOtraPersona.value))) {
-                    resumenDatosClienteDiv.style.display = 'block';
-                } else {
-                    resumenDatosClienteDiv.style.display = 'none';
-                }
+                // Aquí podrías guardar estos datos en localStorage temporalmente si fueran a usarse en una página de "confirmación final"
+                // Por ahora, solo se usan en el console.log del submit
             };
 
-            // Event Listeners para los campos del formulario para actualizar el resumen dinámicamente
-            inputNombre.addEventListener('input', actualizarResumenDatosCliente);
-            inputEmail.addEventListener('input', actualizarResumenDatosCliente);
-            inputTelefono.addEventListener('input', actualizarResumenDatosCliente);
-            inputDireccion.addEventListener('input', actualizarResumenDatosCliente);
-            inputNotas.addEventListener('input', actualizarResumenDatosCliente);
-
-            // Event Listeners para los campos de "otra persona"
-            if (inputNombreOtraPersona) inputNombreOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
-            if (inputEmailOtraPersona) inputEmailOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
-            if (inputTelefonoOtraPersona) inputTelefonoOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
+            // Eliminamos los event listeners de input para el resumen de datos del cliente,
+            // ya que ya no se actualiza dinámicamente en el HTML actual.
+            // inputNombre.addEventListener('input', actualizarResumenDatosCliente);
+            // inputEmail.addEventListener('input', actualizarResumenDatosCliente);
+            // inputTelefono.addEventListener('input', actualizarResumenDatosCliente);
+            // inputDireccion.addEventListener('input', actualizarResumenDatosCliente);
+            // inputNotas.addEventListener('input', actualizarResumenDatosCliente);
+            // if (inputNombreOtraPersona) inputNombreOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
+            // if (inputEmailOtraPersona) inputEmailOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
+            // if (inputTelefonoOtraPersona) inputTelefonoOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
 
 
             // Inicializar el resumen del carrito y otros componentes
@@ -780,7 +763,7 @@
                 actualizarUIMetodoEnvio();
                 actualizarTotalesResumen(); 
                 actualizarBarraProgreso('entrega'); 
-                actualizarResumenDatosCliente(); 
+                // actualizarResumenDatosCliente(); // Ya no es necesario llamarlo aquí al inicio para actualizar el HTML
 
             } else {
                 console.warn("No checkout data found. Redirecting to catalogo.html.");
@@ -857,7 +840,7 @@
                         metodoEnvio: metodoEnvioSeleccionadoActual
                     }));
                     actualizarUIMetodoEnvio(); 
-                    actualizarResumenDatosCliente(); 
+                    // actualizarResumenDatosCliente(); // Ya no es necesario aquí
                     modalEditarEnvio.style.display = 'none'; 
                 });
             }
@@ -880,7 +863,7 @@
                         inputEmailOtraPersona.value = '';
                         inputTelefonoOtraPersona.value = '';
                     }
-                    actualizarResumenDatosCliente(); // Actualizar resumen cuando el checkbox cambia
+                    // actualizarResumenDatosCliente(); // Ya no es necesario aquí
                 });
             }
 
@@ -931,7 +914,7 @@
                     total: resumenTotal.textContent,
                     metodoEnvio: metodoEnvioSeleccionadoActual, 
                     datosCliente: { nombre, email, telefono, direccion, notas },
-                    datosOtraPersona: datosOtraPersona // Incluir los datos de la otra persona
+                    datosOtraPersona: datosOtraPersona 
                 });
 
                 alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
