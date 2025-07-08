@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Referencias para los nuevos elementos del modal de carrito (Medios de Envío)
     const radioEnvioDomicilio = document.getElementById('envioDomicilio');
     const radioRetirarPunto = document.getElementById('retirarPunto');
+    const inputCodigoPostal = document.getElementById('inputCodigoPostal');
+    const btnCalcularEnvio = document.getElementById('btnCalcularEnvio');
+    const linkBuscarAqui = document.getElementById('linkBuscarAqui');
     const btnIniciarCompra = document.getElementById('btnIniciarCompra');
     // Campo para el mensaje de coordinación (si se elige envío a domicilio)
     const mensajeCoordinarEnvio = document.getElementById('mensajeCoordinarEnvio');
@@ -52,6 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Referencia a contenedorCatalogo:", contenedorCatalogo);
     console.log("Referencia a radioEnvioDomicilio:", radioEnvioDomicilio);
     console.log("Referencia a radioRetirarPunto:", radioRetirarPunto);
+    console.log("Referencia a inputCodigoPostal:", inputCodigoPostal);
+    console.log("Referencia a btnCalcularEnvio:", btnCalcularEnvio);
     console.log("Referencia a btnIniciarCompra:", btnIniciarCompra);
     console.log("Referencia a mensajeCoordinarEnvio:", mensajeCoordinarEnvio);
     console.log("Referencia a divEnvioDomicilio:", divEnvioDomicilio);
@@ -443,13 +448,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Asegurarse de que las secciones de envío se muestran/ocultan según lo definido en HTML
-        const opcionesEnvioDomicilio = document.getElementById('opcionesEnvioDomicilio'); // Esta referencia no existe en el HTML que me pasaste, la ignoramos.
-        const opcionesRetirarPor = document.getElementById('opcionesRetirarPor'); // Esta referencia no existe en el HTML que me pasaste, la ignoramos.
-        
-        // La lógica de handleEnvioOptions ya maneja la visibilidad de divEnvioDomicilio y divRetirarPunto.
-        // Las líneas de abajo que hacían referencia a opcionesEnvioDomicilio y opcionesRetirarPor las he eliminado
-        // porque no existen en tu HTML y causaban confusión.
-
+        // NOTA: Las referencias 'opcionesEnvioDomicilio' y 'opcionesRetirarPor' no están definidas en la sección de referencias del DOM.
+        // Si estos elementos existen en tu HTML, asegúrate de añadir sus referencias al inicio del script.
+        // Por ahora, la lógica de handleEnvioOptions ya maneja la visibilidad de divEnvioDomicilio y divRetirarPunto.
+        // Si estas líneas causan un error, elimínalas o define las referencias.
+        const opcionesEnvioDomicilio = document.getElementById('opcionesEnvioDomicilio');
+        const opcionesRetirarPor = document.getElementById('opcionesRetirarPor');
+        if (opcionesEnvioDomicilio) {
+            opcionesEnvioDomicilio.style.display = 'block'; // Siempre visible según el nuevo HTML
+        }
+        if (opcionesRetirarPor) {
+            opcionesRetirarPor.style.display = 'none'; // Siempre oculta según el nuevo HTML
+        }
         // Adjuntar eventos a los botones de eliminar y cantidad DESPUÉS de que se hayan agregado al DOM
         adjuntarEventosCarrito();
     };
@@ -583,6 +593,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event listener para el botón INICIAR COMPRA
+    // Reajustamos la lógica del botón "Iniciar Compra" para usar la variable global `envioSeleccionadoValido`
+    // y solo mostrar el alert cuando sea válido.
     if (btnIniciarCompra) {
         btnIniciarCompra.addEventListener('click', () => {
             if (carrito.length === 0) {
@@ -590,21 +602,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            let metodoEnvioSeleccionado = '';
+            // Si hay ítems en el carrito, verificamos la selección de envío
             if (radioEnvioDomicilio && radioEnvioDomicilio.checked) {
-                metodoEnvioSeleccionado = 'domicilio';
+                if (inputCodigoPostal && inputCodigoPostal.value.trim() !== '') {
+                    // Simulación de cálculo de envío exitoso
+                    alert('¡Iniciando compra con envío a domicilio! Serás contactado para coordinar el envío a tu código postal.');
+                    console.log('Compra iniciada con envío a domicilio. Carrito:', carrito);
+                    // Aquí podrías vaciar el carrito o redirigir
+                } else {
+                    alert('Por favor, ingresa tu código postal para coordinar el envío a domicilio.');
+                    console.log('Falta código postal para envío a domicilio.');
+                }
             } else if (radioRetirarPunto && radioRetirarPunto.checked) {
-                metodoEnvioSeleccionado = 'retiro';
-            }
-
-            if (metodoEnvioSeleccionado) {
-                // Guardar los datos del carrito y el método de envío en localStorage
-                localStorage.setItem('checkoutData', JSON.stringify({
-                    carrito: carrito,
-                    metodoEnvio: metodoEnvioSeleccionado
-                }));
-                // Redirigir a la página de checkout
-                window.location.href = 'checkout.html';
+                alert('¡Iniciando compra con retiro en punto! Serás contactado para coordinar el retiro.');
+                console.log('Compra iniciada con retiro en punto. Carrito:', carrito);
+                // Aquí podrías vaciar el carrito o redirigir
             } else {
                 alert('Por favor, selecciona un método de envío (Domicilio o Retirar por punto) para iniciar la compra.');
                 console.log('Ningún método de envío seleccionado.');
@@ -739,8 +751,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (mensajeCoordinarEnvio) {
                     mensajeCoordinarEnvio.style.display = 'block'; // Mostrar mensaje de coordinación
                 }
-                // Envío a domicilio siempre es válido una vez seleccionado (sin CP)
-                envioSeleccionadoValido = true;
+                // Habilitar botón de compra solo si hay CP
+                envioSeleccionadoValido = (inputCodigoPostal && inputCodigoPostal.value.trim() !== '');
                 console.log("Envío a domicilio seleccionado. Valido:", envioSeleccionadoValido);
             } else if (radioRetirarPunto.checked) {
                 divEnvioDomicilio.style.display = 'none';
@@ -775,8 +787,36 @@ document.addEventListener('DOMContentLoaded', () => {
     if (radioRetirarPunto) {
         radioRetirarPunto.addEventListener('change', handleEnvioOptions);
     }
-    // inputCodigoPostal y btnCalcularEnvio ya no tienen event listeners aquí
-    // linkBuscarAqui ya no tiene event listener aquí
+    // Event listener para el input de código postal (para validación en tiempo real)
+    if (inputCodigoPostal) {
+        inputCodigoPostal.addEventListener('input', handleEnvioOptions);
+    }
+
+    // Event listener para el botón "Calcular Envío" (si lo necesitas para una simulación específica)
+    if (btnCalcularEnvio) {
+        btnCalcularEnvio.addEventListener('click', () => {
+            if (inputCodigoPostal && inputCodigoPostal.value.trim() !== '') {
+                // Aquí iría la lógica para llamar a una API de envío real
+                alert(`Calculando envío para CP: ${inputCodigoPostal.value}. Se coordina con el vendedor.`);
+                console.log(`Simulación de cálculo de envío para CP: ${inputCodigoPostal.value}`);
+                envioSeleccionadoValido = true; // Considerar válido después de "calcular"
+            } else {
+                alert('Por favor, ingresa un código postal.');
+                envioSeleccionadoValido = false;
+            }
+            if (btnIniciarCompra) {
+                btnIniciarCompra.disabled = carrito.length === 0 || !envioSeleccionadoValido;
+            }
+        });
+    }
+
+    if (linkBuscarAqui) {
+        linkBuscarAqui.addEventListener('click', (e) => {
+            e.preventDefault(); // Previene la navegación
+            alert('En una aplicación real, esto abriría un pop-up o redirigiría a un buscador de códigos postales.');
+            window.open('https://www.correoargentino.com.ar/formularios/cpa', '_blank'); // Ejemplo de enlace externo
+        });
+    }
 
     // --- 5. Carga Inicial de Datos y Renderizado ---
 
