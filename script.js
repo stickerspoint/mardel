@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Referencias para los nuevos elementos del modal de carrito (Medios de Envío)
     const radioEnvioDomicilio = document.getElementById('envioDomicilio');
     const radioRetirarPunto = document.getElementById('retirarPunto');
-    // inputCodigoPostal, btnCalcularEnvio, linkBuscarAqui ya no son necesarios en el HTML ni aquí
     const btnIniciarCompra = document.getElementById('btnIniciarCompra');
     // Campo para el mensaje de coordinación (si se elige envío a domicilio)
     const mensajeCoordinarEnvio = document.getElementById('mensajeCoordinarEnvio');
@@ -53,8 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Referencia a contenedorCatalogo:", contenedorCatalogo);
     console.log("Referencia a radioEnvioDomicilio:", radioEnvioDomicilio);
     console.log("Referencia a radioRetirarPunto:", radioRetirarPunto);
-    // console.log("Referencia a inputCodigoPostal:", inputCodigoPostal); // Ya no es necesario
-    // console.log("Referencia a btnCalcularEnvio:", btnCalcularEnvio); // Ya no es necesario
     console.log("Referencia a btnIniciarCompra:", btnIniciarCompra);
     console.log("Referencia a mensajeCoordinarEnvio:", mensajeCoordinarEnvio);
     console.log("Referencia a divEnvioDomicilio:", divEnvioDomicilio);
@@ -700,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (nextBtnGaleria) {
-            nextBtnCarrusel.addEventListener('click', () => {
+            nextBtnGaleria.addEventListener('click', () => {
                 indiceActualCarrusel = (indiceActualCarrusel === imagenesCarrusel.length - 1) ? 0 : indiceActualCarrusel + 1;
                 actualizarCarrusel();
             });
