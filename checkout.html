@@ -76,6 +76,7 @@
             font-size: 1.1em;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-top: 20px; /* Espacio para el botón */
         }
         .btn-finalizar-compra:hover {
             background-color: #e0950b;
@@ -87,6 +88,22 @@
             border-radius: 5px;
             margin-bottom: 20px;
             color: #0050b3;
+            display: flex; /* Para alinear el texto y el botón */
+            justify-content: space-between; /* Para separar el texto y el botón */
+            align-items: center; /* Para centrar verticalmente */
+        }
+        .btn-editar-envio {
+            background-color: #6c757d; /* Color gris para el botón de editar */
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        .btn-editar-envio:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
@@ -116,6 +133,8 @@
             </div>
             <div id="resumenMetodoEnvio" class="mensaje-envio-checkout">
                 <!-- Información del método de envío se cargará aquí -->
+                <span id="textoMetodoEnvio"></span>
+                <button id="btnEditarEnvio" class="btn-editar-envio">Editar</button>
             </div>
         </div>
 
@@ -156,6 +175,8 @@
             const resumenListaCarrito = document.getElementById('resumenListaCarrito');
             const resumenTotal = document.getElementById('resumenTotal');
             const resumenMetodoEnvio = document.getElementById('resumenMetodoEnvio');
+            const textoMetodoEnvio = document.getElementById('textoMetodoEnvio'); // Nuevo span para el texto
+            const btnEditarEnvio = document.getElementById('btnEditarEnvio');     // Nuevo botón de editar
             const direccionEnvioGroup = document.getElementById('direccionEnvioGroup');
             const checkoutForm = document.getElementById('checkoutForm');
 
@@ -175,11 +196,11 @@
 
                 // Mostrar información del método de envío
                 if (checkoutData.metodoEnvio === 'domicilio') {
-                    resumenMetodoEnvio.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
+                    textoMetodoEnvio.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
                     direccionEnvioGroup.style.display = 'block'; // Mostrar campo de dirección
                     document.getElementById('direccion').setAttribute('required', 'required'); // Hacerlo requerido
                 } else if (checkoutData.metodoEnvio === 'retiro') {
-                    resumenMetodoEnvio.textContent = `Retiro en Nuestro Local. Serás contactado para coordinar.`;
+                    textoMetodoEnvio.textContent = `Retiro en Nuestro Local. Serás contactado para coordinar.`;
                     direccionEnvioGroup.style.display = 'none'; // Ocultar campo de dirección
                     document.getElementById('direccion').removeAttribute('required'); // No requerido
                 }
@@ -187,6 +208,16 @@
                 // Si no hay datos en el carrito, redirigir al catálogo o mostrar un mensaje
                 alert('No hay productos en el carrito para finalizar la compra. Redirigiendo al catálogo.');
                 window.location.href = 'catalogo.html'; 
+            }
+
+            // Event Listener para el botón "Editar Envío"
+            if (btnEditarEnvio) {
+                btnEditarEnvio.addEventListener('click', () => {
+                    // Redirigir a la página principal o catálogo, y abrir el modal del carrito
+                    // Para abrir el modal automáticamente, podemos usar un parámetro en la URL o localStorage
+                    localStorage.setItem('abrirCarritoModal', 'true'); // Indicador para script.js
+                    window.location.href = 'index.html'; // O 'catalogo.html' si es donde quieres que se edite
+                });
             }
 
             // Manejar el envío del formulario de checkout
@@ -211,6 +242,7 @@
                 alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
                 localStorage.removeItem('carrito'); // Vaciar el carrito después de la compra
                 localStorage.removeItem('checkoutData'); // Limpiar los datos de checkout
+                localStorage.removeItem('abrirCarritoModal'); // Limpiar el indicador
                 window.location.href = 'index.html'; // Redirigir a la página de inicio
             });
         });
