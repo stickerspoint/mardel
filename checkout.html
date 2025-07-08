@@ -76,7 +76,7 @@
             font-size: 1.1em;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-top: 20px; /* Espacio para el botón */
+            margin-top: 20px;
         }
         .btn-finalizar-compra:hover {
             background-color: #e0950b;
@@ -88,22 +88,78 @@
             border-radius: 5px;
             margin-bottom: 20px;
             color: #0050b3;
-            display: flex; /* Para alinear el texto y el botón */
-            justify-content: space-between; /* Para separar el texto y el botón */
-            align-items: center; /* Para centrar verticalmente */
         }
-        .btn-editar-envio {
-            background-color: #6c757d; /* Color gris para el botón de editar */
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
+
+        /* Estilos para la sección de Medios de Envío en Checkout */
+        .checkout-seccion-envio {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .checkout-seccion-envio h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .checkout-opcion-envio-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: flex-start;
             cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
         }
-        .btn-editar-envio:hover {
-            background-color: #5a6268;
+        .checkout-opcion-envio-item:hover {
+            background-color: #f0f0f0;
+        }
+        .checkout-opcion-envio-item input[type="radio"] {
+            margin-right: 15px;
+            margin-top: 5px; /* Alineación con el texto */
+            min-width: 20px; /* Asegura un tamaño mínimo para el radio button */
+            min-height: 20px;
+        }
+        .checkout-opcion-envio-item input[type="radio"]:checked + div {
+            border-color: #f0a41c; /* Resalta el div cuando está seleccionado */
+        }
+        .checkout-opcion-envio-item input[type="radio"]:checked + div .titulo-opcion {
+            color: #f0a41c; /* Resalta el título */
+        }
+        .checkout-opcion-envio-item > div {
+            flex-grow: 1;
+        }
+        .checkout-opcion-envio-item .titulo-opcion {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .checkout-opcion-envio-item .descripcion-opcion {
+            font-size: 0.9em;
+            color: #777;
+            line-height: 1.4;
+        }
+        .checkout-opcion-envio-item .costo-envio {
+            font-weight: bold;
+            color: #28a745; /* Verde para "Gratis" */
+            margin-left: 15px;
+            white-space: nowrap; /* Evita que el texto se rompa */
+        }
+        .checkout-opcion-envio-item .costo-envio.a-coordinar {
+            color: #f0a41c; /* Naranja para "A coordinar" */
+        }
+        /* Estilos para los divs de información adicional (se muestran/ocultan con JS) */
+        .checkout-info-envio {
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            color: #0050b3;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -131,10 +187,9 @@
             <div class="resumen-total">
                 Total del Pedido: $<span id="resumenTotal">0.00</span>
             </div>
+            <!-- El mensaje de envío ahora se actualizará dinámicamente -->
             <div id="resumenMetodoEnvio" class="mensaje-envio-checkout">
-                <!-- Información del método de envío se cargará aquí -->
-                <span id="textoMetodoEnvio"></span>
-                <button id="btnEditarEnvio" class="btn-editar-envio">Editar</button>
+                <!-- El texto del método de envío se actualizará aquí -->
             </div>
         </div>
 
@@ -152,9 +207,46 @@
                 <label for="telefono">Teléfono:</label>
                 <input type="tel" id="telefono" required>
             </div>
+            
+            <!-- Sección de Medios de Envío integrada directamente en el formulario -->
+            <div class="checkout-seccion-envio">
+                <h3>Selecciona tu Método de Envío</h3>
+                
+                <div class="checkout-opcion-envio-item">
+                    <label>
+                        <input type="radio" name="opcionEnvioCheckout" id="envioDomicilioCheckout" value="domicilio"> 
+                        <div>
+                            <p class="titulo-opcion">Envío a Domicilio en Mar del Plata</p>
+                            <p class="descripcion-opcion">Te contactaremos para coordinar la entrega y el costo del envío.</p>
+                        </div>
+                        <span class="costo-envio a-coordinar">A coordinar</span>
+                    </label>
+                </div>
+
+                <div id="divEnvioDomicilioCheckoutInfo" class="checkout-info-envio" style="display: none;"> 
+                    Se coordinará el envío a tu domicilio.
+                </div>
+
+                <div class="checkout-opcion-envio-item">
+                    <label>
+                        <input type="radio" name="opcionEnvioCheckout" id="retirarPuntoCheckout" value="retiro">
+                        <div>
+                            <p class="titulo-opcion">Retirar en Nuestro Local StickersPoint</p>
+                            <p class="descripcion-opcion">Mar del Plata - Dirección (aguardar mensaje para retirar)</p>
+                        </div>
+                        <span class="costo-envio">Gratis</span>
+                    </label>
+                </div>
+
+                <div id="divRetirarPuntoCheckoutInfo" class="checkout-info-envio" style="display: none;">
+                    Puedes retirar tu pedido en nuestro local en Mar del Plata. Te enviaremos la dirección exacta y los horarios de retiro una vez que tu pedido esté listo.
+                </div>
+
+            </div> <!-- Cierre de checkout-seccion-envio -->
+
             <div class="form-group" id="direccionEnvioGroup" style="display: none;">
                 <label for="direccion">Dirección de Envío:</label>
-                <input type="text" id="direccion" placeholder="Calle, número, piso, depto." required>
+                <input type="text" id="direccion" placeholder="Calle, número, piso, depto.">
             </div>
             <div class="form-group" id="notasPedidoGroup">
                 <label for="notas">Notas del Pedido (opcional):</label>
@@ -175,10 +267,37 @@
             const resumenListaCarrito = document.getElementById('resumenListaCarrito');
             const resumenTotal = document.getElementById('resumenTotal');
             const resumenMetodoEnvio = document.getElementById('resumenMetodoEnvio');
-            const textoMetodoEnvio = document.getElementById('textoMetodoEnvio'); // Nuevo span para el texto
-            const btnEditarEnvio = document.getElementById('btnEditarEnvio');     // Nuevo botón de editar
             const direccionEnvioGroup = document.getElementById('direccionEnvioGroup');
             const checkoutForm = document.getElementById('checkoutForm');
+
+            // Nuevas referencias para los elementos de envío en Checkout
+            const radioEnvioDomicilioCheckout = document.getElementById('envioDomicilioCheckout');
+            const radioRetirarPuntoCheckout = document.getElementById('retirarPuntoCheckout');
+            const divEnvioDomicilioCheckoutInfo = document.getElementById('divEnvioDomicilioCheckoutInfo');
+            const divRetirarPuntoCheckoutInfo = document.getElementById('divRetirarPuntoCheckoutInfo');
+            const inputDireccion = document.getElementById('direccion'); // Referencia al input de dirección
+
+            let metodoEnvioActual = ''; // Variable para guardar el método de envío actual
+
+            // Función para actualizar la UI según la opción de envío seleccionada
+            const handleEnvioOptionsCheckout = () => {
+                if (radioEnvioDomicilioCheckout.checked) {
+                    resumenMetodoEnvio.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
+                    divEnvioDomicilioCheckoutInfo.style.display = 'block';
+                    divRetirarPuntoCheckoutInfo.style.display = 'none';
+                    direccionEnvioGroup.style.display = 'block';
+                    inputDireccion.setAttribute('required', 'required');
+                    metodoEnvioActual = 'domicilio';
+                } else if (radioRetirarPuntoCheckout.checked) {
+                    resumenMetodoEnvio.textContent = `Retiro en Nuestro Local. Serás contactado para coordinar.`;
+                    divEnvioDomicilioCheckoutInfo.style.display = 'none';
+                    divRetirarPuntoCheckoutInfo.style.display = 'block';
+                    direccionEnvioGroup.style.display = 'none';
+                    inputDireccion.removeAttribute('required');
+                    inputDireccion.value = ''; // Limpiar el campo si se cambia a retiro
+                    metodoEnvioActual = 'retiro';
+                }
+            };
 
             if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
                 let total = 0;
@@ -194,55 +313,52 @@
                 });
                 resumenTotal.textContent = total.toFixed(2);
 
-                // Mostrar información del método de envío
+                // Marcar el radio button correcto al cargar la página
                 if (checkoutData.metodoEnvio === 'domicilio') {
-                    textoMetodoEnvio.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
-                    direccionEnvioGroup.style.display = 'block'; // Mostrar campo de dirección
-                    document.getElementById('direccion').setAttribute('required', 'required'); // Hacerlo requerido
+                    radioEnvioDomicilioCheckout.checked = true;
                 } else if (checkoutData.metodoEnvio === 'retiro') {
-                    textoMetodoEnvio.textContent = `Retiro en Nuestro Local. Serás contactado para coordinar.`;
-                    direccionEnvioGroup.style.display = 'none'; // Ocultar campo de dirección
-                    document.getElementById('direccion').removeAttribute('required'); // No requerido
+                    radioRetirarPuntoCheckout.checked = true;
                 }
+                handleEnvioOptionsCheckout(); // Llamar para inicializar la UI
+
             } else {
                 // Si no hay datos en el carrito, redirigir al catálogo o mostrar un mensaje
                 alert('No hay productos en el carrito para finalizar la compra. Redirigiendo al catálogo.');
                 window.location.href = 'catalogo.html'; 
             }
 
-            // Event Listener para el botón "Editar Envío"
-            if (btnEditarEnvio) {
-                btnEditarEnvio.addEventListener('click', () => {
-                    // Redirigir a la página principal o catálogo, y abrir el modal del carrito
-                    // Para abrir el modal automáticamente, podemos usar un parámetro en la URL o localStorage
-                    localStorage.setItem('abrirCarritoModal', 'true'); // Indicador para script.js
-                    window.location.href = 'index.html'; // O 'catalogo.html' si es donde quieres que se edite
-                });
-            }
+            // Event Listeners para los radio buttons de envío en Checkout
+            radioEnvioDomicilioCheckout.addEventListener('change', handleEnvioOptionsCheckout);
+            radioRetirarPuntoCheckout.addEventListener('change', handleEnvioOptionsCheckout);
 
             // Manejar el envío del formulario de checkout
             checkoutForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                // Aquí iría la lógica para procesar la compra
-                // (ej. enviar datos a un servidor, integrar con pasarela de pago)
+                
+                // Validar la dirección si el envío es a domicilio
+                if (metodoEnvioActual === 'domicilio' && inputDireccion.value.trim() === '') {
+                    alert('Por favor, ingresa tu dirección de envío.');
+                    inputDireccion.focus();
+                    return;
+                }
 
                 const nombre = document.getElementById('nombre').value;
                 const email = document.getElementById('email').value;
                 const telefono = document.getElementById('telefono').value;
-                const direccion = checkoutData.metodoEnvio === 'domicilio' ? document.getElementById('direccion').value : 'N/A';
+                const direccion = metodoEnvioActual === 'domicilio' ? inputDireccion.value : 'N/A';
                 const notas = document.getElementById('notas').value;
 
                 console.log('Datos del Pedido:', {
                     carrito: checkoutData.carrito,
                     total: resumenTotal.textContent,
-                    metodoEnvio: resumenMetodoEnvio.textContent,
+                    metodoEnvio: metodoEnvioActual, // Usar el método de envío actual
                     datosCliente: { nombre, email, telefono, direccion, notas }
                 });
 
                 alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
                 localStorage.removeItem('carrito'); // Vaciar el carrito después de la compra
                 localStorage.removeItem('checkoutData'); // Limpiar los datos de checkout
-                localStorage.removeItem('abrirCarritoModal'); // Limpiar el indicador
+                localStorage.removeItem('abrirCarritoModal'); // Limpiar el indicador (si lo usábamos para volver)
                 window.location.href = 'index.html'; // Redirigir a la página de inicio
             });
         });
