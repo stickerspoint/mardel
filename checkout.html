@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - StickersPoint</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        /* Estilos básicos para el checkout, puedes expandirlos */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .checkout-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .resumen-pedido ul {
+            list-style: none;
+            padding: 0;
+            border-top: 1px solid #eee;
+        }
+        .resumen-pedido li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .resumen-pedido li span:first-child {
+            font-weight: bold;
+        }
+        .resumen-total {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn-finalizar-compra {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #f0a41c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-finalizar-compra:hover {
+            background-color: #e0950b;
+        }
+        .mensaje-envio-checkout {
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: #0050b3;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">StickersPoint</div>
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Productos</a>
+            <a href="#">Contacto</a>
+        </nav>
+        <div class="icons">
+            <!-- No se necesita el botón del carrito aquí si no se va a interactuar con él en el checkout -->
+        </div>
+    </header>
+
+    <div class="checkout-container">
+        <h1>Finalizar Compra</h1>
+
+        <div class="resumen-pedido">
+            <h2>Resumen de tu Pedido</h2>
+            <ul id="resumenListaCarrito">
+                <!-- Los ítems del carrito se cargarán aquí -->
+            </ul>
+            <div class="resumen-total">
+                Total del Pedido: $<span id="resumenTotal">0.00</span>
+            </div>
+            <div id="resumenMetodoEnvio" class="mensaje-envio-checkout">
+                <!-- Información del método de envío se cargará aquí -->
+            </div>
+        </div>
+
+        <form id="checkoutForm">
+            <h2>Datos de Contacto y Envío</h2>
+            <div class="form-group">
+                <label for="nombre">Nombre Completo:</label>
+                <input type="text" id="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono">Teléfono:</label>
+                <input type="tel" id="telefono" required>
+            </div>
+            <div class="form-group" id="direccionEnvioGroup" style="display: none;">
+                <label for="direccion">Dirección de Envío:</label>
+                <input type="text" id="direccion" placeholder="Calle, número, piso, depto." required>
+            </div>
+            <div class="form-group" id="notasPedidoGroup">
+                <label for="notas">Notas del Pedido (opcional):</label>
+                <textarea id="notas" rows="3"></textarea>
+            </div>
+            
+            <h2>Método de Pago</h2>
+            <p>Aquí irían las opciones de pago (ej. Mercado Pago, Tarjeta, etc.)</p>
+            <!-- Puedes añadir más campos de formulario aquí para el pago -->
+
+            <button type="submit" class="btn-finalizar-compra">CONFIRMAR COMPRA</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkoutData = JSON.parse(localStorage.getItem('checkoutData'));
+            const resumenListaCarrito = document.getElementById('resumenListaCarrito');
+            const resumenTotal = document.getElementById('resumenTotal');
+            const resumenMetodoEnvio = document.getElementById('resumenMetodoEnvio');
+            const direccionEnvioGroup = document.getElementById('direccionEnvioGroup');
+            const checkoutForm = document.getElementById('checkoutForm');
+
+            if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
+                let total = 0;
+                resumenListaCarrito.innerHTML = ''; // Limpiar lista
+                checkoutData.carrito.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${item.nombre} x ${item.cantidad}</span>
+                        <span>$${(item.precio * item.cantidad).toFixed(2)}</span>
+                    `;
+                    resumenListaCarrito.appendChild(li);
+                    total += item.precio * item.cantidad;
+                });
+                resumenTotal.textContent = total.toFixed(2);
+
+                // Mostrar información del método de envío
+                if (checkoutData.metodoEnvio === 'domicilio') {
+                    resumenMetodoEnvio.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
+                    direccionEnvioGroup.style.display = 'block'; // Mostrar campo de dirección
+                    document.getElementById('direccion').setAttribute('required', 'required'); // Hacerlo requerido
+                } else if (checkoutData.metodoEnvio === 'retiro') {
+                    resumenMetodoEnvio.textContent = `Retiro en Nuestro Local. Serás contactado para coordinar.`;
+                    direccionEnvioGroup.style.display = 'none'; // Ocultar campo de dirección
+                    document.getElementById('direccion').removeAttribute('required'); // No requerido
+                }
+            } else {
+                // Si no hay datos en el carrito, redirigir al catálogo o mostrar un mensaje
+                alert('No hay productos en el carrito para finalizar la compra. Redirigiendo al catálogo.');
+                window.location.href = 'catalogo.html'; 
+            }
+
+            // Manejar el envío del formulario de checkout
+            checkoutForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Aquí iría la lógica para procesar la compra
+                // (ej. enviar datos a un servidor, integrar con pasarela de pago)
+
+                const nombre = document.getElementById('nombre').value;
+                const email = document.getElementById('email').value;
+                const telefono = document.getElementById('telefono').value;
+                const direccion = checkoutData.metodoEnvio === 'domicilio' ? document.getElementById('direccion').value : 'N/A';
+                const notas = document.getElementById('notas').value;
+
+                console.log('Datos del Pedido:', {
+                    carrito: checkoutData.carrito,
+                    total: resumenTotal.textContent,
+                    metodoEnvio: resumenMetodoEnvio.textContent,
+                    datosCliente: { nombre, email, telefono, direccion, notas }
+                });
+
+                alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
+                localStorage.removeItem('carrito'); // Vaciar el carrito después de la compra
+                localStorage.removeItem('checkoutData'); // Limpiar los datos de checkout
+                window.location.href = 'index.html'; // Redirigir a la página de inicio
+            });
+        });
+    </script>
+</body>
+</html>
