@@ -27,26 +27,77 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        .resumen-pedido ul {
+        
+        /* Estilos para el resumen de pedido desplegable */
+        .resumen-pedido-toggle {
+            background-color: #e6f7ff; /* Fondo similar al mensaje de envío */
+            border: 1px solid #91d5ff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #0050b3;
+            transition: background-color 0.2s ease;
+        }
+        .resumen-pedido-toggle:hover {
+            background-color: #d1eaff;
+        }
+        .resumen-pedido-toggle .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        .resumen-pedido-toggle.expanded .toggle-icon {
+            transform: rotate(180deg); /* Flecha hacia arriba */
+        }
+        .resumen-pedido-details {
+            display: none; /* Oculto por defecto */
+            background-color: #fefefe;
+            border: 1px solid #eee;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 15px;
+            margin-top: -20px; /* Para que se superponga con el toggle */
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .resumen-pedido-details ul {
             list-style: none;
             padding: 0;
-            border-top: 1px solid #eee;
+            margin: 0;
         }
-        .resumen-pedido li {
+        .resumen-pedido-details li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 0.95em;
+        }
+        .resumen-pedido-details li:last-child {
+            border-bottom: none;
+        }
+        .resumen-pedido-details .subtotal-line,
+        .resumen-pedido-details .envio-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.95em;
+            color: #555;
+        }
+        .resumen-pedido-details .total-line {
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .resumen-pedido li span:first-child {
             font-weight: bold;
+            font-size: 1.1em;
+            border-top: 1px solid #ddd;
+            margin-top: 10px;
+            padding-top: 15px;
         }
-        .resumen-total {
-            text-align: right;
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-top: 20px;
-        }
+
+
         .form-group {
             margin-bottom: 15px;
         }
@@ -243,12 +294,32 @@
 
         <div class="resumen-pedido">
             <h2>Resumen de tu Pedido</h2>
-            <ul id="resumenListaCarrito">
-                <!-- Los ítems del carrito se cargarán aquí -->
-            </ul>
-            <div class="resumen-total">
-                Total del Pedido: $<span id="resumenTotal">0.00</span>
+            
+            <!-- Contenedor desplegable para el resumen de la compra -->
+            <div id="resumenPedidoToggle" class="resumen-pedido-toggle">
+                <span>Ver detalles de mi compra</span>
+                <span id="resumenToggleTotal">$0.00</span>
+                <i class="fas fa-chevron-down toggle-icon"></i>
             </div>
+
+            <div id="resumenPedidoDetails" class="resumen-pedido-details">
+                <ul id="resumenListaCarrito">
+                    <!-- Los ítems del carrito se cargarán aquí -->
+                </ul>
+                <div class="subtotal-line">
+                    <span>Subtotal</span>
+                    <span id="resumenSubtotal">$0.00</span>
+                </div>
+                <div class="envio-line">
+                    <span>Costo de envío</span>
+                    <span id="resumenCostoEnvio">Gratis</span>
+                </div>
+                <div class="total-line">
+                    <span>Total</span>
+                    <span id="resumenTotal">$0.00</span>
+                </div>
+            </div>
+
             <!-- El mensaje de envío ahora se actualizará dinámicamente -->
             <div id="resumenMetodoEnvio" class="mensaje-envio-checkout">
                 <span id="textoMetodoEnvioResumen"></span>
@@ -334,11 +405,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log("Checkout script: DOMContentLoaded.");
             const checkoutData = JSON.parse(localStorage.getItem('checkoutData'));
+            
+            // Referencias del resumen de pedido desplegable
+            const resumenPedidoToggle = document.getElementById('resumenPedidoToggle');
+            const resumenPedidoDetails = document.getElementById('resumenPedidoDetails');
+            const resumenToggleTotal = document.getElementById('resumenToggleTotal');
             const resumenListaCarrito = document.getElementById('resumenListaCarrito');
-            const resumenTotal = document.getElementById('resumenTotal');
+            const resumenSubtotal = document.getElementById('resumenSubtotal');
+            const resumenCostoEnvio = document.getElementById('resumenCostoEnvio');
+            const resumenTotal = document.getElementById('resumenTotal'); // Este es el total final
+
+            // Referencias existentes
             const resumenMetodoEnvio = document.getElementById('resumenMetodoEnvio');
-            const textoMetodoEnvioResumen = document.getElementById('textoMetodoEnvioResumen'); // Para el texto visible
-            const btnEditarMetodoEnvio = document.getElementById('btnEditarMetodoEnvio'); // Botón para abrir modal
+            const textoMetodoEnvioResumen = document.getElementById('textoMetodoEnvioResumen');
+            const btnEditarMetodoEnvio = document.getElementById('btnEditarMetodoEnvio');
             const direccionEnvioGroup = document.getElementById('direccionEnvioGroup');
             const checkoutForm = document.getElementById('checkoutForm');
             const inputDireccion = document.getElementById('direccion');
@@ -352,13 +432,15 @@
             const divRetirarPuntoModalInfo = document.getElementById('divRetirarPuntoModalInfo');
             const btnConfirmarCambioEnvio = document.getElementById('btnConfirmarCambioEnvio');
 
-            let metodoEnvioSeleccionadoActual = checkoutData ? checkoutData.metodoEnvio : ''; // El método de envío que se usará al final
+            let metodoEnvioSeleccionadoActual = checkoutData ? checkoutData.metodoEnvio : ''; 
+            let costoEnvioActual = 0; // Se inicializa a 0, se actualizará según el método
 
             // Función para actualizar la UI principal y el modal según el método de envío actual
             const actualizarUIMetodoEnvio = () => {
                 console.log("Actualizando UI para método de envío:", metodoEnvioSeleccionadoActual);
                 if (metodoEnvioSeleccionadoActual === 'domicilio') {
                     textoMetodoEnvioResumen.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
+                    costoEnvioActual = 'A coordinar'; // O un valor numérico si se calcula
                     direccionEnvioGroup.style.display = 'block';
                     inputDireccion.setAttribute('required', 'required');
                     // Marcar en el modal si está abierto
@@ -367,15 +449,17 @@
                     if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'none';
                 } else if (metodoEnvioSeleccionadoActual === 'retiro') {
                     textoMetodoEnvioResumen.textContent = `Retiro en Nuestro Local. Serás contactado para coordinar.`;
+                    costoEnvioActual = 'Gratis';
                     direccionEnvioGroup.style.display = 'none';
                     inputDireccion.removeAttribute('required');
-                    inputDireccion.value = ''; // Limpiar el campo si se cambia a retiro
+                    inputDireccion.value = ''; 
                     // Marcar en el modal si está abierto
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
                     if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'block';
                 } else {
                     textoMetodoEnvioResumen.textContent = `Selecciona un método de envío.`;
+                    costoEnvioActual = 'N/A';
                     direccionEnvioGroup.style.display = 'none';
                     inputDireccion.removeAttribute('required');
                     inputDireccion.value = '';
@@ -385,12 +469,32 @@
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
                     if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'none';
                 }
+                // Actualizar el costo de envío en el resumen desplegable
+                resumenCostoEnvio.textContent = costoEnvioActual === 'A coordinar' ? costoEnvioActual : `$${parseFloat(costoEnvioActual).toFixed(2)}`;
+                actualizarTotalesResumen(); // Recalcular totales
+            };
+
+            // Función para actualizar los totales en el resumen desplegable
+            const actualizarTotalesResumen = () => {
+                let subtotal = 0;
+                if (checkoutData && checkoutData.carrito) {
+                    subtotal = checkoutData.carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+                }
+                resumenSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+
+                let totalFinal = subtotal;
+                // Si el costo de envío es numérico, sumarlo al total
+                if (typeof costoEnvioActual === 'number') {
+                    totalFinal += costoEnvioActual;
+                }
+
+                resumenTotal.textContent = `$${totalFinal.toFixed(2)}`;
+                resumenToggleTotal.textContent = `$${totalFinal.toFixed(2)}`; // Actualizar el total del botón desplegable
             };
 
             // Inicializar el resumen del carrito
             if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
                 console.log("Checkout data found:", checkoutData);
-                let total = 0;
                 resumenListaCarrito.innerHTML = '';
                 checkoutData.carrito.forEach(item => {
                     const li = document.createElement('li');
@@ -399,17 +503,24 @@
                         <span>$${(item.precio * item.cantidad).toFixed(2)}</span>
                     `;
                     resumenListaCarrito.appendChild(li);
-                    total += item.precio * item.cantidad;
                 });
-                resumenTotal.textContent = total.toFixed(2);
                 
-                // Inicializar el método de envío al cargar la página
+                // Inicializar el método de envío y actualizar la UI
                 actualizarUIMetodoEnvio();
+                actualizarTotalesResumen(); // Asegurar que los totales se calculen al inicio
 
             } else {
                 console.warn("No checkout data found. Redirecting to catalogo.html.");
                 alert('No hay productos en el carrito para finalizar la compra. Redirigiendo al catálogo.');
                 window.location.href = 'catalogo.html'; 
+            }
+
+            // Event Listener para el toggle del resumen de pedido
+            if (resumenPedidoToggle) {
+                resumenPedidoToggle.addEventListener('click', () => {
+                    resumenPedidoDetails.style.display = resumenPedidoDetails.style.display === 'block' ? 'none' : 'block';
+                    resumenPedidoToggle.classList.toggle('expanded'); // Para rotar la flecha
+                });
             }
 
             // Event Listeners para el modal de edición de envío
@@ -466,7 +577,6 @@
                     } else if (radioRetirarPuntoModal.checked) {
                         metodoEnvioSeleccionadoActual = 'retiro';
                     } else {
-                        // Esto no debería pasar si siempre hay uno seleccionado, pero es un fallback
                         alert('Por favor, selecciona un método de envío.');
                         return;
                     }
@@ -501,14 +611,14 @@
                 console.log('Datos del Pedido Final:', {
                     carrito: checkoutData.carrito,
                     total: resumenTotal.textContent,
-                    metodoEnvio: metodoEnvioSeleccionadoActual, // Usar el método de envío actual
+                    metodoEnvio: metodoEnvioSeleccionadoActual, 
                     datosCliente: { nombre, email, telefono, direccion, notas }
                 });
 
                 alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
-                localStorage.removeItem('carrito'); // Vaciar el carrito después de la compra
-                localStorage.removeItem('checkoutData'); // Limpiar los datos de checkout
-                window.location.href = 'index.html'; // Redirigir a la página de inicio
+                localStorage.removeItem('carrito'); 
+                localStorage.removeItem('checkoutData'); 
+                window.location.href = 'index.html'; 
             });
         });
     </script>
