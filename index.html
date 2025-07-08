@@ -63,6 +63,7 @@
 <section class="productos-destacados">
     <h2>Productos Destacados</h2>
     <div id="contenedorDestacados" class="destacados-grid">
+        <!-- Los productos destacados se cargarán aquí mediante JavaScript -->
     </div>
 </section>
 
@@ -78,7 +79,8 @@
             
             <div class="opcion-envio-item">
                 <label>
-                    <input type="radio" name="opcionEnvio" value="envioMarDelPlata" data-costo="0" data-nombre="Envío a Domicilio en Mar del Plata" checked> 
+                    <!-- ID añadido para el radio de envío a domicilio -->
+                    <input type="radio" name="opcionEnvio" id="envioDomicilio" value="envioMarDelPlata" data-costo="0" data-nombre="Envío a Domicilio en Mar del Plata" checked> 
                     <div>
                         <p class="titulo-opcion">Envío a Domicilio en Mar del Plata</p>
                         <p class="descripcion-opcion">Te contactaremos para coordinar la entrega y el costo del envío.</p>
@@ -87,9 +89,22 @@
                 </label>
             </div>
 
+            <!-- Contenedor para la opción de Envío a Domicilio (inicialmente oculto o mostrado por JS) -->
+            <div id="divEnvioDomicilio" style="display: none;"> 
+                <div class="input-group">
+                    <label for="inputCodigoPostal">Código Postal:</label>
+                    <input type="text" id="inputCodigoPostal" placeholder="Ej: 7600">
+                    <button id="btnCalcularEnvio">Calcular Envío</button>
+                </div>
+                <p id="mensajeCoordinarEnvio" class="mensaje-coordinar" style="display: none;">
+                    Se coordinará el envío a tu domicilio. <a href="#" id="linkBuscarAqui" target="_blank">¿No sabés tu código postal? Buscalo aquí.</a>
+                </p>
+            </div>
+
             <div class="opcion-envio-item">
                 <label>
-                    <input type="radio" name="opcionEnvio" value="retirarLocal" data-costo="0" data-nombre="Retiro en Nuestro Local">
+                    <!-- ID añadido para el radio de retirar en punto -->
+                    <input type="radio" name="opcionEnvio" id="retirarPunto" value="retirarLocal" data-costo="0" data-nombre="Retiro en Nuestro Local">
                     <div>
                         <p class="titulo-opcion">Retirar en Nuestro Local StickersPoint</p>
                         <p class="descripcion-opcion">Mar del Plata - Dirección (aguardar mensaje para retirar)</p>
@@ -98,7 +113,14 @@
                 </label>
             </div>
 
+            <!-- Contenedor para la opción de Retirar en Punto (inicialmente oculto o mostrado por JS) -->
+            <div id="divRetirarPunto" style="display: none;">
+                <p class="mensaje-retiro">
+                    Puedes retirar tu pedido en nuestro local en Mar del Plata. Te enviaremos la dirección exacta y los horarios de retiro una vez que tu pedido esté listo.
+                </p>
             </div>
+
+        </div> <!-- Cierre de carrito-seccion-envio -->
 
         <div class="carrito-acciones">
             Total: $<span id="totalCarrito">0.00</span>
@@ -107,6 +129,10 @@
         <button id="btnIniciarCompra" class="btn-iniciar-compra" disabled>INICIAR COMPRA</button>
     </div>
 </div>
+
+<button id="scrollToTopBtn" class="scroll-to-top-btn" aria-label="Volver arriba">
+    <i class="fas fa-arrow-up"></i>
+</button>
 
 <script src="script.js"></script>
 </body>
