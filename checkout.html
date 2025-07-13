@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <style>
-        /* Estilos básicos para el checkout */
+        /* Estilos básicos para el checkout, puedes expandirlos */
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f8f8;
@@ -19,7 +19,7 @@
             margin: 50px auto;
             background-color: #fff;
             padding: 30px;
-            border-radius: 8px;
+            border-radius: 8px; /* Corregido el valor de border-radius */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         h1, h2 {
@@ -478,6 +478,12 @@
                 <input type="tel" id="telefono" required>
             </div>
             
+            <!-- Campo de Dirección de Envío movido aquí -->
+            <div class="form-group" id="direccionEnvioGroup" style="display: none;">
+                <label for="direccion">Dirección de Envío:</label>
+                <input type="text" id="direccion" placeholder="Calle, número, piso, depto.">
+            </div>
+
             <div class="form-group">
                 <input type="checkbox" id="otraPersonaCheckbox">
                 <label for="otraPersonaCheckbox" style="display: inline-block; margin-left: 10px;">Retira/Recibe otra persona</label>
@@ -499,10 +505,42 @@
                 </div>
             </div>
 
-            <div class="form-group" id="direccionEnvioGroup" style="display: none;">
-                <label for="direccion">Dirección de Envío:</label>
-                <input type="text" id="direccion" placeholder="Calle, número, piso, depto.">
-            </div>
+            <!-- Sección de Medios de Envío -->
+            <div class="checkout-seccion-envio">
+                <h3>Selecciona tu Método de Envío</h3>
+                
+                <div class="checkout-opcion-envio-item">
+                    <label>
+                        <input type="radio" name="opcionEnvioCheckout" id="envioDomicilioCheckout" value="domicilio"> 
+                        <div>
+                            <p class="titulo-opcion">Envío a Domicilio en Mar del Plata</p>
+                            <p class="descripcion-opcion">Te contactaremos para coordinar la entrega y el costo del envío.</p>
+                        </div>
+                        <span class="costo-envio a-coordinar">A coordinar</span>
+                    </label>
+                </div>
+
+                <div id="divEnvioDomicilioCheckoutInfo" class="checkout-info-envio" style="display: none;"> 
+                    Se coordinará el envío a tu domicilio.
+                </div>
+
+                <div class="checkout-opcion-envio-item">
+                    <label>
+                        <input type="radio" name="opcionEnvioCheckout" id="retirarPuntoCheckout" value="retiro">
+                        <div>
+                            <p class="titulo-opcion">Retirar en Nuestro Local StickersPoint</p>
+                            <p class="descripcion-opcion">Mar del Plata - Dirección (aguardar mensaje para retirar)</p>
+                        </div>
+                        <span class="costo-envio">Gratis</span>
+                    </label>
+                </div>
+
+                <div id="divRetirarPuntoCheckoutInfo" class="checkout-info-envio" style="display: none;">
+                    Puedes retirar tu pedido en nuestro local en Mar del Plata. Te enviaremos la dirección exacta y los horarios de retiro una vez que tu pedido esté listo.
+                </div>
+
+            </div> <!-- Cierre de checkout-seccion-envio -->
+
             <div class="form-group" id="notasPedidoGroup">
                 <label for="notas">Notas del Pedido (opcional):</label>
                 <textarea id="notas" rows="3"></textarea>
@@ -735,17 +773,6 @@
                 // Por ahora, solo se usan en el console.log del submit
             };
 
-            // Eliminamos los event listeners de input para el resumen de datos del cliente,
-            // ya que ya no se actualiza dinámicamente en el HTML actual.
-            // inputNombre.addEventListener('input', actualizarResumenDatosCliente);
-            // inputEmail.addEventListener('input', actualizarResumenDatosCliente);
-            // inputTelefono.addEventListener('input', actualizarResumenDatosCliente);
-            // inputDireccion.addEventListener('input', actualizarResumenDatosCliente);
-            // inputNotas.addEventListener('input', actualizarResumenDatosCliente);
-            // if (inputNombreOtraPersona) inputNombreOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
-            // if (inputEmailOtraPersona) inputEmailOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
-            // if (inputTelefonoOtraPersona) inputTelefonoOtraPersona.addEventListener('input', actualizarResumenDatosCliente);
-
 
             // Inicializar el resumen del carrito y otros componentes
             if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
@@ -763,7 +790,6 @@
                 actualizarUIMetodoEnvio();
                 actualizarTotalesResumen(); 
                 actualizarBarraProgreso('entrega'); 
-                // actualizarResumenDatosCliente(); // Ya no es necesario llamarlo aquí al inicio para actualizar el HTML
 
             } else {
                 console.warn("No checkout data found. Redirecting to catalogo.html.");
@@ -840,7 +866,6 @@
                         metodoEnvio: metodoEnvioSeleccionadoActual
                     }));
                     actualizarUIMetodoEnvio(); 
-                    // actualizarResumenDatosCliente(); // Ya no es necesario aquí
                     modalEditarEnvio.style.display = 'none'; 
                 });
             }
@@ -863,7 +888,6 @@
                         inputEmailOtraPersona.value = '';
                         inputTelefonoOtraPersona.value = '';
                     }
-                    // actualizarResumenDatosCliente(); // Ya no es necesario aquí
                 });
             }
 
