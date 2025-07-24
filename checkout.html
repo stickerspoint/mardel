@@ -428,6 +428,192 @@
             color: #333;
             margin-right: 5px;
         }
+
+        /* Estilos para la sección de Métodos de Pago */
+        .checkout-seccion-pago {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .checkout-seccion-pago h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        /* Reutilizamos los estilos de .opcion-envio-item para las opciones de pago */
+        .checkout-opcion-pago-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .checkout-opcion-pago-item:last-child {
+            margin-bottom: 0;
+        }
+        .checkout-opcion-pago-item:hover {
+            background-color: #fcfcfc;
+            border-color: var(--color-primario);
+        }
+        .checkout-opcion-pago-item label {
+            display: flex;
+            width: 100%;
+            cursor: pointer;
+            align-items: center; /* Alinea verticalmente el radio con el texto */
+        }
+        .checkout-opcion-pago-item input[type="radio"] {
+            margin-right: 15px;
+            min-width: 20px;
+            min-height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            appearance: none;
+            -webkit-appearance: none;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+        }
+        .checkout-opcion-pago-item input[type="radio"]::before {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+            background-color: transparent;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: background-color 0.2s ease;
+        }
+        .checkout-opcion-pago-item input[type="radio"]:checked {
+            border-color: #28a745; /* Borde verde cuando está seleccionado */
+        }
+        .checkout-opcion-pago-item input[type="radio"]:checked::before {
+            background-color: #28a745; /* Círculo interior VERDE cuando está seleccionado */
+        }
+        .checkout-opcion-pago-item .titulo-opcion {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .checkout-opcion-pago-item:has(input[type="radio"]:checked) {
+            border-color: #f0a41c; /* Borde naranja más oscuro */
+            background-color: #fef8f0; /* Fondo ligeramente anaranjado */
+            box-shadow: 0 0 8px rgba(240, 164, 28, 0.2); /* Sombra suave */
+        }
+        .checkout-opcion-pago-item:has(input[type="radio"]:checked) .titulo-opcion {
+            color: #f0a41c;
+        }
+        .mensaje-pago-checkout {
+            background-color: #fff5e9; /* Fondo amarillo claro */
+            border: 1px solid #f0a41c; /* Borde amarillo */
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #f0a41c; /* Texto amarillo */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Estilos para el nuevo modal de transferencia */
+        .modal-transferencia {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Fondo oscuro */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content-transferencia {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            text-align: center;
+        }
+        .close-modal-transferencia {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+        .close-modal-transferencia:hover,
+        .close-modal-transferencia:focus {
+            color: black;
+            text-decoration: none;
+        }
+        .modal-content-transferencia h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .modal-content-transferencia p {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .datos-transferencia {
+            background-color: #f9f9f9;
+            border: 1px dashed #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .datos-transferencia p {
+            margin: 8px 0;
+            font-size: 1em;
+            color: #333;
+        }
+        .datos-transferencia strong {
+            color: #000;
+            min-width: 80px;
+            display: inline-block;
+        }
+        .instrucciones-transferencia {
+            font-size: 0.95em;
+            color: #777;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+        .btn-confirmar-transferencia {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #f0a41c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+        }
+        .btn-confirmar-transferencia:hover {
+            background-color: #e0950b;
+        }
     </style>
 </head>
 <body>
@@ -551,9 +737,30 @@
                 <textarea id="notas" rows="3"></textarea>
             </div>
             
-            <h2>Método de Pago</h2>
-            <p>Aquí irían las opciones de pago (ej. Mercado Pago, Tarjeta, etc.)</p>
-            <button type="submit" class="btn-finalizar-compra">CONFIRMAR COMPRA</button>
+            <!-- Sección de Métodos de Pago -->
+            <div class="checkout-seccion-pago">
+                <h3>Método de Pago</h3>
+                
+                <div class="checkout-opcion-pago-item">
+                    <label>
+                        <input type="radio" name="opcionPagoCheckout" id="pagoMercadoPago" value="mercadoPago"> 
+                        <span class="titulo-opcion">Mercado Pago</span>
+                    </label>
+                </div>
+
+                <div class="checkout-opcion-pago-item">
+                    <label>
+                        <input type="radio" name="opcionPagoCheckout" id="pagoTransferencia" value="transferencia">
+                        <span class="titulo-opcion">Transferencia Bancaria</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="resumenMetodoPago" class="mensaje-pago-checkout" style="display: none;">
+                <span id="textoMetodoPagoResumen"></span>
+            </div>
+
+            <button type="submit" class="btn-finalizar-compra" disabled>CONFIRMAR COMPRA</button>
         </form>
 
     </div>
@@ -598,6 +805,23 @@
         </div>
     </div>
 
+    <!-- Modal para mostrar datos de transferencia -->
+    <div id="modalTransferencia" class="modal-transferencia">
+        <div class="modal-content-transferencia">
+            <span class="close-modal-transferencia">&times;</span>
+            <h2>Datos para Transferencia Bancaria</h2>
+            <p>Por favor, realiza la transferencia a los siguientes datos:</p>
+            <div class="datos-transferencia">
+                <p><strong>CBU:</strong> <span id="cbuDisplay">2850000000000000000000</span></p>
+                <p><strong>Alias:</strong> <span id="aliasDisplay">STICKERS.POINT.MP</span></p>
+                <p><strong>Titular:</strong> <span id="titularDisplay">StickersPoint S.R.L.</span></p>
+                <p><strong>CUIT/CUIL:</strong> <span id="cuitCuilDisplay">30-71234567-8</span></p>
+            </div>
+            <p class="instrucciones-transferencia">Una vez realizada la transferencia, envíanos el comprobante a nuestro WhatsApp para coordinar el envío/retiro.</p>
+            <button id="btnTransferenciaConfirmada" class="btn-confirmar-transferencia">Entendido y Finalizar</button>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             console.log("Checkout script: DOMContentLoaded.");
@@ -638,16 +862,32 @@
             const stepEntrega = document.getElementById('stepEntrega');
             const stepPago = document.getElementById('stepPago');
 
-            // NUEVAS REFERENCIAS para los datos de otra persona
+            // Referencias para los datos de otra persona
             const otraPersonaCheckbox = document.getElementById('otraPersonaCheckbox');
             const datosOtraPersonaGroup = document.getElementById('datosOtraPersonaGroup');
             const inputNombreOtraPersona = document.getElementById('nombreOtraPersona');
             const inputEmailOtraPersona = document.getElementById('emailOtraPersona');
             const inputTelefonoOtraPersona = document.getElementById('telefonoOtraPersona');
 
+            // Referencias para los métodos de pago
+            const radioPagoMercadoPago = document.getElementById('pagoMercadoPago');
+            const radioPagoTransferencia = document.getElementById('pagoTransferencia');
+            const resumenMetodoPago = document.getElementById('resumenMetodoPago');
+            const textoMetodoPagoResumen = document.getElementById('textoMetodoPagoResumen');
+
+            // NUEVAS REFERENCIAS para el modal de transferencia
+            const modalTransferencia = document.getElementById('modalTransferencia');
+            const closeModalTransferencia = document.querySelector('#modalTransferencia .close-modal-transferencia');
+            const cbuDisplay = document.getElementById('cbuDisplay');
+            const aliasDisplay = document.getElementById('aliasDisplay');
+            const titularDisplay = document.getElementById('titularDisplay');
+            const cuitCuilDisplay = document.getElementById('cuitCuilDisplay');
+            const btnTransferenciaConfirmada = document.getElementById('btnTransferenciaConfirmada');
+
 
             let metodoEnvioSeleccionadoActual = checkoutData ? checkoutData.metodoEnvio : ''; 
             let costoEnvioActual = 0; 
+            let metodoPagoSeleccionadoActual = checkoutData ? checkoutData.metodoPago : ''; // Nuevo: para el método de pago
 
             // Función para actualizar la barra de progreso
             const actualizarBarraProgreso = (currentStep) => {
@@ -675,7 +915,6 @@
                     direccionEnvioGroup.style.display = 'block'; // Mostrar el campo de dirección
                     inputDireccion.setAttribute('required', 'required'); // Hacerlo requerido
                     
-                    // Asegurar que el radio del modal esté marcado y su info visible
                     if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'block';
                     if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'none';
@@ -686,7 +925,6 @@
                     inputDireccion.removeAttribute('required'); // No requerido
                     inputDireccion.value = ''; // Limpiar el campo si se cambia a retiro
                     
-                    // Asegurar que el radio del modal esté marcado y su info visible
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
                     if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'block';
@@ -697,7 +935,6 @@
                     inputDireccion.removeAttribute('required');
                     inputDireccion.value = '';
                     
-                    // Asegurar que ningún radio del modal esté marcado y las infos ocultas
                     if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = false;
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = false;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
@@ -705,6 +942,39 @@
                 }
                 resumenCostoEnvio.textContent = costoEnvioActual === 'A coordinar' ? costoEnvioActual : `$${parseFloat(costoEnvioActual).toFixed(2)}`;
                 actualizarTotalesResumen(); 
+                habilitarBotonConfirmar(); // Llamar para re-evaluar el botón
+            };
+
+            // NUEVA FUNCIÓN: Actualiza la UI para el método de pago
+            const actualizarUIMetodoPago = () => {
+                console.log("Actualizando UI para método de pago:", metodoPagoSeleccionadoActual);
+                if (metodoPagoSeleccionadoActual) {
+                    let textoDisplay = '';
+                    // Desmarcar todos los radios de pago primero
+                    document.querySelectorAll('input[name="opcionPagoCheckout"]').forEach(radio => radio.checked = false);
+
+                    switch (metodoPagoSeleccionadoActual) {
+                        case 'mercadoPago':
+                            textoDisplay = 'Pago con Mercado Pago';
+                            if (radioPagoMercadoPago) radioPagoMercadoPago.checked = true;
+                            break;
+                        case 'transferencia':
+                            textoDisplay = 'Pago con Transferencia Bancaria';
+                            if (radioPagoTransferencia) radioPagoTransferencia.checked = true;
+                            break;
+                        default:
+                            textoDisplay = 'Método de pago no seleccionado';
+                            break;
+                    }
+                    textoMetodoPagoResumen.textContent = textoDisplay;
+                    resumenMetodoPago.style.display = 'flex'; // Mostrar el resumen de pago
+                    actualizarBarraProgreso('pago'); // Mover la barra de progreso al paso de pago
+                } else {
+                    textoMetodoPagoResumen.textContent = 'Selecciona un método de pago.';
+                    resumenMetodoPago.style.display = 'none'; // Ocultar el resumen de pago si no hay selección
+                    actualizarBarraProgreso('entrega'); // Si no hay pago, volver a 'entrega'
+                }
+                habilitarBotonConfirmar(); // Llamar para re-evaluar el botón
             };
 
             // Función para actualizar los totales en el resumen desplegable
@@ -724,6 +994,19 @@
                 resumenToggleTotal.textContent = `$${totalFinal.toFixed(2)}`; 
             };
 
+            // NUEVA FUNCIÓN: Habilita/deshabilita el botón de confirmar compra
+            const habilitarBotonConfirmar = () => {
+                const isEnvioSelected = !!metodoEnvioSeleccionadoActual; // true si hay un método de envío
+                const isPagoSelected = !!metodoPagoSeleccionadoActual;   // true si hay un método de pago
+                const isCarritoNotEmpty = checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0;
+
+                if (btnFinalizarCompra) {
+                    btnFinalizarCompra.disabled = !(isEnvioSelected && isPagoSelected && isCarritoNotEmpty);
+                    console.log(`Botón 'Confirmar Compra' habilitado: ${!btnFinalizarCompra.disabled} (Envío: ${isEnvioSelected}, Pago: ${isPagoSelected}, Carrito: ${isCarritoNotEmpty})`);
+                }
+            };
+
+
             // Inicializar el resumen del carrito y otros componentes
             if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
                 console.log("Checkout data found:", checkoutData);
@@ -739,9 +1022,11 @@
                 
                 // Asegurarse de que el método de envío inicial del localStorage se refleje
                 metodoEnvioSeleccionadoActual = checkoutData.metodoEnvio;
+                metodoPagoSeleccionadoActual = checkoutData.metodoPago; // Cargar método de pago inicial
+
                 actualizarUIMetodoEnvio();
+                actualizarUIMetodoPago(); // Actualizar UI de pago
                 actualizarTotalesResumen(); 
-                actualizarBarraProgreso('entrega'); 
 
             } else {
                 console.warn("No checkout data found. Redirecting to catalogo.html.");
@@ -830,7 +1115,8 @@
                     }
                     localStorage.setItem('checkoutData', JSON.stringify({
                         ...checkoutData,
-                        metodoEnvio: metodoEnvioSeleccionadoActual
+                        metodoEnvio: metodoEnvioSeleccionadoActual,
+                        metodoPago: metodoPagoSeleccionadoActual // Asegurar que el método de pago también se guarda
                     }));
                     actualizarUIMetodoEnvio(); 
                     modalEditarEnvio.style.display = 'none'; 
@@ -858,12 +1144,29 @@
                 });
             }
 
+            // Event Listeners para los radio buttons de Método de Pago
+            const radioPagos = document.querySelectorAll('input[name="opcionPagoCheckout"]');
+            radioPagos.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    metodoPagoSeleccionadoActual = e.target.value;
+                    localStorage.setItem('checkoutData', JSON.stringify({
+                        ...checkoutData,
+                        metodoEnvio: metodoEnvioSeleccionadoActual,
+                        metodoPago: metodoPagoSeleccionadoActual
+                    }));
+                    actualizarUIMetodoPago();
+                });
+            });
+
+
+            // Referencia al botón de finalizar compra
+            const btnFinalizarCompra = document.querySelector('.btn-finalizar-compra');
+
             // Manejar el envío del formulario de checkout
             checkoutForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 console.log("Formulario de checkout enviado.");
                 
-                // Validar la dirección si el envío es a domicilio
                 if (metodoEnvioSeleccionadoActual === 'domicilio' && inputDireccion.value.trim() === '') {
                     alert('Por favor, ingresa tu dirección de envío.');
                     inputDireccion.focus();
@@ -889,31 +1192,83 @@
                     }
                 }
 
-                const nombre = inputNombre.value;
-                const email = inputEmail.value;
-                const telefono = inputTelefono.value;
-                const direccion = metodoEnvioSeleccionadoActual === 'domicilio' ? inputDireccion.value : 'N/A';
-                const notas = inputNotas.value;
+                if (!metodoEnvioSeleccionadoActual) {
+                    alert('Por favor, selecciona un método de envío.');
+                    return;
+                }
 
-                const datosOtraPersona = otraPersonaCheckbox.checked ? {
-                    nombre: inputNombreOtraPersona.value,
-                    email: inputEmailOtraPersona.value,
-                    telefono: inputTelefonoOtraPersona.value
-                } : 'N/A';
+                if (!metodoPagoSeleccionadoActual) {
+                    alert('Por favor, selecciona un método de pago.');
+                    return;
+                }
 
-                console.log('Datos del Pedido Final:', {
-                    carrito: checkoutData.carrito,
-                    total: resumenTotal.textContent,
-                    metodoEnvio: metodoEnvioSeleccionadoActual, 
-                    datosCliente: { nombre, email, telefono, direccion, notas },
-                    datosOtraPersona: datosOtraPersona 
-                });
+                // Si el método de pago es transferencia, mostrar el modal de transferencia
+                if (metodoPagoSeleccionadoActual === 'transferencia') {
+                    modalTransferencia.style.display = 'flex'; // Mostrar el modal
+                    // Opcional: llenar los datos de transferencia si fueran dinámicos
+                    // cbuDisplay.textContent = 'TU_CBU_AQUI';
+                    // aliasDisplay.textContent = 'TU_ALIAS_AQUI';
+                    // titularDisplay.textContent = 'TU_TITULAR_AQUI';
+                    // cuitCuilDisplay.textContent = 'TU_CUIT_CUIL_AQUI';
+                } else {
+                    // Para otros métodos de pago (ej. Mercado Pago), proceder con la confirmación actual
+                    const nombre = inputNombre.value;
+                    const email = inputEmail.value;
+                    const telefono = inputTelefono.value;
+                    const direccion = metodoEnvioSeleccionadoActual === 'domicilio' ? inputDireccion.value : 'N/A';
+                    const notas = inputNotas.value;
 
-                alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
-                localStorage.removeItem('carrito'); 
-                localStorage.removeItem('checkoutData'); 
-                window.location.href = 'index.html'; 
+                    const datosOtraPersona = otraPersonaCheckbox.checked ? {
+                        nombre: inputNombreOtraPersona.value,
+                        email: inputEmailOtraPersona.value,
+                        telefono: inputTelefonoOtraPersona.value
+                    } : 'N/A';
+
+                    console.log('Datos del Pedido Final:', {
+                        carrito: checkoutData.carrito,
+                        total: resumenTotal.textContent,
+                        metodoEnvio: metodoEnvioSeleccionadoActual, 
+                        metodoPago: metodoPagoSeleccionadoActual, 
+                        datosCliente: { nombre, email, telefono, direccion, notas },
+                        datosOtraPersona: datosOtraPersona 
+                    });
+
+                    alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
+                    localStorage.removeItem('carrito'); 
+                    localStorage.removeItem('checkoutData'); 
+                    window.location.href = 'index.html'; 
+                }
             });
+
+            // Event listener para el botón "Entendido y Finalizar" del modal de transferencia
+            if (btnTransferenciaConfirmada) {
+                btnTransferenciaConfirmada.addEventListener('click', () => {
+                    console.log("Clic en 'Entendido y Finalizar' del modal de transferencia.");
+                    alert('¡Compra confirmada! Por favor, realiza la transferencia y envíanos el comprobante.');
+                    localStorage.removeItem('carrito'); 
+                    localStorage.removeItem('checkoutData'); 
+                    window.location.href = 'index.html'; 
+                });
+            }
+
+            // Event listener para cerrar el modal de transferencia con la 'X'
+            if (closeModalTransferencia) {
+                closeModalTransferencia.addEventListener('click', () => {
+                    modalTransferencia.style.display = 'none';
+                });
+            }
+
+            // Cerrar el modal de transferencia si se hace clic fuera del contenido
+            if (modalTransferencia) {
+                modalTransferencia.addEventListener('click', (e) => {
+                    if (e.target === modalTransferencia) {
+                        modalTransferencia.style.display = 'none';
+                    }
+                });
+            }
+
+            // Llamada inicial para asegurar que el botón esté en el estado correcto al cargar la página
+            habilitarBotonConfirmar();
         });
     </script>
 </body>
