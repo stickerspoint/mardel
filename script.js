@@ -35,13 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollToTopBtn = document.getElementById('scrollToTopBtn');
 
     // Referencias para los nuevos elementos del modal de carrito (Medios de Envío)
-    const radioEnvioDomicilio = document.getElementById('envioDomicilio');
-    const radioRetirarPunto = document.getElementById('retirarPunto');
+    // Asegúrate de que estos IDs existen en tu HTML del modal de carrito
+    const radioEnvioDomicilio = document.querySelector('input[name="opcionEnvio"][value="envioMarDelPlata"]');
+    const radioRetirarPunto = document.querySelector('input[name="opcionEnvio"][value="retirarLocal"]');
+    // Si tienes un input de código postal o botón de calcular envío en el modal del carrito, asegúrate de que existan
+    const inputCodigoPostal = document.getElementById('inputCodigoPostal'); // Podría no existir en el modal actual
+    const btnCalcularEnvio = document.getElementById('btnCalcularEnvio');   // Podría no existir en el modal actual
+    const linkBuscarAqui = document.getElementById('linkBuscarAqui');       // Podría no existir en el modal actual
+
     const btnIniciarCompra = document.getElementById('btnIniciarCompra');
     // Campo para el mensaje de coordinación (si se elige envío a domicilio)
-    const mensajeCoordinarEnvio = document.getElementById('mensajeCoordinarEnvio');
-    const divEnvioDomicilio = document.getElementById('divEnvioDomicilio'); // Referencia al div contenedor para estilos
-    const divRetirarPunto = document.getElementById('divRetirarPunto');     // Referencia al div contenedor para estilos
+    const mensajeCoordinarEnvio = document.getElementById('mensajeCoordinarEnvio'); // Podría no existir en el modal actual
+    const divEnvioDomicilio = document.querySelector('.opcion-envio-item input[value="envioMarDelPlata"]').closest('.opcion-envio-item'); // Referencia al div contenedor para estilos
+    const divRetirarPunto = document.querySelector('.opcion-envio-item input[value="retirarLocal"]').closest('.opcion-envio-item');     // Referencia al div contenedor para estilos
 
 
     // AÑADIDO: Verificar que las referencias clave no son null (para depuración)
@@ -52,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Referencia a contenedorCatalogo:", contenedorCatalogo);
     console.log("Referencia a radioEnvioDomicilio:", radioEnvioDomicilio);
     console.log("Referencia a radioRetirarPunto:", radioRetirarPunto);
+    console.log("Referencia a inputCodigoPostal:", inputCodigoPostal);
+    console.log("Referencia a btnCalcularEnvio:", btnCalcularEnvio);
     console.log("Referencia a btnIniciarCompra:", btnIniciarCompra);
     console.log("Referencia a mensajeCoordinarEnvio:", mensajeCoordinarEnvio);
     console.log("Referencia a divEnvioDomicilio:", divEnvioDomicilio);
@@ -240,6 +248,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const toggleCarritoModal = (e) => {
         console.log("toggleCarritoModal fue llamado.");
+        // Comentar la siguiente línea si quieres que el clic en el fondo oscuro cierre el modal
+        // if (e && typeof e.stopPropagation === 'function') {
+        //     e.stopPropagation();
+        //     console.log("e.stopPropagation() fue llamado.");
+        // }
         
         if (carritoModal) {
             const currentDisplay = carritoModal.style.display;
@@ -438,13 +451,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Asegurarse de que las secciones de envío se muestran/ocultan según lo definido en HTML
-        const opcionesEnvioDomicilio = document.getElementById('opcionesEnvioDomicilio'); 
-        const opcionesRetirarPor = document.getElementById('opcionesRetirarPor'); 
+        // NOTA: Las referencias 'opcionesEnvioDomicilio' y 'opcionesRetirarPor' no están definidas en la sección de referencias del DOM.
+        // Si estos elementos existen en tu HTML, asegúrate de añadir sus referencias al inicio del script.
+        // Por ahora, la lógica de handleEnvioOptions ya maneja la visibilidad de divEnvioDomicilio y divRetirarPunto.
+        // Si estas líneas causan un error, elimínalas o define las referencias.
+        const opcionesEnvioDomicilio = document.getElementById('opcionesEnvioDomicilio');
+        const opcionesRetirarPor = document.getElementById('opcionesRetirarPor');
         if (opcionesEnvioDomicilio) {
-            opcionesEnvioDomicilio.style.display = 'block'; 
+            opcionesEnvioDomicilio.style.display = 'block'; // Siempre visible según el nuevo HTML
         }
         if (opcionesRetirarPor) {
-            opcionesRetirarPor.style.display = 'none'; 
+            opcionesRetirarPor.style.display = 'none'; // Siempre oculta según el nuevo HTML
         }
         // Adjuntar eventos a los botones de eliminar y cantidad DESPUÉS de que se hayan agregado al DOM
         adjuntarEventosCarrito();
@@ -454,6 +471,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const adjuntarEventosCarrito = () => {
         // Eventos para botones de eliminar
         document.querySelectorAll('.btn-eliminar').forEach(button => {
+            // Se usa removeEventListener + addEventListener o se asigna directamente a .onclick
+            // para evitar múltiples listeners en cada renderizado.
             button.onclick = (e) => {
                 const productoId = parseInt(e.currentTarget.dataset.id);
                 eliminarDelCarrito(productoId);
@@ -584,25 +603,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            let metodoEnvioSeleccionado = '';
+            // Determine the selected shipping method from the cart modal
+            let selectedShippingMethod = '';
             if (radioEnvioDomicilio && radioEnvioDomicilio.checked) {
-                metodoEnvioSeleccionado = 'domicilio';
+                selectedShippingMethod = 'domicilio';
             } else if (radioRetirarPunto && radioRetirarPunto.checked) {
-                metodoEnvioSeleccionado = 'retiro';
-            }
-
-            if (metodoEnvioSeleccionado) {
-                // Guardar los datos del carrito y el método de envío en localStorage
-                localStorage.setItem('checkoutData', JSON.stringify({
-                    carrito: carrito,
-                    metodoEnvio: metodoEnvioSeleccionado
-                }));
-                // Redirigir a la página de checkout
-                window.location.href = 'checkout.html';
+                selectedShippingMethod = 'retiro';
             } else {
                 alert('Por favor, selecciona un método de envío (Domicilio o Retirar por punto) para iniciar la compra.');
-                console.log('Ningún método de envío seleccionado.');
+                console.log('Ningún método de envío seleccionado en el carrito.');
+                return; // Stop if no shipping method is selected
             }
+
+            // Save checkout data to localStorage before redirecting
+            localStorage.setItem('checkoutData', JSON.stringify({
+                carrito: carrito,
+                metodoEnvio: selectedShippingMethod // Save the selected shipping method
+            }));
+            console.log("Datos de checkout guardados en localStorage antes de redirigir:", { carrito: carrito, metodoEnvio: selectedShippingMethod });
+
+            // Redirect to checkout page
+            window.location.href = 'checkout.html';
         });
     }
 
@@ -728,17 +749,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleEnvioOptions = () => {
         if (radioEnvioDomicilio && divEnvioDomicilio && radioRetirarPunto && divRetirarPunto) {
             if (radioEnvioDomicilio.checked) {
-                divEnvioDomicilio.style.display = 'block';
-                divRetirarPunto.style.display = 'none';
+                // divEnvioDomicilio.style.display = 'block'; // Estos divs ya están visibles en el HTML
+                // divRetirarPunto.style.display = 'none';
                 if (mensajeCoordinarEnvio) {
                     mensajeCoordinarEnvio.style.display = 'block'; // Mostrar mensaje de coordinación
                 }
-                // Envío a domicilio siempre es válido una vez seleccionado (sin CP)
-                envioSeleccionadoValido = true; 
+                // Habilitar botón de compra solo si hay CP (si el input existe)
+                envioSeleccionadoValido = true; // Asumimos que la selección de domicilio es válida
+                if (inputCodigoPostal) { // Si tienes un input de CP en el modal
+                    envioSeleccionadoValido = inputCodigoPostal.value.trim() !== '';
+                }
                 console.log("Envío a domicilio seleccionado. Valido:", envioSeleccionadoValido);
             } else if (radioRetirarPunto.checked) {
-                divEnvioDomicilio.style.display = 'none';
-                divRetirarPunto.style.display = 'block';
+                // divEnvioDomicilio.style.display = 'none';
+                // divRetirarPunto.style.display = 'block'; // Estos divs ya están visibles en el HTML
                 if (mensajeCoordinarEnvio) {
                     mensajeCoordinarEnvio.style.display = 'none'; // Ocultar mensaje de coordinación
                 }
@@ -747,8 +771,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("Retirar en punto seleccionado. Valido:", envioSeleccionadoValido);
             } else {
                 // Ninguna opción seleccionada o caso inicial
-                divEnvioDomicilio.style.display = 'none';
-                divRetirarPunto.style.display = 'none';
+                // divEnvioDomicilio.style.display = 'none';
+                // divRetirarPunto.style.display = 'none';
                 if (mensajeCoordinarEnvio) {
                     mensajeCoordinarEnvio.style.display = 'none';
                 }
@@ -768,6 +792,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (radioRetirarPunto) {
         radioRetirarPunto.addEventListener('change', handleEnvioOptions);
+    }
+    // Event listener para el input de código postal (para validación en tiempo real)
+    if (inputCodigoPostal) {
+        inputCodigoPostal.addEventListener('input', handleEnvioOptions);
+    }
+
+    // Event listener para el botón "Calcular Envío" (si lo necesitas para una simulación específica)
+    if (btnCalcularEnvio) {
+        btnCalcularEnvio.addEventListener('click', () => {
+            if (inputCodigoPostal && inputCodigoPostal.value.trim() !== '') {
+                // Aquí iría la lógica para llamar a una API de envío real
+                alert(`Calculando envío para CP: ${inputCodigoPostal.value}. Se coordina con el vendedor.`);
+                console.log(`Simulación de cálculo de envío para CP: ${inputCodigoPostal.value}`);
+                envioSeleccionadoValido = true; // Considerar válido después de "calcular"
+            } else {
+                alert('Por favor, ingresa un código postal.');
+                envioSeleccionadoValido = false;
+            }
+            if (btnIniciarCompra) {
+                btnIniciarCompra.disabled = carrito.length === 0 || !envioSeleccionadoValido;
+            }
+        });
+    }
+
+    if (linkBuscarAqui) {
+        linkBuscarAqui.addEventListener('click', (e) => {
+            e.preventDefault(); // Previene la navegación
+            alert('En una aplicación real, esto abriría un pop-up o redirigiría a un buscador de códigos postales.');
+            window.open('https://www.correoargentino.com.ar/formularios/cpa', '_blank'); // Ejemplo de enlace externo
+        });
     }
 
     // --- 5. Carga Inicial de Datos y Renderizado ---
