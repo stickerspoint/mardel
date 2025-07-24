@@ -824,9 +824,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("Checkout script: DOMContentLoaded.");
+            console.log("Checkout script: DOMContentLoaded. Iniciando script de checkout.");
             const checkoutData = JSON.parse(localStorage.getItem('checkoutData'));
-            
+            console.log("Datos de checkout cargados de localStorage:", checkoutData);
+
             // Referencias del resumen de pedido desplegable
             const resumenPedidoToggle = document.getElementById('resumenPedidoToggle');
             const resumenPedidoDetails = document.getElementById('resumenPedidoDetails');
@@ -884,13 +885,20 @@
             const cuitCuilDisplay = document.getElementById('cuitCuilDisplay');
             const btnTransferenciaConfirmada = document.getElementById('btnTransferenciaConfirmada');
 
+            // Referencia al botón de finalizar compra (declarado aquí para que sea accesible globalmente en el script)
+            const btnFinalizarCompra = document.querySelector('.btn-finalizar-compra');
+
 
             let metodoEnvioSeleccionadoActual = checkoutData ? checkoutData.metodoEnvio : ''; 
             let costoEnvioActual = 0; 
             let metodoPagoSeleccionadoActual = checkoutData ? checkoutData.metodoPago : ''; // Nuevo: para el método de pago
 
+            console.log("Valores iniciales: metodoEnvioSeleccionadoActual =", metodoEnvioSeleccionadoActual, "metodoPagoSeleccionadoActual =", metodoPagoSeleccionadoActual);
+
+
             // Función para actualizar la barra de progreso
             const actualizarBarraProgreso = (currentStep) => {
+                console.log("Actualizando barra de progreso a:", currentStep);
                 stepCarrito.classList.remove('active', 'completed');
                 stepEntrega.classList.remove('active', 'completed');
                 stepPago.classList.remove('active', 'completed');
@@ -908,7 +916,7 @@
 
             // Función para actualizar la UI principal y el modal según el método de envío actual
             const actualizarUIMetodoEnvio = () => {
-                console.log("Actualizando UI para método de envío:", metodoEnvioSeleccionadoActual);
+                console.log("Actualizando UI para método de envío. Método actual:", metodoEnvioSeleccionadoActual);
                 if (metodoEnvioSeleccionadoActual === 'domicilio') {
                     textoMetodoEnvioResumen.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
                     costoEnvioActual = 'A coordinar'; 
@@ -947,7 +955,7 @@
 
             // NUEVA FUNCIÓN: Actualiza la UI para el método de pago
             const actualizarUIMetodoPago = () => {
-                console.log("Actualizando UI para método de pago:", metodoPagoSeleccionadoActual);
+                console.log("Actualizando UI para método de pago. Método actual:", metodoPagoSeleccionadoActual);
                 if (metodoPagoSeleccionadoActual) {
                     let textoDisplay = '';
                     // Desmarcar todos los radios de pago primero
@@ -1000,16 +1008,18 @@
                 const isPagoSelected = !!metodoPagoSeleccionadoActual;   // true si hay un método de pago
                 const isCarritoNotEmpty = checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0;
 
+                console.log(`Checking button state: Envío selected = ${isEnvioSelected}, Pago selected = ${isPagoSelected}, Carrito not empty = ${isCarritoNotEmpty}`);
+
                 if (btnFinalizarCompra) {
                     btnFinalizarCompra.disabled = !(isEnvioSelected && isPagoSelected && isCarritoNotEmpty);
-                    console.log(`Botón 'Confirmar Compra' habilitado: ${!btnFinalizarCompra.disabled} (Envío: ${isEnvioSelected}, Pago: ${isPagoSelected}, Carrito: ${isCarritoNotEmpty})`);
+                    console.log(`Button 'CONFIRMAR COMPRA' is now ${btnFinalizarCompra.disabled ? 'DISABLED' : 'ENABLED'}.`);
                 }
             };
 
 
             // Inicializar el resumen del carrito y otros componentes
             if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
-                console.log("Checkout data found:", checkoutData);
+                console.log("Carrito encontrado en checkoutData. Renderizando resumen.");
                 resumenListaCarrito.innerHTML = '';
                 checkoutData.carrito.forEach(item => {
                     const li = document.createElement('li');
@@ -1029,7 +1039,7 @@
                 actualizarTotalesResumen(); 
 
             } else {
-                console.warn("No checkout data found. Redirecting to catalogo.html.");
+                console.warn("No checkout data found or carrito is empty. Redirecting to catalogo.html.");
                 alert('No hay productos en el carrito para finalizar la compra. Redirigiendo al catálogo.');
                 window.location.href = 'catalogo.html'; 
             }
@@ -1037,6 +1047,7 @@
             // Event Listener para el toggle del resumen de pedido
             if (resumenPedidoToggle) {
                 resumenPedidoToggle.addEventListener('click', () => {
+                    console.log("Clic en resumenPedidoToggle. Toggleando visibilidad de detalles de pedido.");
                     resumenPedidoDetails.style.display = resumenPedidoDetails.style.display === 'block' ? 'none' : 'block';
                     resumenPedidoToggle.classList.toggle('expanded'); 
                 });
@@ -1045,30 +1056,29 @@
             // Event Listeners para el modal de edición de envío
             if (btnEditarMetodoEnvio) {
                 btnEditarMetodoEnvio.addEventListener('click', () => {
-                    console.log("Abriendo modal de edición de envío.");
+                    console.log("Clic en btnEditarMetodoEnvio. Abriendo modal de edición de envío.");
                     modalEditarEnvio.style.display = 'flex'; 
                     // Asegurarse de que el radio correcto esté marcado al abrir el modal
+                    if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = (metodoEnvioSeleccionadoActual === 'domicilio');
+                    if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = (metodoEnvioSeleccionadoActual === 'retiro');
+                    
+                    // Asegurar que la información de info-envio se muestra correctamente en el modal
                     if (metodoEnvioSeleccionadoActual === 'domicilio') {
-                        radioEnvioDomicilioModal.checked = true;
-                        divEnvioDomicilioModalInfo.style.display = 'block';
-                        divRetirarPuntoModalInfo.style.display = 'none';
+                        if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'block';
+                        if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'none';
                     } else if (metodoEnvioSeleccionadoActual === 'retiro') {
-                        radioRetirarPuntoModal.checked = true;
-                        divEnvioDomicilioModalInfo.style.display = 'none';
-                        divRetirarPuntoModalInfo.style.display = 'block';
+                        if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
+                        if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'block';
                     } else {
-                        // Si no hay método seleccionado, desmarcar ambos y ocultar infos
-                        radioEnvioDomicilioModal.checked = false;
-                        radioRetirarPuntoModal.checked = false;
-                        divEnvioDomicilioModalInfo.style.display = 'none';
-                        divRetirarPuntoModalInfo.style.display = 'none';
+                        if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
+                        if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'none';
                     }
                 });
             }
 
             if (closeModalEditarEnvio) {
                 closeModalEditarEnvio.addEventListener('click', () => {
-                    console.log("Cerrando modal de edición de envío.");
+                    console.log("Clic en closeModalEditarEnvio. Cerrando modal de edición de envío.");
                     modalEditarEnvio.style.display = 'none'; 
                 });
             }
@@ -1086,6 +1096,7 @@
             // Event Listeners para los radio buttons DENTRO DEL MODAL
             if (radioEnvioDomicilioModal) {
                 radioEnvioDomicilioModal.addEventListener('change', () => {
+                    console.log("Radio 'Envío a Domicilio' en modal cambiado.");
                     if (radioEnvioDomicilioModal.checked) {
                         divEnvioDomicilioModalInfo.style.display = 'block';
                         divRetirarPuntoModalInfo.style.display = 'none';
@@ -1094,6 +1105,7 @@
             }
             if (radioRetirarPuntoModal) {
                 radioRetirarPuntoModal.addEventListener('change', () => {
+                    console.log("Radio 'Retirar en Punto' en modal cambiado.");
                     if (radioRetirarPuntoModal.checked) {
                         divEnvioDomicilioModalInfo.style.display = 'none';
                         divRetirarPuntoModalInfo.style.display = 'block';
@@ -1104,7 +1116,7 @@
             // Event Listener para el botón "Confirmar Cambio" en el modal
             if (btnConfirmarCambioEnvio) {
                 btnConfirmarCambioEnvio.addEventListener('click', () => {
-                    console.log("Confirmando cambio de método de envío.");
+                    console.log("Clic en btnConfirmarCambioEnvio. Confirmando cambio de método de envío.");
                     if (radioEnvioDomicilioModal.checked) {
                         metodoEnvioSeleccionadoActual = 'domicilio';
                     } else if (radioRetirarPuntoModal.checked) {
@@ -1118,6 +1130,7 @@
                         metodoEnvio: metodoEnvioSeleccionadoActual,
                         metodoPago: metodoPagoSeleccionadoActual // Asegurar que el método de pago también se guarda
                     }));
+                    console.log("metodoEnvioSeleccionadoActual actualizado a:", metodoEnvioSeleccionadoActual);
                     actualizarUIMetodoEnvio(); 
                     modalEditarEnvio.style.display = 'none'; 
                 });
@@ -1126,6 +1139,7 @@
             // Event Listener para el checkbox "Retira/Recibe otra persona"
             if (otraPersonaCheckbox) {
                 otraPersonaCheckbox.addEventListener('change', () => {
+                    console.log("Checkbox 'Retira/Recibe otra persona' cambiado. Checked:", otraPersonaCheckbox.checked);
                     if (otraPersonaCheckbox.checked) {
                         datosOtraPersonaGroup.style.display = 'block';
                         inputNombreOtraPersona.setAttribute('required', 'required');
@@ -1148,28 +1162,28 @@
             const radioPagos = document.querySelectorAll('input[name="opcionPagoCheckout"]');
             radioPagos.forEach(radio => {
                 radio.addEventListener('change', (e) => {
+                    console.log("Radio de pago cambiado. Nuevo valor:", e.target.value);
                     metodoPagoSeleccionadoActual = e.target.value;
                     localStorage.setItem('checkoutData', JSON.stringify({
                         ...checkoutData,
                         metodoEnvio: metodoEnvioSeleccionadoActual,
                         metodoPago: metodoPagoSeleccionadoActual
                     }));
+                    console.log("metodoPagoSeleccionadoActual actualizado a:", metodoPagoSeleccionadoActual);
                     actualizarUIMetodoPago();
                 });
             });
 
 
-            // Referencia al botón de finalizar compra
-            const btnFinalizarCompra = document.querySelector('.btn-finalizar-compra');
-
             // Manejar el envío del formulario de checkout
             checkoutForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                console.log("Formulario de checkout enviado.");
+                console.log("Formulario de checkout enviado. Iniciando validaciones...");
                 
                 if (metodoEnvioSeleccionadoActual === 'domicilio' && inputDireccion.value.trim() === '') {
                     alert('Por favor, ingresa tu dirección de envío.');
                     inputDireccion.focus();
+                    console.log("Validación fallida: Dirección de envío requerida.");
                     return;
                 }
 
@@ -1178,38 +1192,39 @@
                     if (inputNombreOtraPersona.value.trim() === '') {
                         alert('Por favor, ingresa el nombre de la persona que retira/recibe.');
                         inputNombreOtraPersona.focus();
+                        console.log("Validación fallida: Nombre de otra persona requerido.");
                         return;
                     }
                     if (inputEmailOtraPersona.value.trim() === '') {
                         alert('Por favor, ingresa el email de la persona que retira/recibe.');
                         inputEmailOtraPersona.focus();
+                        console.log("Validación fallida: Email de otra persona requerido.");
                         return;
                     }
                     if (inputTelefonoOtraPersona.value.trim() === '') {
                         alert('Por favor, ingresa el teléfono de la persona que retira/recibe.');
                         inputTelefonoOtraPersona.focus();
+                        console.log("Validación fallida: Teléfono de otra persona requerido.");
                         return;
                     }
                 }
 
                 if (!metodoEnvioSeleccionadoActual) {
                     alert('Por favor, selecciona un método de envío.');
+                    console.log("Validación fallida: Método de envío no seleccionado.");
                     return;
                 }
 
                 if (!metodoPagoSeleccionadoActual) {
                     alert('Por favor, selecciona un método de pago.');
+                    console.log("Validación fallida: Método de pago no seleccionado.");
                     return;
                 }
 
                 // Si el método de pago es transferencia, mostrar el modal de transferencia
                 if (metodoPagoSeleccionadoActual === 'transferencia') {
+                    console.log("Método de pago es Transferencia. Mostrando modal de transferencia.");
                     modalTransferencia.style.display = 'flex'; // Mostrar el modal
-                    // Opcional: llenar los datos de transferencia si fueran dinámicos
-                    // cbuDisplay.textContent = 'TU_CBU_AQUI';
-                    // aliasDisplay.textContent = 'TU_ALIAS_AQUI';
-                    // titularDisplay.textContent = 'TU_TITULAR_AQUI';
-                    // cuitCuilDisplay.textContent = 'TU_CUIT_CUIL_AQUI';
                 } else {
                     // Para otros métodos de pago (ej. Mercado Pago), proceder con la confirmación actual
                     const nombre = inputNombre.value;
@@ -1224,7 +1239,7 @@
                         telefono: inputTelefonoOtraPersona.value
                     } : 'N/A';
 
-                    console.log('Datos del Pedido Final:', {
+                    console.log('Datos del Pedido Final (Mercado Pago o similar):', {
                         carrito: checkoutData.carrito,
                         total: resumenTotal.textContent,
                         metodoEnvio: metodoEnvioSeleccionadoActual, 
@@ -1236,6 +1251,7 @@
                     alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
                     localStorage.removeItem('carrito'); 
                     localStorage.removeItem('checkoutData'); 
+                    console.log("Redirigiendo a index.html después de confirmar compra (Mercado Pago).");
                     window.location.href = 'index.html'; 
                 }
             });
@@ -1247,6 +1263,7 @@
                     alert('¡Compra confirmada! Por favor, realiza la transferencia y envíanos el comprobante.');
                     localStorage.removeItem('carrito'); 
                     localStorage.removeItem('checkoutData'); 
+                    console.log("Redirigiendo a index.html después de confirmar transferencia.");
                     window.location.href = 'index.html'; 
                 });
             }
@@ -1254,6 +1271,7 @@
             // Event listener para cerrar el modal de transferencia con la 'X'
             if (closeModalTransferencia) {
                 closeModalTransferencia.addEventListener('click', () => {
+                    console.log("Clic en 'X' del modal de transferencia. Cerrando modal.");
                     modalTransferencia.style.display = 'none';
                 });
             }
@@ -1262,6 +1280,7 @@
             if (modalTransferencia) {
                 modalTransferencia.addEventListener('click', (e) => {
                     if (e.target === modalTransferencia) {
+                        console.log("Clic fuera del modal de transferencia. Cerrando modal.");
                         modalTransferencia.style.display = 'none';
                     }
                 });
