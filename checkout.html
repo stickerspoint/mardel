@@ -28,10 +28,10 @@
             margin-bottom: 20px;
         }
         
-        /* Estilos para el resumen de pedido desplegable */
+        /* Estilos para el resumen de pedido desplegable (AHORA EN AMARILLO) */
         .resumen-pedido-toggle {
-            background-color: #e6f7ff; /* Fondo similar al mensaje de envío */
-            border: 1px solid #91d5ff;
+            background-color: #fff5e9; /* Fondo amarillo claro */
+            border: 1px solid #f0a41c; /* Borde amarillo */
             padding: 10px 15px;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -40,11 +40,11 @@
             align-items: center;
             cursor: pointer;
             font-weight: bold;
-            color: #0050b3;
+            color: #f0a41c; /* Texto amarillo */
             transition: background-color 0.2s ease;
         }
         .resumen-pedido-toggle:hover {
-            background-color: #d1eaff;
+            background-color: #ffeccf; /* Tono más oscuro al pasar el mouse */
         }
         .resumen-pedido-toggle .toggle-icon {
             transition: transform 0.3s ease;
@@ -132,13 +132,14 @@
         .btn-finalizar-compra:hover {
             background-color: #e0950b;
         }
+        /* Mensaje de envío en checkout (AHORA EN AMARILLO) */
         .mensaje-envio-checkout {
-            background-color: #e6f7ff;
-            border: 1px solid #91d5ff;
+            background-color: #fff5e9; /* Fondo amarillo claro */
+            border: 1px solid #f0a41c; /* Borde amarillo */
             padding: 10px;
             border-radius: 5px;
             margin-bottom: 20px;
-            color: #0050b3;
+            color: #f0a41c; /* Texto amarillo */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -248,14 +249,15 @@
         .modal-opcion-envio-item .costo-envio.a-coordinar {
             color: #f0a41c;
         }
+        /* Información adicional en el modal (AHORA EN AMARILLO) */
         .modal-info-envio {
-            background-color: #e6f7ff;
-            border: 1px solid #91d5ff;
+            background-color: #fff5e9; /* Fondo amarillo claro */
+            border: 1px solid #f0a41c; /* Borde amarillo */
             padding: 10px 15px;
             border-radius: 5px;
             margin-top: 10px;
             margin-bottom: 20px;
-            color: #0050b3;
+            color: #f0a41c; /* Texto amarillo */
             font-size: 0.9em;
         }
         .btn-confirmar-cambio-envio {
@@ -328,12 +330,12 @@
             transition: color 0.3s ease;
         }
 
-        /* Estilos para pasos completados */
+        /* Estilos para pasos completados (AHORA EN AMARILLO) */
         .progress-step.completed .progress-icon {
-            background-color: #28a745; /* Verde para completado */
+            background-color: #f0a41c; /* Amarillo/Naranja para completado */
         }
         .progress-step.completed .progress-text {
-            color: #28a745;
+            color: #f0a41c; /* Amarillo/Naranja */
             font-weight: bold;
         }
         .progress-step.completed .progress-icon i {
@@ -505,9 +507,6 @@
                 </div>
             </div>
 
-            <!-- La sección de "Selecciona tu Método de Envío" (con los radio buttons) se ha ELIMINADO de aquí -->
-            <!-- Ahora solo se edita a través del modal -->
-
             <div class="form-group" id="notasPedidoGroup">
                 <label for="notas">Notas del Pedido (opcional):</label>
                 <textarea id="notas" rows="3"></textarea>
@@ -553,7 +552,7 @@
             </div>
 
             <div id="divRetirarPuntoModalInfo" class="modal-info-envio" style="display: none;">
-                Puedes retirar tu pedido en nuestro punto de retiro en Mar del Plata. Te enviaremos la dirección exacta y los horarios de retiro una vez que tu pedido esté listo.
+                Puedes retirar tu pedido en nuestro local en Mar del Plata. Te enviaremos la dirección exacta y los horarios de retiro una vez que tu pedido esté listo.
             </div>
 
             <button id="btnConfirmarCambioEnvio" class="btn-confirmar-cambio-envio">Confirmar Cambio</button>
