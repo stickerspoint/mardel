@@ -19,7 +19,7 @@
             margin: 50px auto;
             background-color: #fff;
             padding: 30px;
-            border-radius: 8px; /* Corregido el valor de border-radius */
+            border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         h1, h2 {
@@ -478,7 +478,7 @@
                 <input type="tel" id="telefono" required>
             </div>
             
-            <!-- Campo de Dirección de Envío movido aquí -->
+            <!-- Campo de Dirección de Envío se mantiene aquí y su visibilidad es controlada por JS -->
             <div class="form-group" id="direccionEnvioGroup" style="display: none;">
                 <label for="direccion">Dirección de Envío:</label>
                 <input type="text" id="direccion" placeholder="Calle, número, piso, depto.">
@@ -505,41 +505,8 @@
                 </div>
             </div>
 
-            <!-- Sección de Medios de Envío -->
-            <div class="checkout-seccion-envio">
-                <h3>Selecciona tu Método de Envío</h3>
-                
-                <div class="checkout-opcion-envio-item">
-                    <label>
-                        <input type="radio" name="opcionEnvioCheckout" id="envioDomicilioCheckout" value="domicilio"> 
-                        <div>
-                            <p class="titulo-opcion">Envío a Domicilio en Mar del Plata</p>
-                            <p class="descripcion-opcion">Te contactaremos para coordinar la entrega y el costo del envío.</p>
-                        </div>
-                        <span class="costo-envio a-coordinar">A coordinar</span>
-                    </label>
-                </div>
-
-                <div id="divEnvioDomicilioCheckoutInfo" class="checkout-info-envio" style="display: none;"> 
-                    Se coordinará el envío a tu domicilio.
-                </div>
-
-                <div class="checkout-opcion-envio-item">
-                    <label>
-                        <input type="radio" name="opcionEnvioCheckout" id="retirarPuntoCheckout" value="retiro">
-                        <div>
-                            <p class="titulo-opcion">Retirar en Nuestro Local StickersPoint</p>
-                            <p class="descripcion-opcion">Mar del Plata - Dirección (aguardar mensaje para retirar)</p>
-                        </div>
-                        <span class="costo-envio">Gratis</span>
-                    </label>
-                </div>
-
-                <div id="divRetirarPuntoCheckoutInfo" class="checkout-info-envio" style="display: none;">
-                    Puedes retirar tu pedido en nuestro local en Mar del Plata. Te enviaremos la dirección exacta y los horarios de retiro una vez que tu pedido esté listo.
-                </div>
-
-            </div> <!-- Cierre de checkout-seccion-envio -->
+            <!-- La sección de "Selecciona tu Método de Envío" (con los radio buttons) se ha ELIMINADO de aquí -->
+            <!-- Ahora solo se edita a través del modal -->
 
             <div class="form-group" id="notasPedidoGroup">
                 <label for="notas">Notas del Pedido (opcional):</label>
@@ -551,25 +518,9 @@
             <button type="submit" class="btn-finalizar-compra">CONFIRMAR COMPRA</button>
         </form>
 
-        <!-- Este div se elimina o se mueve a una página de resumen post-confirmación -->
-        <!-- <div class="resumen-datos-cliente" style="display: none;">
-            <h3>Tus Datos Ingresados:</h3>
-            <p><strong>Nombre:</strong> <span id="resumenNombre"></span></p>
-            <p><strong>Email:</strong> <span id="resumenEmail"></span></p>
-            <p><strong>Teléfono:</strong> <span id="resumenTelefono"></span></p>
-            <p id="resumenDireccionCliente"><strong>Dirección de Envío:</strong> <span id="textoResumenDireccion"></span></p>
-            <p><strong>Notas:</strong> <span id="resumenNotas"></span></p>
-
-            <div id="resumenOtraPersonaDiv" style="display: none; margin-top: 20px; border-top: 1px dashed #eee; padding-top: 15px;">
-                <h4>Datos de la Persona que Retira/Recibe:</h4>
-                <p><strong>Nombre:</strong> <span id="resumenNombreOtraPersona"></span></p>
-                <p><strong>Email:</strong> <span id="resumenEmailOtraPersona"></span></p>
-                <p><strong>Teléfono:</strong> <span id="resumenTelefonoOtraPersona"></span></p>
-            </div>
-        </div> -->
-
     </div>
 
+    <!-- Modal para editar el método de envío -->
     <div id="modalEditarEnvio" class="modal-editar-envio">
         <div class="modal-content-editar-envio">
             <span class="close-modal-editar-envio">&times;</span>
@@ -649,25 +600,12 @@
             const stepEntrega = document.getElementById('stepEntrega');
             const stepPago = document.getElementById('stepPago');
 
-            // Referencias para el resumen de datos del cliente (eliminadas del HTML, pero las mantenemos aquí por si se usan en otro lado)
-            // const resumenDatosClienteDiv = document.querySelector('.resumen-datos-cliente');
-            // const resumenNombre = document.getElementById('resumenNombre');
-            // const resumenEmail = document.getElementById('resumenEmail');
-            // const resumenTelefono = document.getElementById('resumenTelefono');
-            // const resumenDireccionCliente = document.getElementById('resumenDireccionCliente'); 
-            // const textoResumenDireccion = document.getElementById('textoResumenDireccion'); 
-            // const resumenNotas = document.getElementById('resumenNotas');
-
             // NUEVAS REFERENCIAS para los datos de otra persona
             const otraPersonaCheckbox = document.getElementById('otraPersonaCheckbox');
             const datosOtraPersonaGroup = document.getElementById('datosOtraPersonaGroup');
             const inputNombreOtraPersona = document.getElementById('nombreOtraPersona');
             const inputEmailOtraPersona = document.getElementById('emailOtraPersona');
             const inputTelefonoOtraPersona = document.getElementById('telefonoOtraPersona');
-            // const resumenOtraPersonaDiv = document.getElementById('resumenOtraPersonaDiv'); // Eliminado del HTML
-            // const resumenNombreOtraPersona = document.getElementById('resumenNombreOtraPersona'); // Eliminado del HTML
-            // const resumenEmailOtraPersona = document.getElementById('resumenEmailOtraPersona'); // Eliminado del HTML
-            // const resumenTelefonoOtraPersona = document.getElementById('resumenTelefonoOtraPersona'); // Eliminado del HTML
 
 
             let metodoEnvioSeleccionadoActual = checkoutData ? checkoutData.metodoEnvio : ''; 
@@ -696,25 +634,21 @@
                 if (metodoEnvioSeleccionadoActual === 'domicilio') {
                     textoMetodoEnvioResumen.textContent = `Envío a Domicilio. Serás contactado para coordinar.`;
                     costoEnvioActual = 'A coordinar'; 
-                    direccionEnvioGroup.style.display = 'block';
-                    inputDireccion.setAttribute('required', 'required');
+                    direccionEnvioGroup.style.display = 'block'; // Mostrar el campo de dirección
+                    inputDireccion.setAttribute('required', 'required'); // Hacerlo requerido
                     
-                    // resumenDireccionCliente.style.display = 'block'; // Ya no es necesario aquí
-                    // textoResumenDireccion.textContent = inputDireccion.value.trim() !== '' ? inputDireccion.value : 'Esperando dirección...';
-                    
+                    // Asegurar que el radio del modal esté marcado y su info visible
                     if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'block';
                     if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'none';
                 } else if (metodoEnvioSeleccionadoActual === 'retiro') {
                     textoMetodoEnvioResumen.textContent = `Retiro en Nuestro Local. Serás contactado para coordinar.`;
                     costoEnvioActual = 'Gratis';
-                    direccionEnvioGroup.style.display = 'none';
-                    inputDireccion.removeAttribute('required');
-                    inputDireccion.value = ''; 
+                    direccionEnvioGroup.style.display = 'none'; // Ocultar el campo de dirección
+                    inputDireccion.removeAttribute('required'); // No requerido
+                    inputDireccion.value = ''; // Limpiar el campo si se cambia a retiro
                     
-                    // resumenDireccionCliente.style.display = 'none'; // Ya no es necesario aquí
-                    // textoResumenDireccion.textContent = ''; 
-                    
+                    // Asegurar que el radio del modal esté marcado y su info visible
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = true;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
                     if (divRetirarPuntoModalInfo) divRetirarPuntoModalInfo.style.display = 'block';
@@ -725,9 +659,7 @@
                     inputDireccion.removeAttribute('required');
                     inputDireccion.value = '';
                     
-                    // resumenDireccionCliente.style.display = 'none'; // Ya no es necesario aquí
-                    // textoResumenDireccion.textContent = '';
-                    
+                    // Asegurar que ningún radio del modal esté marcado y las infos ocultas
                     if (radioEnvioDomicilioModal) radioEnvioDomicilioModal.checked = false;
                     if (radioRetirarPuntoModal) radioRetirarPuntoModal.checked = false;
                     if (divEnvioDomicilioModalInfo) divEnvioDomicilioModalInfo.style.display = 'none';
@@ -746,33 +678,13 @@
                 resumenSubtotal.textContent = `$${subtotal.toFixed(2)}`;
 
                 let totalFinal = subtotal;
-                if (typeof costoEnvioActual === 'number') {
+                if (costoEnvioActual !== 'A coordinar' && typeof costoEnvioActual === 'number') {
                     totalFinal += costoEnvioActual;
                 }
 
                 resumenTotal.textContent = `$${totalFinal.toFixed(2)}`;
                 resumenToggleTotal.textContent = `$${totalFinal.toFixed(2)}`; 
             };
-
-            // Función para actualizar el resumen de datos del cliente (AHORA SOLO PARA CONSOLE.LOG O FUTURO RESUMEN FINAL)
-            const actualizarResumenDatosCliente = () => {
-                // Estos datos ya no se muestran en el HTML actual, pero se pueden usar para el console.log final
-                const nombre = inputNombre.value;
-                const email = inputEmail.value;
-                const telefono = inputTelefono.value;
-                const direccion = metodoEnvioSeleccionadoActual === 'domicilio' ? inputDireccion.value : 'N/A';
-                const notas = inputNotas.value;
-
-                const datosOtraPersona = otraPersonaCheckbox.checked ? {
-                    nombre: inputNombreOtraPersona.value,
-                    email: inputEmailOtraPersona.value,
-                    telefono: inputTelefonoOtraPersona.value
-                } : 'N/A';
-
-                // Aquí podrías guardar estos datos en localStorage temporalmente si fueran a usarse en una página de "confirmación final"
-                // Por ahora, solo se usan en el console.log del submit
-            };
-
 
             // Inicializar el resumen del carrito y otros componentes
             if (checkoutData && checkoutData.carrito && checkoutData.carrito.length > 0) {
@@ -787,6 +699,8 @@
                     resumenListaCarrito.appendChild(li);
                 });
                 
+                // Asegurarse de que el método de envío inicial del localStorage se refleje
+                metodoEnvioSeleccionadoActual = checkoutData.metodoEnvio;
                 actualizarUIMetodoEnvio();
                 actualizarTotalesResumen(); 
                 actualizarBarraProgreso('entrega'); 
@@ -810,7 +724,22 @@
                 btnEditarMetodoEnvio.addEventListener('click', () => {
                     console.log("Abriendo modal de edición de envío.");
                     modalEditarEnvio.style.display = 'flex'; 
-                    actualizarUIMetodoEnvio(); 
+                    // Asegurarse de que el radio correcto esté marcado al abrir el modal
+                    if (metodoEnvioSeleccionadoActual === 'domicilio') {
+                        radioEnvioDomicilioModal.checked = true;
+                        divEnvioDomicilioModalInfo.style.display = 'block';
+                        divRetirarPuntoModalInfo.style.display = 'none';
+                    } else if (metodoEnvioSeleccionadoActual === 'retiro') {
+                        radioRetirarPuntoModal.checked = true;
+                        divEnvioDomicilioModalInfo.style.display = 'none';
+                        divRetirarPuntoModalInfo.style.display = 'block';
+                    } else {
+                        // Si no hay método seleccionado, desmarcar ambos y ocultar infos
+                        radioEnvioDomicilioModal.checked = false;
+                        radioRetirarPuntoModal.checked = false;
+                        divEnvioDomicilioModalInfo.style.display = 'none';
+                        divRetirarPuntoModalInfo.style.display = 'none';
+                    }
                 });
             }
 
@@ -870,7 +799,7 @@
                 });
             }
 
-            // NUEVO: Event Listener para el checkbox "Retira/Recibe otra persona"
+            // Event Listener para el checkbox "Retira/Recibe otra persona"
             if (otraPersonaCheckbox) {
                 otraPersonaCheckbox.addEventListener('change', () => {
                     if (otraPersonaCheckbox.checked) {
@@ -896,6 +825,7 @@
                 e.preventDefault();
                 console.log("Formulario de checkout enviado.");
                 
+                // Validar la dirección si el envío es a domicilio
                 if (metodoEnvioSeleccionadoActual === 'domicilio' && inputDireccion.value.trim() === '') {
                     alert('Por favor, ingresa tu dirección de envío.');
                     inputDireccion.focus();
