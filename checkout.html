@@ -1039,9 +1039,10 @@
                 actualizarTotalesResumen(); 
 
             } else {
-                console.warn("No checkout data found or carrito is empty. Redirecting to catalogo.html.");
-                alert('No hay productos en el carrito para finalizar la compra. Redirigiendo al catálogo.');
-                window.location.href = 'catalogo.html'; 
+                console.warn("No checkout data found or carrito is empty. Notifying user.");
+                // Modificado para no causar un error de redirección en el entorno del sandbox.
+                // En lugar de window.location.href, se muestra un mensaje.
+                alert('No hay productos en el carrito para finalizar la compra.');
             }
 
             // Event Listener para el toggle del resumen de pedido
@@ -1251,8 +1252,7 @@
                     alert('¡Compra confirmada! En breve nos pondremos en contacto contigo.');
                     localStorage.removeItem('carrito'); 
                     localStorage.removeItem('checkoutData'); 
-                    console.log("Redirigiendo a index.html después de confirmar compra (Mercado Pago).");
-                    window.location.href = 'index.html'; 
+                    console.log("Pedido finalizado. No se redirige para evitar errores en este entorno.");
                 }
             });
 
@@ -1263,8 +1263,7 @@
                     alert('¡Compra confirmada! Por favor, realiza la transferencia y envíanos el comprobante.');
                     localStorage.removeItem('carrito'); 
                     localStorage.removeItem('checkoutData'); 
-                    console.log("Redirigiendo a index.html después de confirmar transferencia.");
-                    window.location.href = 'index.html'; 
+                    console.log("Pedido finalizado. No se redirige para evitar errores en este entorno.");
                 });
             }
 
